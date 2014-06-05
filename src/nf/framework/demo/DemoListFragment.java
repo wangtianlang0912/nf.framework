@@ -79,6 +79,39 @@ public class DemoListFragment extends AbsListFragment<DemoVO>{
 		demoRequestData.getDataFromNet(hashMap, absUIResquestHandler);
 		
 	}
+	
+	
+	/** (non-Javadoc)
+	 *
+	 * @see android.support.v4.app.Fragment#setUserVisibleHint(boolean)
+	 *
+	 * niufei
+	 *
+	 * 2014-6-5 上午10:51:14
+	 */
+	@Override
+	public void setUserVisibleHint(boolean isVisibleToUser) {
+		// TODO Auto-generated method stub
+		super.setUserVisibleHint(isVisibleToUser);
+	}
+	
+	/** (non-Javadoc)
+	 *
+	 * @see android.support.v4.app.Fragment#getUserVisibleHint()
+	 *
+	 * niufei
+	 *
+	 * 2014-6-5 上午10:51:30
+	 */
+	@Override
+	public boolean getUserVisibleHint() {
+		// TODO Auto-generated method stub
+		return super.getUserVisibleHint();
+		
+		
+	}
+	
+	
 	private AbsUIResquestHandler<List<DemoVO>> absUIResquestHandler=new AbsUIResquestHandler<List<DemoVO>>() {
 		
 		@Override
