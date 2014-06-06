@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="gray">#333333</color>
+    <color name="white">#ffffff</color>
+    <color name="menu_item_selector_pressed">#E7EFE2</color>
+    <color name="menu_item_selector_normal">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="expand_navigate_bg">#ae2c27</color>
+    <!-- 通用按钮点击 -->
+    <color name="expand_btn_selector_normal">@color/expand_navigate_bg</color>
+    <color name="expand_btn_selector_pressed">#c98885</color>
+  <!-- menu 文字颜色 -->
+    <color name="expand_menu_txt_color">#333333</color>
+</resources>
