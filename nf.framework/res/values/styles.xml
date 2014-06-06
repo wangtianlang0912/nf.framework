@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <style name="compose_addr_view_input">
+        <item name="android:textSize">16.0sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">@null</item>
+        <item name="android:minWidth">@dimen/compose_addr_view_input_minwidth</item>
+        <item name="android:minHeight">@dimen/compose_addr_view_btn_height</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:selectAllOnFocus">true</item>
+        <item name="android:completionThreshold">1</item>
+        <item name="android:dropDownWidth">fill_parent</item>
+        <item name="android:imeOptions">actionNext</item>
+        <item name="android:dropDownHeight">wrap_content</item>
+    </style>
+    <style name="compose_addr_view_input_subject">
+        <item name="android:textSize">16.0sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">@null</item>
+        <item name="android:layout_width">0.0dip</item>
+        <item name="android:layout_height">@dimen/compose_addr_view_btn_height</item>
+        <item name="android:minHeight">@dimen/compose_addr_view_btn_height</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:selectAllOnFocus">true</item>
+        <item name="android:completionThreshold">1</item>
+        <item name="android:layout_weight">1.0</item>
+        <item name="android:dropDownWidth">fill_parent</item>
+        <item name="android:imeOptions">actionNext</item>
+        <item name="android:dropDownHeight">wrap_content</item>
+    </style>
+    <style name="compose_addr_view_btn_add">
+        <item name="android:layout_gravity">bottom</item>
+        <item name="android:layout_width">@dimen/compose_add_btn_size</item>
+        <item name="android:layout_height">@dimen/compose_add_btn_size</item>
+        <item name="android:scaleType">center</item>
+    </style>
+    <style name="compose_sign_style">
+        <item name="android:textSize">16.0sp</item>
+        <item name="android:textColor">#ff444444</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="compose_addr_groupselector_wrap">
+        <item name="android:paddingTop">0.0dip</item>
+        <item name="android:paddingBottom">0.0dip</item>
+        <item name="android:duplicateParentState">true</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/compose_addr_view_btn_height</item>
+        <item name="android:minHeight">@dimen/compose_addr_view_btn_height</item>
+    </style>
+    
+    
+    
+</resources>
