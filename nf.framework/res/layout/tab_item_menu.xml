@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tab_item_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center_vertical" >
+<!--   android:background="@drawable/tab_item_bg" -->
+    <ImageView
+        android:id="@+id/tab_item_image"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_centerHorizontal="true"
+    >
+    </ImageView>
+
+    <TextView
+        android:id="@+id/tab_item_text"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tab_item_image"
+        android:gravity="center_horizontal"
+        android:shadowColor="#000000"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="1"
+        android:textSize="13sp"
+        android:visibility="gone"
+         />
+
+</RelativeLayout>
