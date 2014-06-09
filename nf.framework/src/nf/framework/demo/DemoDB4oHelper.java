@@ -1,11 +1,3 @@
-/**   
- * @Title: DemoDB4oHelper.java 
- * @Package com.example.edittexttest.demo 
- * @Description: TODO(��һ�仰�������ļ���ʲô) 
- * @author niufei
- * @date 2014-5-13 ����3:58:56 
- * @version V1.0   
-*/
 package nf.framework.demo;
 
 import java.io.File;
