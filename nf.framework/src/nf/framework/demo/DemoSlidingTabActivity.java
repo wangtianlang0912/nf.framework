@@ -71,8 +71,8 @@ public class DemoSlidingTabActivity extends AbsSlidingTabActivity{
 		// TODO Auto-generated method stub
 		List<TabItemActVO> tabList=new ArrayList<TabItemActVO>();
 		tabList.add(new TabItemActVO(DemoTabBarActivity.class,R.drawable.ic_launcher,"tab1"));
-		tabList.add(new TabItemActVO(DemoTabBarActivity.class,R.drawable.ic_launcher,"tab2"));
-		tabList.add(new TabItemActVO(DemoTabBarActivity.class,R.drawable.ic_launcher,"tab3"));
+		tabList.add(new TabItemActVO(DemoListActivity.class,R.drawable.ic_launcher,"tab2"));
+		tabList.add(new TabItemActVO(DemoListActivity.class,R.drawable.ic_launcher,"tab3"));
 		return tabList;
 	}
 

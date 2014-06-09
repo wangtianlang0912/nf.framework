@@ -70,13 +70,14 @@ public class DemoListFragment extends AbsListFragment<DemoVO>{
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		DemoRequestData demoRequestData=new  DemoRequestData(getActivity());
-		List<DemoVO> demoList=	demoRequestData.getDataFromCache();
-		System.out.println("DemoListFragment.onResume()"+demoList);
-		HashMap<String,String> hashMap=new HashMap<String, String>();
-		hashMap.put("course_cid","4");
-		demoRequestData.getDataFromNet(hashMap, absUIResquestHandler);
-		
+		if(list.isEmpty()){
+			DemoRequestData demoRequestData=new  DemoRequestData(getActivity());
+			List<DemoVO> demoList=	demoRequestData.getDataFromCache();
+			System.out.println("DemoListFragment.onResume()"+demoList);
+			HashMap<String,String> hashMap=new HashMap<String, String>();
+			hashMap.put("course_cid","4");
+			demoRequestData.getDataFromNet(hashMap, absUIResquestHandler);
+		}
 	}
 	
 	
