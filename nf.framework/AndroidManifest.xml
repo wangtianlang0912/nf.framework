@@ -13,14 +13,18 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Light.NoTitleBar" >
-        <activity
-            android:name="nf.framework.demo.DemoTabBarActivity"
+         <activity
+            android:name="nf.framework.demo.DemoSlidingTabActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="nf.framework.demo.DemoTabBarActivity"
+            android:label="@string/app_name" >
         </activity>
         <activity
             android:name="nf.framework.demo.DemoListActivity"
