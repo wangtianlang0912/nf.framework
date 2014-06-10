@@ -42,13 +42,9 @@ public abstract class AbsListFragment<T> extends Fragment implements
 		}
 		listItemAdapter=createAbsListAdapter();
 		if(listItemAdapter!=null){
-			// ���listview��footView
 			mlistview.setAdapter(listItemAdapter);
 			listItemAdapter.notifyDataSetChanged();
 		}
-		/**
-		 * ���¹���ˢ��
-		 */
 		mlistview.setOnHeaderRefreshListener(this);
 		mlistview.setFooterOnClickListener(this);
 		mlistview.setOnItemClickListener(this);
@@ -84,7 +80,6 @@ public abstract class AbsListFragment<T> extends Fragment implements
 	 * @param packagelist
 	 * @param numRows
 	 * @param niufei
-	 * @param 2014-5-8 ����4:28:37
 	 * @return void
 	 * @throws
 	 */
