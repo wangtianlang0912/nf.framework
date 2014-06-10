@@ -90,7 +90,7 @@ public class DemoRequestData extends AbsBaseRequestData<List<DemoVO>> {
 					Log.w("TestRequestData_",locallist.size()+"");
 					sendSuccessResultToUI(mcontext,mUIResquestHandler,list);
 				}else{
-					sendFailureResultToUI(mcontext, mUIResquestHandler, "�������ʧ��");
+					sendFailureResultToUI(mcontext, mUIResquestHandler, "请求失败");
 				}
 			}
 
