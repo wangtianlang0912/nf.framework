@@ -10,18 +10,28 @@ package nf.framework.fragment;
 
 import java.util.List;
 
+import nf.framework.R;
 import nf.framework.expand.widgets.UpFreshListView;
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListener;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 
 public abstract class AbsListAdapter<T,ViewHolder> extends BaseAdapter {
 	
 	protected List<T> mList;
 	protected LayoutInflater mLayoutInflater;
+	protected DisplayImageOptions options;
 	/**
 	 * @param mcontext
 	 * @param list
@@ -29,6 +39,7 @@ public abstract class AbsListAdapter<T,ViewHolder> extends BaseAdapter {
 	public AbsListAdapter(Context mcontext, List<T> list) {
 		// TODO Auto-generated constructor stub
 		this(mcontext,null,list);
+		
 	}
 	/**
 	 * @param mcontext
@@ -40,6 +51,17 @@ public abstract class AbsListAdapter<T,ViewHolder> extends BaseAdapter {
 	
 		mList=list;
 		mLayoutInflater=LayoutInflater.from(mcontext);
+		
+		options = new DisplayImageOptions.Builder()
+		.showImageOnLoading(R.drawable.ic_launcher)
+		.showImageForEmptyUri(R.drawable.ic_launcher)
+		.showImageOnFail(R.drawable.ic_launcher)
+		.cacheInMemory(true)
+		.cacheOnDisk(true)
+		.considerExifParams(true)
+		.displayer(new RoundedBitmapDisplayer(20))
+		.build();
+
 	}
 	
 	/* (non-Javadoc)
@@ -104,6 +126,18 @@ public abstract class AbsListAdapter<T,ViewHolder> extends BaseAdapter {
 		return convertView;
 	}
 	
+	protected  void setImageLoader(ImageView imageView,String url,SimpleImageLoadingListener simpleImageLoadingListener){
+		
+		setImageLoader(imageView, url, simpleImageLoadingListener,null);
+	}
+	
+	protected  void setImageLoader(ImageView imageView,String url,SimpleImageLoadingListener simpleImageLoadingListener,ImageLoadingProgressListener progressListener){
+		if(imageView==null||TextUtils.isEmpty(url)){
+			return;
+		}
+		ImageLoader.getInstance().displayImage(url,imageView, options, simpleImageLoadingListener,progressListener);
+	}
+	
 	protected abstract int getItemViewLayout();
 	
 	
@@ -111,5 +145,4 @@ public abstract class AbsListAdapter<T,ViewHolder> extends BaseAdapter {
 	
 	
 	protected abstract void bindDataToView(T object, ViewHolder holder);
-	
 }

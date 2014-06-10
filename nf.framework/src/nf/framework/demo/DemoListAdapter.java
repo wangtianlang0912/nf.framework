@@ -15,6 +15,7 @@ import nf.framework.expand.widgets.BannerGalleryView;
 import nf.framework.fragment.AbsListAdapter;
 import android.content.Context;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class DemoListAdapter extends AbsListAdapter<DemoVO,DemoViewHolder>{
@@ -35,6 +36,7 @@ public class DemoListAdapter extends AbsListAdapter<DemoVO,DemoViewHolder>{
 		DemoViewHolder holder = new DemoViewHolder();
 		holder.titleview = (TextView) convertView.findViewById(R.id.titleview);
 		holder.contentView = (TextView) convertView.findViewById(R.id.contentView);
+		holder.imageview=(ImageView) convertView.findViewById(R.id.imageview);
 		holder.bannerGalleryView =(BannerGalleryView)convertView.findViewById(R.id.bannerGalleryView1);
 		return holder;
 	}
@@ -47,6 +49,8 @@ public class DemoListAdapter extends AbsListAdapter<DemoVO,DemoViewHolder>{
 		
 		holder.contentView.setText(object.getText());
 		holder.titleview.setText(object.getText());
+		
+		setImageLoader(holder.imageview, "http://d.hiphotos.baidu.com/image/w%3D400/sign=c51c55d80e3387449cc52e7c610ed937/d1a20cf431adcbef4531758eaeaf2edda3cc9f34.jpg", null);
 	}
 	/* (non-Javadoc)
 	 * @see com.example.apricotforest_commontest.Abslist.AbsListAdapter#getItemViewLayout()
