@@ -12,7 +12,6 @@ package nf.framework.act;
 import nf.framework.R;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -23,13 +22,15 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.slidingmenu.lib.app.SlidingFragmentActivity;
+
 /***
  * 
  * 
  * @author niufei
  * 
  */
-public abstract class AbsBaseActivity extends FragmentActivity{
+public abstract class AbsSlidingBaseActivity extends SlidingFragmentActivity{
 
 	protected TextView top_textview;
 	protected TextView right_textview;

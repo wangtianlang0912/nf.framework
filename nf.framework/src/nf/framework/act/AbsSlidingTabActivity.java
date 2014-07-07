@@ -27,12 +27,10 @@ public abstract class AbsSlidingTabActivity extends SlidingTabActivity{
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
+        
         TabHost  tabHost = getTabHostView();
         setContentView(tabHost);
-        
         setBehindContentView(getBehindContentView());
-        
         slidingMenu = getSlidingMenu();
         slidingMenu.setMode(SlidingMenu.LEFT);
         slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);

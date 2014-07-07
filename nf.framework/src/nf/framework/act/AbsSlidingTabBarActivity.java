@@ -26,7 +26,7 @@ import android.widget.LinearLayout;
  * @author D.Winter
  * 
  */
-public abstract class AbsTabBarActivity extends AbsBaseActivity{
+public abstract class AbsSlidingTabBarActivity extends AbsSlidingBaseActivity{
 
 	private ViewPager mPager;// 页卡内容
 	private List<TabBarVO> tabBarList = new ArrayList<TabBarVO>();// 页卡头标
@@ -270,7 +270,4 @@ public abstract class AbsTabBarActivity extends AbsBaseActivity{
 		public void onPageScrollStateChanged(int arg0) {
 		}
 	}
-
-	
-	
 }

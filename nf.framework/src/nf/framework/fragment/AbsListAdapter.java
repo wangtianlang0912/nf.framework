@@ -48,10 +48,8 @@ public abstract class AbsListAdapter<T,ViewHolder> extends BaseAdapter {
 	 */
 	public AbsListAdapter(Context mcontext, UpFreshListView category_listview,List<T> list) {
 		// TODO Auto-generated constructor stub
-	
 		mList=list;
 		mLayoutInflater=LayoutInflater.from(mcontext);
-		
 		options = new DisplayImageOptions.Builder()
 		.showImageOnLoading(R.drawable.ic_launcher)
 		.showImageForEmptyUri(R.drawable.ic_launcher)
@@ -61,9 +59,15 @@ public abstract class AbsListAdapter<T,ViewHolder> extends BaseAdapter {
 		.considerExifParams(true)
 		.displayer(new RoundedBitmapDisplayer(20))
 		.build();
-
 	}
 	
+	public AbsListAdapter(Context mcontext, UpFreshListView category_listview,List<T> list,DisplayImageOptions options) {
+		
+		mList=list;
+		mLayoutInflater=LayoutInflater.from(mcontext);
+		this.options=options;
+		
+	}
 	/* (non-Javadoc)
 	 * @see android.widget.Adapter#getCount()
 	 */
