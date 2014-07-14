@@ -51,9 +51,9 @@ public abstract class AbsListAdapter<T,ViewHolder> extends BaseAdapter {
 		mList=list;
 		mLayoutInflater=LayoutInflater.from(mcontext);
 		options = new DisplayImageOptions.Builder()
-		.showImageOnLoading(R.drawable.ic_launcher)
-		.showImageForEmptyUri(R.drawable.ic_launcher)
-		.showImageOnFail(R.drawable.ic_launcher)
+		.showImageOnLoading(R.color.lightblue)
+		.showImageForEmptyUri(R.color.lightblue)
+		.showImageOnFail(R.color.lightblue)
 		.cacheInMemory(true)
 		.cacheOnDisk(true)
 		.considerExifParams(true)
