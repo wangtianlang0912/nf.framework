@@ -1,6 +1,7 @@
 package nf.framework.core.http;
 
 import java.io.File;
+import java.util.Iterator;
 import java.util.Map;
 
 import nf.framework.core.cache.CacheDataMaster;
@@ -178,4 +179,22 @@ public abstract class AbsBaseRequestData<T> {
 	public abstract void getDataFromNet(Map<String,String> map,AbsUIResquestHandler<T> absUIResquestHandler);
 
 	public abstract T getDataFromCache();
+	
+	protected String buildGetUrlByMap(String url ,Map<String,String> map){
+		
+		StringBuffer sb=new StringBuffer();
+		if(map!=null){
+			Iterator iter = map.entrySet().iterator();
+			while (iter.hasNext()) {
+				Map.Entry entry = (Map.Entry) iter.next();
+				Object key = entry.getKey();
+				sb.append(key);
+				sb.append("=");
+				Object val = entry.getValue();
+				sb.append(val);
+				sb.append("&");
+			}
+		}
+		return url + sb.toString();
+	}
 }
