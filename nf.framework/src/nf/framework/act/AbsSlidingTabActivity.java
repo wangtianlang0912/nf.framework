@@ -103,7 +103,6 @@ public abstract class AbsSlidingTabActivity extends SlidingTabActivity{
 		tabWidget.setLayoutParams(new ViewGroup.LayoutParams(LayoutParams.FILL_PARENT,dip2px(this,50)));
 		tabWidget.setClickable(false);
 		tabWidget.setId(android.R.id.tabs);
-		tabWidget.setBackgroundColor(Color.YELLOW);
 		linearLayout.addView(tabWidget);
 		tabHost.addView(linearLayout, LinearLayout.LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
 		
