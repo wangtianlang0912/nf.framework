@@ -69,7 +69,6 @@ public abstract class AbsSlidingTabActivity extends SlidingTabActivity{
 			@Override
 			public void onTabChanged(String arg0) {
 				// TODO Auto-generated method stub
-				Toast.makeText(AbsSlidingTabActivity.this,arg0,0).show();
 			}
 		});
 		

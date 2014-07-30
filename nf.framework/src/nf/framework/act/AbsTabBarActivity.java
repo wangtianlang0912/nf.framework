@@ -1,6 +1,5 @@
 package nf.framework.act;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
