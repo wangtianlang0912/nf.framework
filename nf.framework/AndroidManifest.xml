@@ -46,6 +46,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <activity
+            android:name="nf.framework.act.pic.ImageBrowseActivity"
+            android:label="@string/app_name" >
+        </activity>
         <activity
             android:name="nf.framework.MainActivity"
             android:label="@string/app_name" >
