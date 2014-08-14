@@ -10,11 +10,16 @@ package nf.framework.act;
 
 
 import nf.framework.R;
+import nf.framework.act.MyLeftRightGestureListener.LeftRightGestureListenerCallback;
+import nf.framework.act.lockscreen.LockScreen;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -38,11 +43,15 @@ public abstract class AbsBaseActivity extends FragmentActivity{
 	protected LinearLayout mainlayout;
 	protected FrameLayout framelayout;
 	protected ViewGroup navigationBarLayout;
-
+	private boolean isLeftRightGesture = false;
+	private GestureDetector leftRightDetector = null;
+	private LockScreen mLockScreen = new LockScreen(this);
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setBaseContentView();
+		this.leftRightDetector = new GestureDetector(getApplicationContext(),
+				new MyLeftRightGestureListener(new MyCallBack()));
 	}
 
 	/***
@@ -198,4 +207,77 @@ public abstract class AbsBaseActivity extends FragmentActivity{
 			selectBtn.setSelected(true);
 		}
 	}
+	public boolean isAddLeftRightGesture() {
+		return isLeftRightGesture;
+	}
+
+	/***
+	 * 设置左右滑屏
+	 * @param isLeftRightGesture
+	 */
+	public void setLeftRightGesture(boolean isLeftRightGesture) {
+		this.isLeftRightGesture = isLeftRightGesture;
+	}
+	/**
+	 * 设置锁屏
+	 * @param isLockScreen
+	 */
+	public void setLockScreen(boolean isLockScreen){
+		this.mLockScreen.setLockScreen(isLockScreen);
+	}
+	
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent event) {
+		try{
+			this.mLockScreen.startLockRunnable();
+
+			if(this.isLeftRightGesture && this.mainlayout != null){
+				float ex = event.getX();
+				float ey = event.getY();
+
+				boolean flag = false;
+
+				Rect listviewRec = new Rect();
+				this.mainlayout.getGlobalVisibleRect(listviewRec);
+
+				if ((listviewRec.left < ex && ex < listviewRec.right)
+						&& (listviewRec.top < ey && ey < listviewRec.bottom)
+						&& listviewRec.top != 0) {
+					// NewsUtils.log(getClass(), "### Rect right:" + listviewRec.right +
+					// " Rect bottom:" + listviewRec.bottom + " ex:" + ex + " ey:" +
+					// ey);
+					flag = leftRightDetector.onTouchEvent(event);
+					// NewsUtils.log(getClass(), "### leftRightDetector flag: " + flag);
+					if (flag) {
+						return flag;
+					}
+				}
+
+				flag = super.dispatchTouchEvent(event);
+				return flag;
+			}
+			else{
+				return super.dispatchTouchEvent(event);
+			}
+		}
+		catch(OutOfMemoryError e){
+			
+		}
+		
+		return false;
+	}
+	
+	private class MyCallBack implements LeftRightGestureListenerCallback {
+
+		@Override
+		public void onLeft() {
+			AbsBaseActivity.this.onBackPressed();
+		}
+
+		@Override
+		public void onRight() {
+		}
+
+	}
+
 }
