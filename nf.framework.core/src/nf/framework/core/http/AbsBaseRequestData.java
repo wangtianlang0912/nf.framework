@@ -14,7 +14,6 @@ import android.util.Log;
 public abstract class AbsBaseRequestData<T> {
 
 	private static final String TAG="BaseRequestData";
-	protected boolean mNetworkFailure = false;
 	protected Context mcontext;
 	protected NetworkRequest  mNetworkRequest;
 	private boolean isCacheData=false;
@@ -131,7 +130,6 @@ public abstract class AbsBaseRequestData<T> {
 		//while request cancel or other request error
 		if( mNetworkRequest.getRequestErrorCode()!=0){
 			
-			mNetworkFailure = true;
 			if (mHttpRequestInterface != null) {
 				mHttpRequestInterface.onRequestFailured(String.valueOf(mNetworkRequest.getRequestErrorCode()));
 			}
@@ -146,6 +144,7 @@ public abstract class AbsBaseRequestData<T> {
 			}
 			return;
 		}
+		//缓存数据 
 		saveCache(responseData);
 		if (mHttpRequestInterface != null) {
 			
@@ -176,8 +175,13 @@ public abstract class AbsBaseRequestData<T> {
 		return cacheDataMaster.readCacheFile(cacheName);
 	}
 	
-	public abstract void getDataFromNet(Map<String,String> map,AbsUIResquestHandler<T> absUIResquestHandler);
+	public abstract void requestDataFromNet(Map<String,String> map,AbsUIResquestHandler<T> absUIResquestHandler);
 
+	public void excute(){
+		
+		ServerEngine.getInstance().request(this);
+	}
+	
 	public abstract T getDataFromCache();
 	
 	protected String buildGetUrlByMap(String url ,Map<String,String> map){
