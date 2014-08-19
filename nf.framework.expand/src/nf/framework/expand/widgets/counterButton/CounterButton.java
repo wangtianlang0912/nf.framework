@@ -52,6 +52,12 @@ public class CounterButton extends Button implements OnClickListener {
 		timeCount = new TimeCount(millisInFuture, countDownInterval);
 	}
 
+	public void startTimer(){
+		
+		if(timeCount!=null){
+			timeCount.start();
+		}
+	}
 	/**
 	 * 停止定时器
 	 */
