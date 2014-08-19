@@ -287,7 +287,95 @@ public static final String CHARSET = "UTF-8";
 		}
 		return null;
 	}
-
+	@Override
+	public String postRequest(String strUrl, byte[] data) {
+		// TODO Auto-generated method stub
+		HttpURLConnection conn = null;
+		OutputStream outStream = null;
+		InputStream inStream = null;
+		try {
+	        URL url = new URL(strUrl);
+			conn = getConnection(url);
+			if (conn == null) {
+				mRequestErrorCode = HTTP_REQUEST_ERROR_CONNECT;
+				return null;
+			}
+			// user stop
+			if (checkStop()) {
+				return null;
+			}
+			mConnection = conn;
+	        conn.setRequestMethod("POST");
+	        conn.setDoInput(true);
+	        conn.setDoOutput(true);
+	        conn.setUseCaches(false);
+	        conn.setRequestProperty("Connection", "Keep-Alive");
+	        conn.setRequestProperty("Charset", CHARSET);
+	        conn.setInstanceFollowRedirects(true);
+	        conn.setRequestProperty("Content-Type","application/json");
+			try {
+				conn.connect();
+			}
+			catch (SocketTimeoutException e) {
+				e.printStackTrace();
+				checkStop();
+				return null;
+			}
+			if (checkStop()) {
+				return null;
+			}
+			 
+			if (data != null) {
+				outStream = conn.getOutputStream();
+				outStream.write(data);
+				outStream.close();
+			}
+			mResponseCode = conn.getResponseCode();  
+	        mResultDesc = conn.getResponseMessage();
+	        if (mResponseCode != HttpURLConnection.HTTP_OK) {
+	        	mResultDesc = conn.getResponseMessage();
+	        	return null;
+	        }
+	        
+	        if (checkStop()) {
+				return null;
+			}
+	        
+	        inStream = conn.getInputStream();  
+	        return getResponseData(inStream);
+		}
+		catch (Exception e) {
+	    	e.printStackTrace();
+	    	mResultDesc = e.getMessage();
+	    }
+		finally {
+			try {
+				if (outStream != null){
+					outStream.close();
+					outStream = null;
+				}
+				if (inStream != null){
+					inStream.close();
+					inStream = null;
+				}
+				if (conn != null){
+					conn.disconnect();
+					conn = null;
+				}
+			} 
+			catch (Exception e){
+				e.printStackTrace();
+			}
+            if (checkStop()) {
+            	synchronized (objAbort) {
+            	    objAbort.notify();
+            	}
+            }
+		}
+	    
+	    return null;
+	}
+	
 	@Override
 	public String postFileRequest(String strUrl, byte[] data, String filePath) {
 		// TODO Auto-generated method stub
@@ -848,4 +936,6 @@ public static final String CHARSET = "UTF-8";
 		
 		return null;
 	}
+
+	
 }

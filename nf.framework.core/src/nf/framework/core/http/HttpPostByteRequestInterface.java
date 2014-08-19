@@ -5,6 +5,4 @@ public interface HttpPostByteRequestInterface extends HttpRequestInterface{
 	
 	public byte[] getByteData();
 	
-	
-	public String getFilePath();
 }

@@ -54,6 +54,9 @@ public abstract class AbsBaseRequestData<T> {
 			}else if(mHttpRequestInterface instanceof HttpPostByteRequestInterface){
 
 				httpPostByteData(mNetworkRequest);
+			}else if(mHttpRequestInterface instanceof HttpPostByteFileRequestInterface){
+			
+				httpPostByteFileData(mNetworkRequest);
 			}else{
 				
 				httpGet(mNetworkRequest);
@@ -63,7 +66,6 @@ public abstract class AbsBaseRequestData<T> {
 			e.printStackTrace();
 		}
 	}
-
 	private void httpPostByteData(NetworkRequest mNetworkRequest2) {
 		// TODO Auto-generated method stub
 		if(mHttpRequestInterface==null){
@@ -74,6 +76,19 @@ public abstract class AbsBaseRequestData<T> {
 
 		Log.d(TAG, "HTTP post BEGIN: " + url);
 		HttpPostByteRequestInterface byteRequestInterface=(HttpPostByteRequestInterface)mHttpRequestInterface;
+		responseData = mNetworkRequest.postRequest(url, byteRequestInterface.getByteData());
+		onNetWorkRequested(mNetworkRequest, responseData);	
+	}
+	private void httpPostByteFileData(NetworkRequest mNetworkRequest2) {
+		// TODO Auto-generated method stub
+		if(mHttpRequestInterface==null){
+			throw new NFRuntimeException("HTTP post byte request must implements HttpPostByteRequestInterface");
+		}
+		String url =mHttpRequestInterface.bulidUrl();
+		String responseData = null;
+
+		Log.d(TAG, "HTTP post BEGIN: " + url);
+		HttpPostByteFileRequestInterface byteRequestInterface=(HttpPostByteFileRequestInterface)mHttpRequestInterface;
 		responseData = mNetworkRequest.postFileRequest(url, byteRequestInterface.getByteData(),byteRequestInterface.getFilePath());
 		onNetWorkRequested(mNetworkRequest, responseData);	
 	}

@@ -11,6 +11,8 @@ public interface NetworkRequest {
 	
 	public String postRequest(String url, Map<String, String> params);
 	
+	public String postRequest(String url, byte[] data);
+	
 	public String postFileRequest(String strUrl, byte[] data, String filePath);
 	
 	public String getRequest(String url);
