@@ -33,7 +33,7 @@ public abstract class AbsListFragment<T> extends Fragment implements
 		super.onResume();
 	}
 
-	private void initView(View v) {
+	protected void initView(View v) {
 
 		mlistview = (UpFreshListView) v.findViewById(R.id.common_listview);
 		View headerView=getListHeaderView();
