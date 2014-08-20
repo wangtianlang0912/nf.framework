@@ -12,6 +12,7 @@ package nf.framework.act;
 import nf.framework.R;
 import nf.framework.act.MyLeftRightGestureListener.LeftRightGestureListenerCallback;
 import nf.framework.act.lockscreen.LockScreen;
+import nf.framework.expand.dialog.ProgressDialog;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -46,6 +47,8 @@ public abstract class AbsBaseActivity extends FragmentActivity{
 	private boolean isLeftRightGesture = false;
 	private GestureDetector leftRightDetector = null;
 	private LockScreen mLockScreen = new LockScreen(this);
+	private ProgressDialog progressDialog=null;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -170,6 +173,19 @@ public abstract class AbsBaseActivity extends FragmentActivity{
 		}
 	}
 
+	protected void showProgressBar(){
+		if(progressDialog==null){
+			progressDialog	=new ProgressDialog(this);
+		}
+		progressDialog.show();
+	}
+	
+	protected void dismissProgressBar(){
+		
+		if(progressDialog!=null){
+			progressDialog.dismiss();
+		}
+	}
 	/**
 	 * 当用户信息发生变化时执行操作
 	 */
