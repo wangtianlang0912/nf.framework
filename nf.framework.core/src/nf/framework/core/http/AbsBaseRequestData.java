@@ -18,7 +18,7 @@ public abstract class AbsBaseRequestData<T> {
 	protected NetworkRequest  mNetworkRequest;
 	private boolean isCacheData=false;
 	private HttpRequestInterface mHttpRequestInterface;
-	
+	private String session;
 	
 	private CacheDataMaster cacheDataMaster;
 	public AbsBaseRequestData(Context mcontext,boolean isCacheData) {
@@ -77,6 +77,7 @@ public abstract class AbsBaseRequestData<T> {
 		Log.d(TAG, "HTTP post BEGIN: " + url);
 		HttpPostByteRequestInterface byteRequestInterface=(HttpPostByteRequestInterface)mHttpRequestInterface;
 		responseData = mNetworkRequest.postRequest(url, byteRequestInterface.getByteData());
+		mNetworkRequest.getSession();
 		onNetWorkRequested(mNetworkRequest, responseData);	
 	}
 	private void httpPostByteFileData(NetworkRequest mNetworkRequest2) {
@@ -151,6 +152,9 @@ public abstract class AbsBaseRequestData<T> {
 			return;
 		}
 		int responseCode=mNetworkRequest.getResponseCode();
+		
+		String session =mNetworkRequest.getSession();
+		setSession(session);
 		if (responseCode != HttpRequest.HTTP_OK) {
 			
 			String responseMessage=mNetworkRequest.getResponseMessage();
@@ -167,6 +171,15 @@ public abstract class AbsBaseRequestData<T> {
 		}
 	}
 	
+	private void setSession(String session2) {
+		// TODO Auto-generated method stub
+		this.session=session2;
+	}
+
+	public String getSession() {
+		return session;
+	}
+
 	protected abstract T resolveJsonToObject(String jsonData);
 	
 	protected abstract String getCacheFileName();
@@ -197,6 +210,13 @@ public abstract class AbsBaseRequestData<T> {
 		ServerEngine.getInstance().request(this);
 	}
 	
+	public void excuteWithSession(String session){
+		
+		mNetworkRequest.setSessionToHeader(session);
+		
+		ServerEngine.getInstance().request(this);
+	}
+	
 	public abstract T getDataFromCache();
 	
 	protected String buildGetUrlByMap(String url ,Map<String,String> map){
@@ -216,4 +236,10 @@ public abstract class AbsBaseRequestData<T> {
 		}
 		return url + sb.toString();
 	}
+
+	public NetworkRequest getmNetworkRequest() {
+		return mNetworkRequest;
+	}
+	
+	
 }

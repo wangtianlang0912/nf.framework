@@ -26,6 +26,10 @@ public interface NetworkRequest {
 	public String getResponseMessage();
 
 	public int getRequestErrorCode();
+	
+	public String getSession();
+	
+	public void setSessionToHeader(String session);
 
 	
 }

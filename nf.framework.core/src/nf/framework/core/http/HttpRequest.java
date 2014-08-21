@@ -15,13 +15,16 @@ import java.net.MalformedURLException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import nf.framework.core.exception.LogUtil;
 import nf.framework.core.exception.NFRuntimeException;
 
+import org.apache.http.HttpClientConnection;
 import org.apache.http.protocol.HTTP;
 
 import android.content.Context;
@@ -75,7 +78,7 @@ public static final String CHARSET = "UTF-8";
 	
 	private Context mcontext;
 	
-	
+	private String session;
 	
 	public HttpRequest(Context mcontext) {
 		super();
@@ -303,14 +306,7 @@ public static final String CHARSET = "UTF-8";
 				mRequestErrorCode = HTTP_REQUEST_ERROR_CONNECT;
 				return null;
 			}
-//			 String key=null;  
-//		   for (int i = 1; (key = conn.getHeaderFieldKey(i)) != null; i++ ) {  
-//               if (key.equalsIgnoreCase("set-cookie")) {  
-//                   cookieVal = conn.getHeaderField(i);  
-//                   cookieVal = cookieVal.substring(0, cookieVal.indexOf(";"));  
-//                   sessionId = sessionId+cookieVal+";";  
-//               }  
-//           }  
+			conn.setRequestProperty("Cookie", this.session);
 			// user stop
 			if (checkStop()) {
 				return null;
@@ -342,24 +338,7 @@ public static final String CHARSET = "UTF-8";
 				outStream.close();
 			}
 			//获取cookie
-			Map<String,List<String>> map=conn.getHeaderFields();
-			if(map!=null){
-				Set<String> set=map.keySet();
-				String firstCookie=null;
-				for (Iterator iterator = set.iterator(); iterator.hasNext();) {
-					String key = (String) iterator.next();
-					if (key!=null&&key.equals("Set-Cookie")) {
-						System.out.println("key=" + key+",开始获取cookie");
-						List<String> list = map.get(key);
-						StringBuilder builder = new StringBuilder();
-						for (String str : list) {
-							builder.append(str).toString();
-						}
-						firstCookie=builder.toString();
-						System.out.println("第一次得到的cookie="+firstCookie);
-					}
-				}
-			}
+			saveSession(conn);
 			mResponseCode = conn.getResponseCode();  
 	        mResultDesc = conn.getResponseMessage();
 	        if (mResponseCode != HttpURLConnection.HTTP_OK) {
@@ -406,6 +385,40 @@ public static final String CHARSET = "UTF-8";
 	    return null;
 	}
 	
+	private void saveSession(HttpURLConnection conn){
+		//获取cookie
+		Map<String,List<String>> map=conn.getHeaderFields();
+		String firstCookie=null;
+		if(map!=null){
+			Set<String> set=map.keySet();
+			for (Iterator iterator = set.iterator(); iterator.hasNext();) {
+				String key = (String) iterator.next();
+				if (key!=null&&key.equals("Set-Cookie")) {
+					LogUtil.d(mcontext,"key=" + key+",开始获取cookie");
+					List<String> list = map.get(key);
+					StringBuilder builder = new StringBuilder();
+					for (String str : list) {
+						builder.append(str).toString();
+					}
+					firstCookie=builder.toString();
+					LogUtil.d(mcontext,"cookie------"+firstCookie);
+				}
+			}
+		}
+		this.session=firstCookie;
+	}
+	@Override
+	public String getSession() {
+		// TODO Auto-generated method stub
+		return this.session;
+	}
+
+	@Override
+	public void setSessionToHeader(String session) {
+		// TODO Auto-generated method stub
+		this.session=session;
+	}
+
 	@Override
 	public String postFileRequest(String strUrl, byte[] data, String filePath) {
 		// TODO Auto-generated method stub
