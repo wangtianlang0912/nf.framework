@@ -15,7 +15,10 @@ import java.net.MalformedURLException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import nf.framework.core.exception.NFRuntimeException;
 
@@ -300,6 +303,14 @@ public static final String CHARSET = "UTF-8";
 				mRequestErrorCode = HTTP_REQUEST_ERROR_CONNECT;
 				return null;
 			}
+//			 String key=null;  
+//		   for (int i = 1; (key = conn.getHeaderFieldKey(i)) != null; i++ ) {  
+//               if (key.equalsIgnoreCase("set-cookie")) {  
+//                   cookieVal = conn.getHeaderField(i);  
+//                   cookieVal = cookieVal.substring(0, cookieVal.indexOf(";"));  
+//                   sessionId = sessionId+cookieVal+";";  
+//               }  
+//           }  
 			// user stop
 			if (checkStop()) {
 				return null;
@@ -329,6 +340,25 @@ public static final String CHARSET = "UTF-8";
 				outStream = conn.getOutputStream();
 				outStream.write(data);
 				outStream.close();
+			}
+			//获取cookie
+			Map<String,List<String>> map=conn.getHeaderFields();
+			if(map!=null){
+				Set<String> set=map.keySet();
+				String firstCookie=null;
+				for (Iterator iterator = set.iterator(); iterator.hasNext();) {
+					String key = (String) iterator.next();
+					if (key!=null&&key.equals("Set-Cookie")) {
+						System.out.println("key=" + key+",开始获取cookie");
+						List<String> list = map.get(key);
+						StringBuilder builder = new StringBuilder();
+						for (String str : list) {
+							builder.append(str).toString();
+						}
+						firstCookie=builder.toString();
+						System.out.println("第一次得到的cookie="+firstCookie);
+					}
+				}
 			}
 			mResponseCode = conn.getResponseCode();  
 	        mResultDesc = conn.getResponseMessage();

@@ -11,11 +11,11 @@ package nf.framework.core.http;
 public interface AbsUIResquestHandler<T> {
 
 	
-	public void onPreExcute();
+	public void onPreExcute(AbsBaseRequestData<?> baseRequestData);
 	
-	public void onSuccessPostExecute(T object);
+	public void onSuccessPostExecute(AbsBaseRequestData<?> baseRequestData,T object);
 	
-	public void onFailurePostExecute(String failureMsg);
+	public void onFailurePostExecute(AbsBaseRequestData<?> baseRequestData,String failureMsg);
 	
-	public void onCompleteExcute();
+	public void onCompleteExcute(AbsBaseRequestData<?> baseRequestData);
 }
