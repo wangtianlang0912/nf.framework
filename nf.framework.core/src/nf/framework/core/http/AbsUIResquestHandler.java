@@ -1,7 +1,6 @@
 /**   
  * @Title: AbsUIResquestHandler.java 
  * @Package com.example.edittexttest.httprequest 
- * @Description: TODO(��һ�仰�������ļ���ʲô) 
  * @author niufei
  * @date 2014-5-13 ����9:51:41 
  * @version V1.0   
