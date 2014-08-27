@@ -43,10 +43,10 @@ public class CameraUtil {
 	
 	private static final String SCAN_MEDIA_FILE_FINISH = "ACTION_MEDIA_SCANNER_SCAN_FILE_FINISH";
 
-	private static final int PIC_REQUEST_CODE_WITH_DATA = 1; // 标识获取图片数据
-	private static final int PIC_REQUEST_CODE_SELECT_CAMERA = 2; // 标识请求照相功能的activity 再次调用图片剪辑程序去修剪图片
-	private static final int PIC_Select_CODE_ImageFromLoacal = 3;// 标识请求相册取图功能的activity
-	private static final int PIC_REQUEST_CODE_SELECT_CAMERA2 = 4; // 标识请求照相功能的activity 直接返回图片bitmap
+	public static final int PIC_REQUEST_CODE_WITH_DATA = 1; // 标识获取图片数据
+	public static final int PIC_REQUEST_CODE_SELECT_CAMERA = 2; // 标识请求照相功能的activity 再次调用图片剪辑程序去修剪图片
+	public static final int PIC_Select_CODE_ImageFromLoacal = 3;// 标识请求相册取图功能的activity
+	public static final int PIC_REQUEST_CODE_SELECT_CAMERA2 = 4; // 标识请求照相功能的activity 直接返回图片bitmap
 	private Context mContext;
 	private Activity mActivity;
 
@@ -80,7 +80,7 @@ public class CameraUtil {
 			mActivity.startActivityForResult(cIntent,
 					PIC_REQUEST_CODE_SELECT_CAMERA);
 		} else {
-			Toast.makeText(mContext, "没有SD卡",	Toast.LENGTH_LONG).show();
+			Toast.makeText(mContext, "抱歉，没有检测到SD卡",	Toast.LENGTH_LONG).show();
 		}
 		
 	}
@@ -88,14 +88,18 @@ public class CameraUtil {
 	 * 调用照相机进行拍照 保存到指定路径
 	 */
 	public void takePhoto(String fileSavePath){
-		if(fileSavePath==null){
-			return;
+		String status = Environment.getExternalStorageState();
+		if (status.equals(Environment.MEDIA_MOUNTED)) {// 判断是否有SD卡
+			if(fileSavePath==null){
+				return;
+			}
+			mCurrentPhotoFile = new File(fileSavePath);// 给新照的照片文件命名
+			Intent cIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
+			cIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mCurrentPhotoFile));
+			mActivity.startActivityForResult(cIntent,PIC_REQUEST_CODE_SELECT_CAMERA2);
+		} else {
+			Toast.makeText(mContext, "抱歉，没有检测到SD卡",	Toast.LENGTH_LONG).show();
 		}
-		mCurrentPhotoFile = new File(fileSavePath);// 给新照的照片文件命名
-		Intent cIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
-		cIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mCurrentPhotoFile));
-		mActivity.startActivityForResult(cIntent,PIC_REQUEST_CODE_SELECT_CAMERA2);
-		
 		
 	}
 	/**
@@ -219,7 +223,7 @@ public class CameraUtil {
 //		if (resultCode == Activity.RESULT_OK) {
 			switch (requestCode) {
 			case PIC_REQUEST_CODE_WITH_DATA: {// 调用Gallery返回的
-			System.out.println("CameraUtil.onActivityResult()+111111");
+				System.out.println("CameraUtil.onActivityResult()+111111");
 				if(data!=null){
 					photo = data.getParcelableExtra("data");
 				}else{
@@ -246,7 +250,6 @@ public class CameraUtil {
 					Toast.makeText(mContext, "获取图片异常，请重新尝试。", Toast.LENGTH_LONG).show();
 					Log.e(TAG, "Cannot crop image:", e);
 				}
-				photo = null;
 				break;
 			}
 			case PIC_Select_CODE_ImageFromLoacal:
