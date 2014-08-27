@@ -11,6 +11,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import nf.framework.core.util.android.MobelUtils;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -37,6 +39,7 @@ import android.graphics.RectF;
 import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.ExifInterface;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
@@ -788,4 +791,144 @@ public class ImageUtil {
 	        options.inJustDecodeBounds = false;
 	        return BitmapFactory.decodeByteArray(data, offset, length, options);
 	    }
+	    
+	    /**
+		 * 获取sd卡图片改变色值并缩小到2m
+		 * 
+		 * @param context
+		 * @param path
+		 * @return
+		 */
+		public static String convertPOIImagePath2m(Context context, String path) {
+			// int size = Util.getFileSize(path) / 1024 / 1024;
+			String str = null;
+			try {
+				int angle = getExifOrientation(path);
+				Bitmap bitmap;
+				// 如果照片出现了 旋转 那么 就更改旋转度数
+				if (angle != 0) {
+					bitmap = createBitmap(context, angle, path);
+				} else {
+					bitmap = decodeBitmap(path);
+
+				}
+				bitmap = null;
+			} catch (Exception e) {
+				
+				e.getStackTrace();
+			}
+
+			return str;
+	}
+
+		public static Bitmap decodeBitmap(String path) {
+			try {
+				Bitmap bitmap = null;
+				BitmapFactory.Options options2 = new BitmapFactory.Options();
+				options2.inJustDecodeBounds = true;
+				BitmapFactory.decodeFile(path, options2);
+				options2.inPreferredConfig = Config.RGB_565;
+				/**
+				 * 防止内存溢出，超过手机可容错大小就压缩
+				 */
+				int wh[] = MobelUtils.getMobelPicWorh();
+				if (options2.outWidth > wh[0]) {
+					int w = options2.outWidth;
+					int h = options2.outHeight;
+					float hh = wh[0];
+					float ww = wh[1];// 这里设置宽度为720f
+					// 缩放比。由于是固定比例缩放，只用高或者宽其中一个数据进行计算即可
+					int be = 1;// be=1表示不缩放
+					if (w > h && w > ww) {// 如果宽度大的话根据宽度固定大小缩放
+						be = (int) Math.ceil(options2.outWidth / (float) ww);
+					} else if (w < h && h > hh) {// 如果高度高的话根据宽度固定大小缩放
+						be = (int) Math.ceil(options2.outHeight / (float) hh);
+					}
+					if (be <= 0)
+						be = 1;
+					options2.inSampleSize = be;// 设置缩放比例
+				}
+				options2.inJustDecodeBounds = false;
+				bitmap = BitmapFactory.decodeFile(path, options2);
+				return bitmap;
+			} catch (Exception e) {
+				
+				e.getStackTrace();
+			}
+			return null;
+		}
+		/**
+		 * 得到 图片旋转 的角度
+		 * 
+		 * @param filepath
+		 * @return
+		 */
+		public static int getExifOrientation(String filepath) {
+			int degree = 0;
+			ExifInterface exif = null;
+			try {
+				exif = new ExifInterface(filepath);
+			} catch (IOException ex) {
+			}
+			if (exif != null) {
+				int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, -1);
+				if (orientation != -1) {
+					switch (orientation) {
+					case ExifInterface.ORIENTATION_ROTATE_90:
+						degree = 90;
+						break;
+					case ExifInterface.ORIENTATION_ROTATE_180:
+						degree = 180;
+						break;
+					case ExifInterface.ORIENTATION_ROTATE_270:
+						degree = 270;
+						break;
+					}
+				}
+			}
+			return degree;
+		}
+
+		/****
+		 * 获取bitmap  并且按照指定角度旋转
+		 * @param context
+		 * @param angle
+		 * @param path
+		 * @return
+		 */
+		public static Bitmap createBitmap(Context context, int angle, String path) {
+			Bitmap bitmap = null;
+			BitmapFactory.Options options2 = new BitmapFactory.Options();
+			options2.inJustDecodeBounds = true;
+			BitmapFactory.decodeFile(path, options2);
+			options2.inPreferredConfig = Config.RGB_565;
+			/**
+			 * 防止内存溢出，超过手机可容错大小就压缩
+			 */
+			int wh[] = MobelUtils.getMobelPicWorh();
+			if (options2.outWidth > wh[0]) {
+				int w = options2.outWidth;
+				int h = options2.outHeight;
+				float hh = wh[0];
+				float ww = wh[1];// 这里设置宽度为720f
+				// 缩放比。由于是固定比例缩放，只用高或者宽其中一个数据进行计算即可
+				int be = 1;// be=1表示不缩放
+				if (w > h && w > ww) {// 如果宽度大的话根据宽度固定大小缩放
+					be = (int) Math.ceil(options2.outWidth / (float) ww);
+				} else if (w < h && h > hh) {// 如果高度高的话根据宽度固定大小缩放
+					be = (int) Math.ceil(options2.outHeight / (float) hh);
+				}
+				if (be <= 0)
+					be = 1;
+				options2.inSampleSize = be;// 设置缩放比例
+			}
+			options2.inJustDecodeBounds = false; // 设置了此属性一定要记得将值设置为false
+			bitmap = BitmapFactory.decodeFile(path, options2);
+			Matrix matrix = new Matrix();
+			matrix.postRotate(angle);
+			bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+
+			return bitmap;
+		}
+		
 }
