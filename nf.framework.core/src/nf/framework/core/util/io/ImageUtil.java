@@ -924,6 +924,18 @@ public class ImageUtil {
 			}
 			options2.inJustDecodeBounds = false; // 设置了此属性一定要记得将值设置为false
 			bitmap = BitmapFactory.decodeFile(path, options2);
+			bitmap = exifBitmap(bitmap,angle);
+			return bitmap;
+		}
+		
+		/***
+		 * 按照角度旋转图片
+		 * @param bitmap
+		 * @param angle
+		 * @return
+		 */
+		public static Bitmap exifBitmap(Bitmap bitmap,int angle){
+			
 			Matrix matrix = new Matrix();
 			matrix.postRotate(angle);
 			bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
