@@ -43,10 +43,10 @@ public class CameraUtil {
 	
 	private static final String SCAN_MEDIA_FILE_FINISH = "ACTION_MEDIA_SCANNER_SCAN_FILE_FINISH";
 
-	public static final int PIC_REQUEST_CODE_WITH_DATA = 1; // 标识获取图片数据
-	public static final int PIC_REQUEST_CODE_SELECT_CAMERA = 2; // 标识请求照相功能的activity 再次调用图片剪辑程序去修剪图片
-	public static final int PIC_Select_CODE_ImageFromLoacal = 3;// 标识请求相册取图功能的activity
-	public static final int PIC_REQUEST_CODE_SELECT_CAMERA2 = 4; // 标识请求照相功能的activity 直接返回图片bitmap
+	public static final int PIC_REQUEST_CODE_WITH_DATA = 10000; // 标识获取图片数据
+	public static final int PIC_REQUEST_CODE_SELECT_CAMERA = 10001; // 标识请求照相功能的activity 再次调用图片剪辑程序去修剪图片
+	public static final int PIC_Select_CODE_ImageFromLoacal = 10002;// 标识请求相册取图功能的activity
+	public static final int PIC_REQUEST_CODE_SELECT_CAMERA2 = 10003; // 标识请求照相功能的activity 直接返回图片bitmap
 	private Context mContext;
 	private Activity mActivity;
 
