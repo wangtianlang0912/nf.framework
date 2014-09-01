@@ -20,7 +20,7 @@ public abstract class AbstractDB4oHelper<T> {
 	public AbstractDB4oHelper(Context ctx) {
 		context = ctx;
 	}
-	private synchronized  ObjectContainer db() {
+	protected synchronized  ObjectContainer db() {
 		try {
 			if(hasChangedFilePath()){
 				close();
@@ -174,7 +174,6 @@ public abstract class AbstractDB4oHelper<T> {
 		Query query = db().query();
 		query.constrain(getClassT());
 		query.descend(setObjectIndexedField()).constrain(fieldParam);
-		query.execute();
 		ObjectSet<T> list = query.execute();
 		return list;
 	}
@@ -183,7 +182,6 @@ public abstract class AbstractDB4oHelper<T> {
 		Query query = db().query();
 		query.constrain(getClassT());
 		query.descend(columnField).constrain(fieldParam);
-		query.execute();
 		ObjectSet<T> list = query.execute();
 		return list;
 	}
@@ -208,10 +206,22 @@ public abstract class AbstractDB4oHelper<T> {
 	public void saveObject(T object) {
 		db().store(object);
 		this.commit();
-
 		LogUtil.d(context, "******saveObject success *****");
 	}
-
+	/***
+	 * update Object
+	 * 
+	 * @param Object
+	 * @param niufei
+	 * @param 2014-3-21 ����11:46:54
+	 * @return void
+	 * @throws
+	 */
+	public void updateObject(T object) {
+		db().ext().set(object);
+		this.commit();
+		LogUtil.d(context, "******update Object success *****");
+	}
 	/***
 	 * 
 	 * @param list
