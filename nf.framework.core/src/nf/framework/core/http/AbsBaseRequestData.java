@@ -6,6 +6,7 @@ import java.util.Map;
 
 import nf.framework.core.cache.CacheDataMaster;
 import nf.framework.core.exception.NFRuntimeException;
+import nf.framework.core.util.android.CheckInternet;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
@@ -147,7 +148,7 @@ public abstract class AbsBaseRequestData<T> {
 		if( mNetworkRequest.getRequestErrorCode()!=0){
 			
 			if (mHttpRequestInterface != null) {
-				mHttpRequestInterface.onRequestFailured(String.valueOf(mNetworkRequest.getRequestErrorCode()));
+				mHttpRequestInterface.onRequestFailured(HttpReponseConfig.getReponseDataByCode(mNetworkRequest.getRequestErrorCode()));
 			}
 			return;
 		}
@@ -206,15 +207,20 @@ public abstract class AbsBaseRequestData<T> {
 	public abstract void requestDataFromNet(Map<String,String> map,AbsUIResquestHandler<T> absUIResquestHandler);
 
 	public void excute(){
-		
-		ServerEngine.getInstance().request(this);
+		if(CheckInternet.checkInternet(mcontext)){
+			ServerEngine.getInstance().request(this);
+		}else{
+			this.mHttpRequestInterface.onRequestFailured(HttpReponseConfig.getReponseDataByCode(HttpRequest.HTTP_REQUEST_NETWORK_ERROR));
+		}
 	}
 	
 	public void excuteWithSession(String session){
-		
-		mNetworkRequest.setSessionToHeader(session);
-		
-		ServerEngine.getInstance().request(this);
+		if(CheckInternet.checkInternet(mcontext)){
+			mNetworkRequest.setSessionToHeader(session);
+			ServerEngine.getInstance().request(this);
+		}else{
+			this.mHttpRequestInterface.onRequestFailured(HttpReponseConfig.getReponseDataByCode(HttpRequest.HTTP_REQUEST_NETWORK_ERROR));
+		}	
 	}
 	
 	public abstract T getDataFromCache();
