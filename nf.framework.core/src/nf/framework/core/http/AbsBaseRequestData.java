@@ -164,11 +164,14 @@ public abstract class AbsBaseRequestData<T> {
 			}
 			return;
 		}
-		//缓存数据 
-		saveCache(responseData);
-		if (mHttpRequestInterface != null) {
-			
-			mHttpRequestInterface.onRequestCompleted(responseData);
+		
+		if(onPretreatReponseData(responseData)){
+			//缓存数据 
+			saveCache(responseData);
+			if (mHttpRequestInterface != null) {
+				
+				mHttpRequestInterface.onRequestCompleted(responseData);
+			}
 		}
 	}
 	
@@ -181,6 +184,16 @@ public abstract class AbsBaseRequestData<T> {
 		return session;
 	}
 
+	/**
+	 * 数据预处理 用户处理session过期等通用逻辑处理
+	 * 默认为true 
+	 * @return
+	 */
+	protected boolean onPretreatReponseData(String responseData){
+		
+		return true;
+	}
+	
 	protected abstract T resolveJsonToObject(String jsonData);
 	
 	protected abstract String getCacheFileName();
