@@ -36,7 +36,7 @@ public class HttpReponseConfig {
 			break;
 		case HttpRequest.HTTP_REQUEST_NETWORK_ERROR:
 			
-			reponseDdata ="网络连接不可达";
+			reponseDdata ="网络连接不可用";
 			break;
 		case HttpRequest.TIMEOUT:
 			
