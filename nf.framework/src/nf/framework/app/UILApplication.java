@@ -15,7 +15,7 @@
  *******************************************************************************/
 package nf.framework.app;
 
-import android.app.Application;
+import nf.framework.core.AbsApplication;
 import android.content.Context;
 
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -26,7 +26,7 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 /**
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  */
-public class UILApplication extends Application {
+public abstract class UILApplication extends AbsApplication {
 	@Override
 	public void onCreate() {
 //		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
