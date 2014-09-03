@@ -37,10 +37,11 @@ public abstract class AbsApplication extends Application {
 	 *
 	 * 2014-6-5 下午4:48:30
 	 */
-	protected abstract  String getAppName();
+	public abstract  String getAppName();
 	
+	public abstract String getCurrentUserId();
 	
-	
+	public abstract String getCurrentUserName();
 	@Override  
     public void onTerminate(){  
         super.onTerminate();  
