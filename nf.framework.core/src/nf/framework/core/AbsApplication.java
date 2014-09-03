@@ -17,18 +17,18 @@ public abstract class AbsApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		LogUtil.init(getApplicationContext());
-		CrashHandler crashHandler = CrashHandler.getInstance();
-		//注册crashHandler
-		crashHandler.init(getApplicationContext());
-		//发送以前没发送的报告(可选)
-		crashHandler.sendPreviousReportsToServer(new CrashMessageCallBack() {
-			
-			@Override
-			public void asyncPostCrashMessageInfo(String message) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
+//		CrashHandler crashHandler = CrashHandler.getInstance();
+//		//注册crashHandler
+//		crashHandler.init(getApplicationContext());
+//		//发送以前没发送的报告(可选)
+//		crashHandler.sendPreviousReportsToServer(new CrashMessageCallBack() {
+//			
+//			@Override
+//			public void asyncPostCrashMessageInfo(String message) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//		});
 	}
 	/**
 	 * @return
