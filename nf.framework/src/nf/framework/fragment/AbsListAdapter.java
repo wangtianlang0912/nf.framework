@@ -32,6 +32,7 @@ public abstract class AbsListAdapter<T,ViewHolder> extends BaseAdapter {
 	protected List<T> mList;
 	protected LayoutInflater mLayoutInflater;
 	protected DisplayImageOptions options;
+	protected int currentPos=0;
 	/**
 	 * @param mcontext
 	 * @param list
@@ -94,6 +95,9 @@ public abstract class AbsListAdapter<T,ViewHolder> extends BaseAdapter {
 		return position;
 	}
 	
+	public int getCurrentPosition(){
+		return currentPos;
+	}
 
 	/* (non-Javadoc)
 	 * @see android.widget.Adapter#getView(int, android.view.View, android.view.ViewGroup)
@@ -123,7 +127,7 @@ public abstract class AbsListAdapter<T,ViewHolder> extends BaseAdapter {
 		}	
 		
 		T object=getItem(position);
-		
+		currentPos=position;
 		if(object!=null){	
 			bindDataToView(object,holder);
 		}
