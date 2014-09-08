@@ -29,6 +29,7 @@
             android:gravity="center"
             android:singleLine="true"
             android:text="分享"
+            android:minHeight="40dp"
             android:textColor="@color/black"
             android:textSize="15sp" />
     </LinearLayout>
