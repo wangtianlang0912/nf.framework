@@ -51,17 +51,17 @@ public class ChefListFilterDisplayAction extends PopupWindows{
 			childListView.setOnItemClickListener(childItemClickListener);
 			break;
 		}
+		groupList=new ArrayList<FilterItemVO>();
+		groupFilterAdapter=new FilterAdapter(mContext, groupList,true);
+		groupListView.setAdapter(groupFilterAdapter);
+		groupFilterAdapter.notifyDataSetChanged();
+		groupListView.setOnItemClickListener(groupItemClickListener);
 	}
 	@Override
 	protected View getRootViewLayout() {
 		// TODO Auto-generated method stub
 		View layoutView=LayoutInflater.from(mContext).inflate(R.layout.chef_list_filter_layout,null);
 		groupListView=	(ListView)layoutView.findViewById(R.id.filter_layout_listview1);
-		groupFilterAdapter=new FilterAdapter(mContext, groupList,true);
-		groupListView.setAdapter(groupFilterAdapter);
-		groupFilterAdapter.notifyDataSetChanged();
-		groupListView.setOnItemClickListener(groupItemClickListener);
-		
 		childListView=(ListView)layoutView.findViewById(R.id.filter_layout_listview2);
 		return layoutView;
 	}
@@ -142,8 +142,8 @@ public class ChefListFilterDisplayAction extends PopupWindows{
 	protected void setWindowLayoutParam() {
 		// TODO Auto-generated method stub
 		mWindow.setWidth(WindowManager.LayoutParams.FILL_PARENT);
-//		mWindow.setHeight(dip2px(mContext,200));
-		mWindow.setHeight(WindowManager.LayoutParams.FILL_PARENT);
+		mWindow.setHeight(dip2px(mContext,200));
+//		mWindow.setHeight(WindowManager.LayoutParams.FILL_PARENT);
 		
 	}
 	 private int dip2px(Context context, float pxValue) {  
