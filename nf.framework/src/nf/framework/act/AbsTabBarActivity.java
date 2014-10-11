@@ -94,7 +94,11 @@ public abstract class AbsTabBarActivity extends AbsBaseActivity{
 		mPager.setOffscreenPageLimit(tabBarList.size());// 设置缓存页面，当前页面的相邻N各页面都会被缓存
 		setCurrentTabItem(0);
 	}
-
+	protected void onRebuildTabView(){
+		
+		InitTabBarView();
+		InitViewPager();
+	}
 	
 	protected abstract List<Fragment> getFragmentList(List<TabBarVO> tabBarList);
 
