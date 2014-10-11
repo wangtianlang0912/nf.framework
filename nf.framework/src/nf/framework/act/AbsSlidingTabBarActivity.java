@@ -70,6 +70,7 @@ public abstract class AbsSlidingTabBarActivity extends AbsSlidingBaseActivity{
 			titleLayout.setVisibility(View.GONE);
 			return;
 		}
+		titleLayout.setVisibility(View.VISIBLE);
 		titleLayout.removeAllViewsInLayout();
 		titleLayout.setWeightSum(tabBarList.size());
 		for (int i = 0; i < tabBarList.size(); i++) {

@@ -3,10 +3,15 @@ package nf.framework.act;
 import java.util.ArrayList;
 import java.util.List;
 
+import nf.framework.act.AbsSlidingTabBarActivity.SectionsPagerAdapter;
+import nf.framework.act.AbsSlidingTabBarActivity.TabBarOnPageChangeListener;
+import nf.framework.act.AbsSlidingTabBarActivity.TabBarTitleViewOnClickListener;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
@@ -29,6 +34,8 @@ public abstract class AbsTabBarActivity extends AbsBaseActivity{
 
 	private ViewPager mPager;// 页卡内容
 	private List<TabBarVO> tabBarList = new ArrayList<TabBarVO>();// 页卡头标
+	
+	private List<Fragment> fragmentList = new ArrayList<Fragment>();
 	private LinearLayout titleLayout = null;
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	private ViewGroup mainLanderView;
@@ -45,6 +52,12 @@ public abstract class AbsTabBarActivity extends AbsBaseActivity{
 		// 设置布局
 		mainLanderView = (ViewGroup) LayoutInflater.from(this).inflate(getMainLayout(), null);
 		super.mainlayout.addView(mainLanderView);
+		titleLayout = (LinearLayout) findViewById(getTabBarLinearLayoutId());
+		mPager = (ViewPager) findViewById(getViewPagerId());
+		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),fragmentList);
+		mPager.setAdapter(mSectionsPagerAdapter);
+		mPager.setOnPageChangeListener(new TabBarOnPageChangeListener());
+		mSectionsPagerAdapter.notifyDataSetChanged();
 	}
 
 	protected abstract int getMainLayout();
@@ -57,11 +70,12 @@ public abstract class AbsTabBarActivity extends AbsBaseActivity{
 	private void InitTabBarView() {
 		tabBarList.clear();
 		tabBarList.addAll(makeTabBarList());
-		titleLayout = (LinearLayout) findViewById(getTabBarLinearLayoutId());
 		if (tabBarList.size() <= 1) {
 			titleLayout.setVisibility(View.GONE);
 			return;
 		}
+		titleLayout.setVisibility(View.VISIBLE);
+		titleLayout.removeAllViewsInLayout();
 		titleLayout.setWeightSum(tabBarList.size());
 		for (int i = 0; i < tabBarList.size(); i++) {
 			TabBarVO tabBar = tabBarList.get(i);
@@ -87,19 +101,16 @@ public abstract class AbsTabBarActivity extends AbsBaseActivity{
 	 * 初始化ViewPager
 	 */
 	private void InitViewPager() {
-		mPager = (ViewPager) findViewById(getViewPagerId());
-		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), getFragmentList(tabBarList));
-		mPager.setAdapter(mSectionsPagerAdapter);
-		mPager.setOnPageChangeListener(new TabBarOnPageChangeListener());
+		mSectionsPagerAdapter.setFragments(getFragmentList(tabBarList));
 		mPager.setOffscreenPageLimit(tabBarList.size());// 设置缓存页面，当前页面的相邻N各页面都会被缓存
 		setCurrentTabItem(0);
 	}
+
 	protected void onRebuildTabView(){
 		
 		InitTabBarView();
 		InitViewPager();
 	}
-	
 	protected abstract List<Fragment> getFragmentList(List<TabBarVO> tabBarList);
 
 	/***
@@ -146,9 +157,10 @@ public abstract class AbsTabBarActivity extends AbsBaseActivity{
 	 */
 	public class SectionsPagerAdapter extends FragmentPagerAdapter {
 		List<Fragment> dataFragmentList = null;
-
+		FragmentManager mFragmentManager;
 		public SectionsPagerAdapter(FragmentManager fm, List<Fragment> dataFragmentList) {
 			super(fm);
+			this.mFragmentManager=fm;
 			this.dataFragmentList = dataFragmentList;
 		}
 
@@ -157,12 +169,27 @@ public abstract class AbsTabBarActivity extends AbsBaseActivity{
 			Fragment fragment = dataFragmentList.get(position);
 			return fragment;
 		}
-
+		@Override  
+		public int getItemPosition(Object object) {  
+		    return POSITION_NONE;  
+		}  
 		@Override
 		public int getCount() {
 			return dataFragmentList.size();
 		}
-
+		public void setFragments( List<Fragment> fragmentList) {
+			   if(this.dataFragmentList != null){
+			      FragmentTransaction ft = mFragmentManager.beginTransaction();
+			      for(Fragment f:this.dataFragmentList){
+			        ft.remove(f);
+			      }
+			      ft.commit();
+			      ft=null;
+			      mFragmentManager.executePendingTransactions();
+			   }
+			  this.dataFragmentList = fragmentList;
+			  notifyDataSetChanged();
+			}
 	}
 
 	public DataFragmentCallBack dataCallBack = new DataFragmentCallBack() {
@@ -273,7 +300,4 @@ public abstract class AbsTabBarActivity extends AbsBaseActivity{
 		public void onPageScrollStateChanged(int arg0) {
 		}
 	}
-
-	
-	
 }
