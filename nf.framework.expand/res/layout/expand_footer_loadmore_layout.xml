@@ -9,12 +9,15 @@
     android:paddingBottom="2dp"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
-    android:paddingTop="2dp" >
+    android:paddingTop="1dp" >
 
     <Button
         android:id="@+id/expand_footer_loadmore_btn"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/listview_morebtn_selector"
+        android:padding="10dp"
+        android:textColor="#333333"
         android:text="更  多" />
 
     <ProgressBar
