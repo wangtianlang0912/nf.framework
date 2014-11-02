@@ -44,7 +44,7 @@ import android.text.TextUtils;
 
 /**
  * 
- * æ¥å£è¯·æ±‚å‚æ•°çš„æŠ½è±¡ç±»
+ * ½Ó¿ÚÇëÇó²ÎÊıµÄ³éÏóÀà
  * 
  * @author niufei
  * 
@@ -67,23 +67,23 @@ public abstract class AbstractHttpService {
 
 		for (String param : params) {
 			if (TextUtils.isEmpty(param)) {
-				String errorMsg = "è¯·æ±‚å‚æ•°ä¸èƒ½ä¸ºç©º";
+				String errorMsg ="ÇëÇó²ÎÊı²»ÄÜÎª¿Õ";
 				throw new NFRuntimeException(errorMsg);
 			}
 		}
 	}
 
 	/**
-	 * postæ–¹æ³•ä¼ å€¼
+	 * post·½·¨´«Öµ
 	 * 
 	 * @param url
 	 * @param list
 	 * @return
 	 * @throws Exception
-	 *             1.åˆ›å»ºHttpGetæˆ–HttpPostå¯¹è±¡ï¼Œå°†è¦è¯·æ±‚çš„URLé€šè¿‡æ„é€ æ–¹æ³•ä¼ å…¥HttpGetæˆ–HttpPostå¯¹è±¡ã€‚
-	 *             2.ä½¿ç”¨DefaultHttpClientç±»çš„executeæ–¹æ³•å‘é€HTTP GETæˆ–HTTP
-	 *             POSTè¯·æ±‚ï¼Œå¹¶è¿”å›HttpResponseå¯¹è±¡ã€‚
-	 *             3.é€šè¿‡HttpResponseæ¥å£çš„getEntityæ–¹æ³•è¿”å›å“åº”ä¿¡æ¯ï¼Œå¹¶è¿›è¡Œç›¸åº”çš„å¤„ç†ã€‚
+	 *             1.´´½¨HttpGet»òHttpPost¶ÔÏó£¬½«ÒªÇëÇóµÄURLÍ¨¹ı¹¹Ôì·½·¨´«ÈëHttpGet»òHttpPost¶ÔÏó¡£
+	 *             2.Ê¹ÓÃDefaultHttpClientÀàµÄexecute·½·¨·¢ËÍHTTP GET»òHTTP
+	 *             POSTÇëÇó£¬²¢·µ»ØHttpResponse¶ÔÏó¡£
+	 *             3.Í¨¹ıHttpResponse½Ó¿ÚµÄgetEntity·½·¨·µ»ØÏìÓ¦ĞÅÏ¢£¬²¢½øĞĞÏàÓ¦µÄ´¦Àí¡£
 	 */
 	public String getDataByHttp(String url, ArrayList<NameValuePair> list) {
 		String responseBody = "";
@@ -93,8 +93,8 @@ public abstract class AbstractHttpService {
 		int time = 0;
 		do {
 			try {
-				// ç”Ÿæˆä¸€ä¸ªhttpå®¢æˆ·ç«¯å¯¹è±¡
-				httpClient = getHttpClient();// å‘é€è¯·æ±‚
+				// Éú³ÉÒ»¸öhttp¿Í»§¶Ë¶ÔÏó
+				httpClient = getHttpClient();// ·¢ËÍÇëÇó
 				httpPost = getHttpPost(url, null, null);
 				if (list != null) {
 					NameValuePair[] nameValues = new NameValuePair[] {};
@@ -109,7 +109,7 @@ public abstract class AbstractHttpService {
 					// System.out.println("XMLDATA=====>"+responseBody);
 					break;
 				} else {
-					 //å°†poståœ°å€è½¬æ¢ä¸ºgetåœ°å€ï¼Œå¹¶ä¸”ä¿å­˜åˆ°å­˜å‚¨å¡ä¸­çš„åˆ—è¡¨ä¸­
+					 //½«postµØÖ·×ª»»ÎªgetµØÖ·£¬²¢ÇÒ±£´æµ½´æ´¢¿¨ÖĞµÄÁĞ±íÖĞ
 					String requestUrl = getALLInterfaceUrl(url, list);
 //					throw new XingshulinError(DEBUG_TAG_POST + ":::"+ statusCode);
 				}
@@ -123,7 +123,7 @@ public abstract class AbstractHttpService {
 					}
 					continue;
 				}
-				// å‘ç”Ÿè‡´å‘½çš„å¼‚å¸¸ï¼Œå¯èƒ½æ˜¯åè®®ä¸å¯¹æˆ–è€…è¿”å›çš„å†…å®¹æœ‰é—®é¢˜
+				// ·¢ÉúÖÂÃüµÄÒì³££¬¿ÉÄÜÊÇĞ­Òé²»¶Ô»òÕß·µ»ØµÄÄÚÈİÓĞÎÊÌâ
 				e.printStackTrace();
 			} catch (IOException e) {
 				time++;
@@ -134,7 +134,7 @@ public abstract class AbstractHttpService {
 					}
 					continue;
 				}
-				// å‘ç”Ÿç½‘ç»œå¼‚å¸¸
+				// ·¢ÉúÍøÂçÒì³£
 				e.printStackTrace();
 			} finally {
 				if (inputStream != null) {
@@ -144,7 +144,7 @@ public abstract class AbstractHttpService {
 						// TODO Auto-generated catch block
 					}
 				}
-				// é‡Šæ”¾è¿æ¥
+				// ÊÍ·ÅÁ¬½Ó
 				httpPost.releaseConnection();
 				httpClient = null;
 			}
@@ -153,20 +153,20 @@ public abstract class AbstractHttpService {
 	}
 
 	/**
-	 * getæ–¹æ³•ä¼ å€¼
+	 * get·½·¨´«Öµ
 	 * 
 	 * @param uripath
 	 * @return
 	 * @throws Exception
-	 *             1.åˆ›å»ºHttpGetæˆ–HttpPostå¯¹è±¡ï¼Œå°†è¦è¯·æ±‚çš„URLé€šè¿‡æ„é€ æ–¹æ³•ä¼ å…¥HttpGetæˆ–HttpPostå¯¹è±¡ã€‚
-	 *             2.ä½¿ç”¨DefaultHttpClientç±»çš„executeæ–¹æ³•å‘é€HTTP GETæˆ–HTTP
-	 *             POSTè¯·æ±‚ï¼Œå¹¶è¿”å›HttpResponseå¯¹è±¡ã€‚
-	 *             3.é€šè¿‡HttpResponseæ¥å£çš„getEntityæ–¹æ³•è¿”å›å“åº”ä¿¡æ¯ï¼Œå¹¶è¿›è¡Œç›¸åº”çš„å¤„ç†ã€‚
+	 *             1.´´½¨HttpGet»òHttpPost¶ÔÏó£¬½«ÒªÇëÇóµÄURLÍ¨¹ı¹¹Ôì·½·¨´«ÈëHttpGet»òHttpPost¶ÔÏó¡£
+	 *             2.Ê¹ÓÃDefaultHttpClientÀàµÄexecute·½·¨·¢ËÍHTTP GET»òHTTP
+	 *             POSTÇëÇó£¬²¢·µ»ØHttpResponse¶ÔÏó¡£
+	 *             3.Í¨¹ıHttpResponse½Ó¿ÚµÄgetEntity·½·¨·µ»ØÏìÓ¦ĞÅÏ¢£¬²¢½øĞĞÏàÓ¦µÄ´¦Àí¡£
 	 */
 	public String getNet(String uripath, String enconding) throws Exception {
 		InputStream inputStream = null;
-		// ç”Ÿæˆä¸€ä¸ªhttpå®¢æˆ·ç«¯å¯¹è±¡
-		HttpClient httpClient = getHttpClient();// å‘é€è¯·æ±‚
+		// Éú³ÉÒ»¸öhttp¿Í»§¶Ë¶ÔÏó
+		HttpClient httpClient = getHttpClient();// ·¢ËÍÇëÇó
 		String responseBody = null;
 		GetMethod httpGet = null;
 		int time = 0;
@@ -174,7 +174,7 @@ public abstract class AbstractHttpService {
 			try {
 				httpGet = getHttpGet(uripath, null, null);
 				int statusCode = httpClient.executeMethod(httpGet);
-				// åˆ¤æ–­è¯·æ±‚æ˜¯å¦æˆåŠŸå¤„ç†
+				// ÅĞ¶ÏÇëÇóÊÇ·ñ³É¹¦´¦Àí
 				if (statusCode == HttpStatus.SC_OK) {
 					inputStream = httpGet.getResponseBodyAsStream();
 					responseBody = inputStream2String(inputStream);
@@ -192,7 +192,7 @@ public abstract class AbstractHttpService {
 					}
 					continue;
 				}
-				// å‘ç”Ÿè‡´å‘½çš„å¼‚å¸¸ï¼Œå¯èƒ½æ˜¯åè®®ä¸å¯¹æˆ–è€…è¿”å›çš„å†…å®¹æœ‰é—®é¢˜
+				// ·¢ÉúÖÂÃüµÄÒì³££¬¿ÉÄÜÊÇĞ­Òé²»¶Ô»òÕß·µ»ØµÄÄÚÈİÓĞÎÊÌâ
 				e.printStackTrace();
 			} catch (IOException e) {
 				time++;
@@ -203,7 +203,7 @@ public abstract class AbstractHttpService {
 					}
 					continue;
 				}
-				// å‘ç”Ÿç½‘ç»œå¼‚å¸¸
+				// ·¢ÉúÍøÂçÒì³£
 				e.printStackTrace();
 			} finally {
 				if (inputStream != null) {
@@ -213,7 +213,7 @@ public abstract class AbstractHttpService {
 						// TODO Auto-generated catch block
 					}
 				}
-				// é‡Šæ”¾è¿æ¥
+				// ÊÍ·ÅÁ¬½Ó
 				httpGet.releaseConnection();
 				httpClient = null;
 			}
@@ -221,21 +221,22 @@ public abstract class AbstractHttpService {
 		return responseBody;
 	}
 
+
 	private static HttpClient getHttpClient() {
 		HttpClient httpClient = new HttpClient();
-		// è®¾ç½® HttpClient æ¥æ”¶ Cookie,ç”¨ä¸æµè§ˆå™¨ä¸€æ ·çš„ç­–ç•¥
+		// ÉèÖÃ HttpClient ½ÓÊÕ Cookie,ÓÃÓëä¯ÀÀÆ÷Ò»ÑùµÄ²ßÂÔ
 		httpClient.getParams().setCookiePolicy(
 				CookiePolicy.BROWSER_COMPATIBILITY);
-		// è®¾ç½® é»˜è®¤çš„è¶…æ—¶é‡è¯•å¤„ç†ç­–ç•¥
+		// ÉèÖÃ Ä¬ÈÏµÄ³¬Ê±ÖØÊÔ´¦Àí²ßÂÔ
 		httpClient.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
 				new DefaultHttpMethodRetryHandler());
-		// è®¾ç½® è¿æ¥è¶…æ—¶æ—¶é—´
+		// ÉèÖÃ Á¬½Ó³¬Ê±Ê±¼ä
 		httpClient.getHttpConnectionManager().getParams()
 				.setConnectionTimeout(TIMEOUT_CONNECTION);
-		// è®¾ç½® è¯»æ•°æ®è¶…æ—¶æ—¶é—´
+		// ÉèÖÃ ¶ÁÊı¾İ³¬Ê±Ê±¼ä
 		httpClient.getHttpConnectionManager().getParams()
 				.setSoTimeout(TIMEOUT_SOCKET);
-		// è®¾ç½® å­—ç¬¦é›†
+		// ÉèÖÃ ×Ö·û¼¯
 		httpClient.getParams().setContentCharset(UTF_8);
 		return httpClient;
 	}
@@ -243,7 +244,7 @@ public abstract class AbstractHttpService {
 	private static GetMethod getHttpGet(String url, String cookie,
 			String userAgent) {
 		GetMethod httpGet = new GetMethod(url);
-		// è®¾ç½® è¯·æ±‚è¶…æ—¶æ—¶é—´
+		// ÉèÖÃ ÇëÇó³¬Ê±Ê±¼ä
 		httpGet.getParams().setSoTimeout(TIMEOUT_SOCKET);
 		httpGet.setRequestHeader("Connection", "Keep-Alive");
 		httpGet.setRequestHeader("Cookie", cookie);
@@ -254,7 +255,7 @@ public abstract class AbstractHttpService {
 	private static PostMethod getHttpPost(String url, String cookie,
 			String userAgent) {
 		PostMethod httpPost = new PostMethod(url);
-		// è®¾ç½® è¯·æ±‚è¶…æ—¶æ—¶é—´
+		// ÉèÖÃ ÇëÇó³¬Ê±Ê±¼ä
 		httpPost.getParams().setSoTimeout(TIMEOUT_SOCKET);
 		httpPost.setRequestHeader("Connection", "Keep-Alive");
 		httpPost.setRequestHeader("Cookie", cookie);
@@ -265,10 +266,10 @@ public abstract class AbstractHttpService {
 	protected String getALLInterfaceUrl(String url, List<NameValuePair> list) {
 		StringBuffer sb = new StringBuffer();
 		if (url == null) {
-			throw new NFRuntimeException("æ¥å£åœ°å€è·¯å¾„ä¸èƒ½ä¸ºç©º");
+			throw new NFRuntimeException("½Ó¿ÚµØÖ·Â·¾¶²»ÄÜÎª¿Õ");
 		}
 		if (list == null) {
-			throw new NFRuntimeException("æ¥å£åœ°å€å‚æ•°åˆ—è¡¨å¯¹è±¡ä¸èƒ½ä¸ºç©º");
+			throw new NFRuntimeException("½Ó¿ÚµØÖ·²ÎÊıÁĞ±í¶ÔÏó²»ÄÜÎª¿Õ");
 		}
 		sb.append(url);
 		for (NameValuePair nameValue : list) {
@@ -284,7 +285,7 @@ public abstract class AbstractHttpService {
 	}
 
 	/**
-	 * post æ–‡ä»¶ä¸Šä¼ æ¥å£
+	 * post ÎÄ¼şÉÏ´«½Ó¿Ú
 	 * 
 	 * @param url
 	 * @param nameValuePairs
@@ -296,13 +297,13 @@ public abstract class AbstractHttpService {
 		String result = null;
 	
 		org.apache.http.client.HttpClient httpClient = new DefaultHttpClient();
-		// è®¾ç½®é€šä¿¡åè®®ç‰ˆæœ¬
+		// ÉèÖÃÍ¨ĞÅĞ­Òé°æ±¾
 		httpClient.getParams().setParameter(
 				CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
 		HttpPost httpPost = new HttpPost(url);
 		httpClient.getParams().setIntParameter(
 				CoreConnectionPNames.CONNECTION_TIMEOUT, TIMEOUT_CONNECTION);
-		// è®¾ç½®è¯»æ•°æ®è¶…æ—¶æ—¶é—´(å•ä½æ¯«ç§’)
+		// ÉèÖÃ¶ÁÊı¾İ³¬Ê±Ê±¼ä(µ¥Î»ºÁÃë)
 		httpClient.getParams().setIntParameter(CoreConnectionPNames.SO_TIMEOUT,
 				TIMEOUT_SOCKET);
 				
@@ -324,13 +325,13 @@ public abstract class AbstractHttpService {
 			}
 		}
 		httpPost.setEntity(entity);
-		HttpResponse response = httpClient.execute(httpPost);// æ¥æ”¶å“åº”
-		// åˆ¤æ–­è¯·æ±‚æ˜¯å¦æˆåŠŸå¤„ç†
+		HttpResponse response = httpClient.execute(httpPost);// ½ÓÊÕÏìÓ¦
+		// ÅĞ¶ÏÇëÇóÊÇ·ñ³É¹¦´¦Àí
 		if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-			// è§£æè¿”å›çš„å†…å®¹
+			// ½âÎö·µ»ØµÄÄÚÈİ
 			result = EntityUtils.toString(response.getEntity(), "utf-8");
 		} else {
-			// //å°†poståœ°å€è½¬æ¢ä¸ºgetåœ°å€ï¼Œå¹¶ä¸”ä¿å­˜åˆ°å­˜å‚¨å¡ä¸­çš„åˆ—è¡¨ä¸­
+			// //½«postµØÖ·×ª»»ÎªgetµØÖ·£¬²¢ÇÒ±£´æµ½´æ´¢¿¨ÖĞµÄÁĞ±íÖĞ
 			String requestUrl = getALLInterfaceUrl(url, nameValuePairs);
 			int errorReponseCode = response.getStatusLine().getStatusCode();
 			httpClient.getConnectionManager().shutdown();
@@ -365,7 +366,7 @@ public abstract class AbstractHttpService {
 		if (in != null) {
 			BufferedReader bf = new BufferedReader(new InputStreamReader(in,
 					"UTF-8"));
-			// æœ€å¥½åœ¨å°†å­—èŠ‚æµè½¬æ¢ä¸ºå­—ç¬¦æµçš„æ—¶å€™ è¿›è¡Œè½¬ç 
+			// ×îºÃÔÚ½«×Ö½ÚÁ÷×ª»»Îª×Ö·ûÁ÷µÄÊ±ºò ½øĞĞ×ªÂë
 			StringBuffer buffer = new StringBuffer();
 			String line = "";
 			while ((line = bf.readLine()) != null) {
