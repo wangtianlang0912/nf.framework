@@ -43,9 +43,8 @@
         <attr name="slipOffBackground" format="reference" />
         <attr name="slipCursorDrawable" format="reference" />
     </declare-styleable>
-    <declare-styleable name="ViewPagerIndicator">
+    <declare-styleable name="TabPageIndicatorStyle">
 	  <!-- Style of the tab indicator's tabs. -->
-	     <attr name="vpiTabPageIndicatorStyle" format="reference"/>
+	     <attr name="vpiTabPageIndicatorStyle" format="dimension"/>
     </declare-styleable>
-     
 </resources>
