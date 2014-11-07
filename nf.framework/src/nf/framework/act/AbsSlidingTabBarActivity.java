@@ -52,9 +52,9 @@ public abstract class AbsSlidingTabBarActivity extends AbsSlidingBaseActivity{
 		mPager = (ViewPager) findViewById(getViewPagerId());
 		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),fragmentList);
 		mPager.setAdapter(mSectionsPagerAdapter);
-		mPager.setOnPageChangeListener(new TabBarOnPageChangeListener());
 		mSectionsPagerAdapter.notifyDataSetChanged();
 		indicator.setViewPager(mPager);
+		indicator.setOnPageChangeListener(new TabBarOnPageChangeListener());
 	}
 
 	protected abstract int getMainLayout();
