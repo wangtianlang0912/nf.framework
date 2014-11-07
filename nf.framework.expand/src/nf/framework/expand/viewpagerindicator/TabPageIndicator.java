@@ -20,11 +20,12 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import nf.framework.expand.R;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.AttributeSet;
-import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,6 +85,11 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
     private int mTabViewPaddingLeft =10;
     private int mTabViewPaddingRight =10;
     private int mTabViewPaddingBottom =10;
+    
+    private int mTabViewTextSize =14;
+    private int mTabViewTextColor = Color.BLACK;
+    
+    private TabImgPosition mImgPosition= TabImgPosition.Left;
     public TabPageIndicator(Context context) {
         this(context, null);
     }
@@ -165,11 +171,26 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
         tabView.setOnClickListener(mTabClickListener);
         tabView.setText(text);
         tabView.setSingleLine(true);
+        tabView.setTextColor(mTabViewTextColor);
+        tabView.setTextSize(TypedValue.COMPLEX_UNIT_SP, mTabViewTextSize);
         tabView.setGravity(mTabViewGravity);
         tabView.setBackgroundResource(mTabViewBackground);
         tabView.setPadding(mTabViewPaddingLeft,mTabViewPaddingTop, mTabViewPaddingRight,mTabViewPaddingBottom);
         if (iconResId != 0) {
-            tabView.setCompoundDrawablesWithIntrinsicBounds(iconResId, 0, 0, 0);
+        	switch (this.mImgPosition) {
+			case Left:
+				tabView.setCompoundDrawablesWithIntrinsicBounds(iconResId, 0, 0, 0);
+				break;
+			case Top:
+				tabView.setCompoundDrawablesWithIntrinsicBounds(0,iconResId, 0, 0);
+				break;
+			case Right:
+				tabView.setCompoundDrawablesWithIntrinsicBounds(0,0,iconResId, 0);
+				break;
+			case Bottom:
+				tabView.setCompoundDrawablesWithIntrinsicBounds(0,0, 0,iconResId);
+				break;
+			}
         }
 
         mTabLayout.addView(tabView, new LinearLayout.LayoutParams(0, MATCH_PARENT, 1));
@@ -178,21 +199,61 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
     public void setTabViewGravity(int gravity){
     	
     	this.mTabViewGravity=gravity;
+    	for(int i= 0;i<mTabLayout.getChildCount();i++){
+    		View childView =mTabLayout.getChildAt(i);
+    		if(childView instanceof TabView){
+    			((TabView) childView).setGravity(mTabViewGravity);
+    		}
+    	}
+    }
+    public void setImgPosition(TabImgPosition position){
+    	
+    	this.mImgPosition =position;
     	notifyDataSetChanged();
     }
     
     public void setTabViewBackground(int backgroundDrawable){
     	
     	this.mTabViewBackground = backgroundDrawable;
-    	notifyDataSetChanged();
+    	for(int i= 0;i<mTabLayout.getChildCount();i++){
+    		View childView =mTabLayout.getChildAt(i);
+    		if(childView instanceof TabView){
+    			childView.setBackgroundResource(backgroundDrawable);
+    		}
+    	}
     }
     public void setTabViewPadding(int left,int top,int right ,int bottom){
+    	this.mTabViewPaddingLeft =left;
+    	this.mTabViewPaddingTop =top;
+    	this.mTabViewPaddingRight =right;
+    	this.mTabViewPaddingBottom =bottom;
+    	for(int i= 0;i<mTabLayout.getChildCount();i++){
+    		View childView =mTabLayout.getChildAt(i);
+    		if(childView instanceof TabView){
+    			childView.setPadding(left, top, right, bottom);
+    		}
+    	}
+    }
+    
+    public void setTabViewTextSize(int textSize){
     	
-    	this.mTabViewPaddingLeft=left;
-    	this.mTabViewPaddingTop=top;
-    	this.mTabViewPaddingRight=right;
-    	this.mTabViewPaddingBottom=bottom;
-    	notifyDataSetChanged();
+    	this.mTabViewTextSize =textSize;
+    	for(int i= 0;i<mTabLayout.getChildCount();i++){
+    		View childView =mTabLayout.getChildAt(i);
+    		if(childView instanceof TabView){
+    			((TabView) childView).setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
+    		}
+    	}
+    }
+    public void setTabViewTextColor(int textColor){
+    	
+    	this.mTabViewTextColor =textColor;
+    	for(int i= 0;i<mTabLayout.getChildCount();i++){
+    		View childView =mTabLayout.getChildAt(i);
+    		if(childView instanceof TabView){
+    			((TabView) childView).setTextColor(mTabViewTextColor);
+    		}
+    	}
     }
     @Override
     public void onPageScrollStateChanged(int arg0) {
@@ -314,5 +375,10 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
         public int getIndex() {
             return mIndex;
         }
+    }
+    
+    public enum TabImgPosition{
+    	
+    	Left,Top,Right,Bottom
     }
 }
