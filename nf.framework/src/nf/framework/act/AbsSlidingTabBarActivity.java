@@ -3,6 +3,9 @@ package nf.framework.act;
 import java.util.ArrayList;
 import java.util.List;
 
+import nf.framework.expand.viewpagerindicator.IconPagerAdapter;
+import nf.framework.expand.viewpagerindicator.TabPageIndicator;
+import nf.framework.expand.viewpagerindicator.TabPageIndicator.TabImgPosition;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,12 +16,10 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.OvershootInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 
 /**
  * Tab页面手势滑动切换以及动画效果
@@ -32,7 +33,7 @@ public abstract class AbsSlidingTabBarActivity extends AbsSlidingBaseActivity{
 	private List<TabBarVO> tabBarList = new ArrayList<TabBarVO>();// 页卡头标
 	
 	private List<Fragment> fragmentList = new ArrayList<Fragment>();
-	private LinearLayout titleLayout = null;
+	private TabPageIndicator indicator = null;
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	private ViewGroup mainLanderView;
 
@@ -40,7 +41,6 @@ public abstract class AbsSlidingTabBarActivity extends AbsSlidingBaseActivity{
 		super.onCreate(savedInstanceState);
 		initView();
 		InitTabBarView();
-		// InitImageView();
 		InitViewPager();
 	}
 
@@ -48,12 +48,13 @@ public abstract class AbsSlidingTabBarActivity extends AbsSlidingBaseActivity{
 		// 设置布局
 		mainLanderView = (ViewGroup) LayoutInflater.from(this).inflate(getMainLayout(), null);
 		super.mainlayout.addView(mainLanderView);
-		titleLayout = (LinearLayout) findViewById(getTabBarLinearLayoutId());
+		indicator = (TabPageIndicator) findViewById(getTabBarLinearLayoutId());
 		mPager = (ViewPager) findViewById(getViewPagerId());
 		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),fragmentList);
 		mPager.setAdapter(mSectionsPagerAdapter);
 		mPager.setOnPageChangeListener(new TabBarOnPageChangeListener());
 		mSectionsPagerAdapter.notifyDataSetChanged();
+		indicator.setViewPager(mPager);
 	}
 
 	protected abstract int getMainLayout();
@@ -67,23 +68,13 @@ public abstract class AbsSlidingTabBarActivity extends AbsSlidingBaseActivity{
 		tabBarList.clear();
 		tabBarList.addAll(makeTabBarList());
 		if (tabBarList.size() <= 1) {
-			titleLayout.setVisibility(View.GONE);
+			indicator.setVisibility(View.GONE);
 			return;
 		}
-		titleLayout.setVisibility(View.VISIBLE);
-		titleLayout.removeAllViewsInLayout();
-		titleLayout.setWeightSum(tabBarList.size());
-		for (int i = 0; i < tabBarList.size(); i++) {
-			TabBarVO tabBar = tabBarList.get(i);
-			View itemView = getTabBarItemView(tabBar);
-			itemView.setTag(i);
-			itemView.setOnClickListener(new TabBarTitleViewOnClickListener());
-			titleLayout.addView(itemView, new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
-		}
-
+		indicator.setVisibility(View.VISIBLE);
+		indicator.notifyDataSetChanged();
+		indicator.setTabViewPadding(30,10,30,10);
 	}
-
-	protected abstract View getTabBarItemView(TabBarVO tabBar);
 
 	protected abstract List<TabBarVO> makeTabBarList();
 
@@ -126,32 +117,20 @@ public abstract class AbsSlidingTabBarActivity extends AbsSlidingBaseActivity{
 	 */
 	public void setCurrentTabItem(int position) {
 
-		if (titleLayout != null && titleLayout.getVisibility() != View.GONE) {
-			View selectedView = titleLayout.getChildAt(position);
-			selectedView.setSelected(true);
-		}
 		mPager.setCurrentItem(position);
 	}
 
 	public Fragment getCurrentTabFragment() {
-		int position = 0;
-		if (titleLayout != null && titleLayout.getVisibility() != View.GONE) {
-			for (int i = 0; i < titleLayout.getChildCount(); i++) {
-				View view = (View) titleLayout.getChildAt(i);
-				if (view.isSelected()) {
-					position = i;
-					break;
-				}
-			}
-		}
-		return mSectionsPagerAdapter.getItem(position);
+		
+		return mSectionsPagerAdapter.getItem(mPager.getCurrentItem());
+	
 	}
 
 	/**
 	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
 	 * one of the sections/tabs/pages.
 	 */
-	public class SectionsPagerAdapter extends FragmentPagerAdapter {
+	public class SectionsPagerAdapter extends FragmentPagerAdapter implements IconPagerAdapter {
 		List<Fragment> dataFragmentList = null;
 		FragmentManager mFragmentManager;
 		public SectionsPagerAdapter(FragmentManager fm, List<Fragment> dataFragmentList) {
@@ -169,23 +148,35 @@ public abstract class AbsSlidingTabBarActivity extends AbsSlidingBaseActivity{
 		public int getItemPosition(Object object) {  
 		    return POSITION_NONE;  
 		}  
+		
+		@Override
+        public CharSequence getPageTitle(int position) {
+            return tabBarList.get(position).getTabTitle();
+        }
 		@Override
 		public int getCount() {
-			return dataFragmentList.size();
+
+			return tabBarList.size();
 		}
 		public void setFragments( List<Fragment> fragmentList) {
-			   if(this.dataFragmentList != null){
-			      FragmentTransaction ft = mFragmentManager.beginTransaction();
-			      for(Fragment f:this.dataFragmentList){
-			        ft.remove(f);
-			      }
-			      ft.commit();
-			      ft=null;
-			      mFragmentManager.executePendingTransactions();
-			   }
-			  this.dataFragmentList = fragmentList;
-			  notifyDataSetChanged();
-			}
+		   if(this.dataFragmentList != null){
+		      FragmentTransaction ft = mFragmentManager.beginTransaction();
+		      for(Fragment f:this.dataFragmentList){
+		        ft.remove(f);
+		      }
+		      ft.commit();
+		      ft=null;
+		      mFragmentManager.executePendingTransactions();
+		   }
+		  this.dataFragmentList = fragmentList;
+		  notifyDataSetChanged();
+		}
+
+		@Override
+		public int getIconResId(int index) {
+			// TODO Auto-generated method stub
+			return tabBarList.get(index).getImageResId();
+		}
 	}
 
 	public DataFragmentCallBack dataCallBack = new DataFragmentCallBack() {
@@ -279,11 +270,6 @@ public abstract class AbsSlidingTabBarActivity extends AbsSlidingBaseActivity{
 
 		@Override
 		public void onPageSelected(int position) {
-			if (titleLayout != null && titleLayout.getVisibility() != View.GONE) {
-				for (int i = 0; i < titleLayout.getChildCount(); i++) {
-					titleLayout.getChildAt(i).setSelected(i == position ? true : false);
-				}
-			}
 			Fragment fragment = (Fragment) (mSectionsPagerAdapter.getItem(position));
 			buildCurrentFragmentListData(fragment);
 		}
