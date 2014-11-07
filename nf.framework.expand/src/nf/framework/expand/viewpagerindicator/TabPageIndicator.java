@@ -164,6 +164,7 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
         tabView.setFocusable(true);
         tabView.setOnClickListener(mTabClickListener);
         tabView.setText(text);
+        tabView.setSingleLine(true);
         tabView.setGravity(mTabViewGravity);
         tabView.setBackgroundResource(mTabViewBackground);
         tabView.setPadding(mTabViewPaddingLeft,mTabViewPaddingTop, mTabViewPaddingRight,mTabViewPaddingBottom);
