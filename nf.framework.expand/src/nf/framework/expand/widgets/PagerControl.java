@@ -17,6 +17,7 @@ package nf.framework.expand.widgets;
  */
 
 import nf.framework.expand.R;
+import android.R.integer;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -125,6 +126,12 @@ public class PagerControl extends View{
         return currentPage;
     }
 
+    public void setHighlightColor(int color){
+    	this.highlightPaint.setColor(color);
+    }
+    public void setBarColor(int color){
+    	this.barPaint.setColor(color);
+    }
     /**
      *
      * @param currentPage 0 to numPages-1

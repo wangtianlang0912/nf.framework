@@ -68,7 +68,7 @@ public class BannerGalleryView extends RelativeLayout {
 		float density=metric.density;
 		LayoutParams pagercontrolParams=	new LayoutParams((int)(60*density),(int)(25*density));
 		pagercontrolParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-		pagercontrolParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+		pagercontrolParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
 		pagercontrol.setLayoutParams(pagercontrolParams);
 		layout.addView(imggallery);
 		layout.addView(pagercontrol);
@@ -178,6 +178,13 @@ public class BannerGalleryView extends RelativeLayout {
 		}
 	};
 
+	public CancleInertiaGallery getImggallery() {
+		return imggallery;
+	}
+
+	public PagerControl getPagercontrol() {
+		return pagercontrol;
+	}
 	public interface OnBannerItemClickListener {
 
 		public void onBannerItemClick(AdapterView<?> arg0, View arg1, int arg2,
