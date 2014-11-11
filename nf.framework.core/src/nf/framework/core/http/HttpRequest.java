@@ -141,19 +141,31 @@ public static final String CHARSET = "UTF-8";
 			}
 	        
 	        // construct params for Text
-	        StringBuilder sb = new StringBuilder();
- 			for (Map.Entry<String, String> entry : params.entrySet()) {
- 				sb.append(PREFIX);
- 				sb.append(BOUNDARY);
- 				sb.append(LINEND);
- 				sb.append("Content-Disposition: form-data; name=\"" + entry.getKey() + "\"" + LINEND);
- 				sb.append("Content-Type: text/plain; charset=" + CHARSET + LINEND);
- 				sb.append("Content-Transfer-Encoding: 8bit" + LINEND);
- 				sb.append(LINEND);
- 				sb.append(entry.getValue());
- 				sb.append(LINEND);
- 			}
-	     			
+//	        StringBuilder sb = new StringBuilder();
+// 			for (Map.Entry<String, String> entry : params.entrySet()) {
+// 				sb.append(PREFIX);
+// 				sb.append(BOUNDARY);
+// 				sb.append(LINEND);
+// 				sb.append("Content-Disposition: form-data; name=\"" + entry.getKey() + "\"" + LINEND);
+// 				sb.append("Content-Type: text/plain; charset=" + CHARSET + LINEND);
+// 				sb.append("Content-Transfer-Encoding: 8bit" + LINEND);
+// 				sb.append(LINEND);
+// 				sb.append(entry.getValue());
+// 				sb.append(LINEND);
+// 			}
+	        StringBuffer sb = new StringBuffer();  
+ 		// 组织请求参数  
+ 	        Iterator it = params.entrySet().iterator();  
+ 	        while (it.hasNext()) {  
+ 	            Map.Entry element = (Map.Entry) it.next();  
+ 	            sb.append(element.getKey());  
+ 	           	sb.append("=");  
+ 	          	sb.append(element.getValue());  
+ 	         	sb.append("&");  
+ 	        }  
+ 	        if (sb.length() > 0) {  
+ 	        	sb.deleteCharAt(sb.length() - 1);  
+ 	        }  		
 	        outStream = new DataOutputStream(conn.getOutputStream());
 	        outStream.write(sb.toString().getBytes(CHARSET));
 	        outStream.flush();
