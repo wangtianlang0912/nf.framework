@@ -59,7 +59,7 @@
     <TextView
         android:id="@+id/common_base_top_title_textview"
         style="@style/common_navigate_title_style"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_centerInParent="true"
         android:layout_marginLeft="48dp"
