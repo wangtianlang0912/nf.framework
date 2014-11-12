@@ -374,7 +374,7 @@ public class UpFreshListView extends ListView implements OnScrollListener {
 
 	public void setOnHeaderRefreshListener(OnHeaderRefreshListener refreshListener) {
 		this.refreshListener = refreshListener;
-		isRefreshable = true;
+		isRefreshable =(refreshListener==null?false: true);
 	}
 	public void onRefreshComplete() {
 		state = DONE;
