@@ -176,7 +176,7 @@ public class LevelListView extends ExpandableListView implements OnScrollListene
 	@Override
 	public void setAdapter(ExpandableListAdapter adapter) {
 		super.setAdapter(adapter);
-//		mAdapter = (LevelListHeaderAdapter) adapter;
+		mAdapter = (LevelListHeaderAdapter) adapter;
 	}
 
 	/**
