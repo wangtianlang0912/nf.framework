@@ -12,9 +12,11 @@ public interface AbsUIResquestHandler<T> {
 	
 	public void onPreExcute(AbsBaseRequestData<?> baseRequestData);
 	
-	public void onSuccessPostExecute(AbsBaseRequestData<?> baseRequestData,T object);
+	public void onSuccessPostExecute(AbsBaseRequestData<?> baseRequestData,T object,boolean hasNext);
 	
 	public void onFailurePostExecute(AbsBaseRequestData<?> baseRequestData,String failureMsg);
 	
 	public void onCompleteExcute(AbsBaseRequestData<?> baseRequestData);
+	
+	
 }
