@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="bottom"
+    android:background="@color/dialog_bg"
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <GridView
+        android:id="@+id/content_gridview"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:cacheColorHint="@color/transparent"
+        android:horizontalSpacing="5dp"
+        android:listSelector="@null"
+        android:numColumns="4"
+        android:verticalSpacing="5dp" />
+	<Button
+        android:id="@+id/alert_dialog_menu_cancel_btn"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        style="@style/Style_Cancle_Button_Blue"
+        android:text="@string/dialog_btn_cancel"
+        />
+</LinearLayout>
