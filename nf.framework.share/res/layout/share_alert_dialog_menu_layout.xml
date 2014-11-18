@@ -22,6 +22,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:padding="10dp"
         style="@style/Style_Cancle_Button_Blue"
         android:text="@string/dialog_btn_cancel"
         />
