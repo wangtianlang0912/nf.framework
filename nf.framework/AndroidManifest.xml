@@ -55,6 +55,14 @@
             android:name="nf.framework.MainActivity"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name="nf.framework.act.browser.InnerBrowserActivity"
+            android:label="@string/app_name" >
+        </activity>
+          <activity
+            android:name="nf.framework.act.browser.InnerBrowserByTitleActivity"
+            android:label="@string/app_name" >
+        </activity>
     </application>
 
     <uses-permission android:name="android.permission.CALL_PHONE" >
