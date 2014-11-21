@@ -1,4 +1,4 @@
-package nf.framework.video.ui.vitamio;
+package io.vov.vitamio.activity;
 
 import io.vov.vitamio.Vitamio;
 import android.app.Activity;
@@ -29,7 +29,7 @@ public final class LibsChecker {
 	public static final boolean checkVitamioLibs(Activity ctx, int msgID) {
 		if ((!Vitamio.isInitialized(ctx)) && (!ctx.getIntent().getBooleanExtra("fromVitamioInitActivity", false))) {
 			Intent i = new Intent();
-			i.setClassName(ctx.getPackageName(), "com.nmbb.oplayer.ui.vitamio.InitActivity");//io.vov.vitamio.activity.InitActivity
+			i.setClassName(ctx.getPackageName(), "io.vov.vitamio.activity.InitActivity");//io.vov.vitamio.activity.InitActivity
 			i.putExtras(ctx.getIntent());
 			i.setData(ctx.getIntent().getData());
 			i.putExtra("package", ctx.getPackageName());

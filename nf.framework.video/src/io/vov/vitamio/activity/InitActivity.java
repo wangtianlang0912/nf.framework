@@ -1,4 +1,4 @@
-package nf.framework.video.ui.vitamio;
+package io.vov.vitamio.activity;
 
 import io.vov.vitamio.Vitamio;
 import nf.framework.video.R;
