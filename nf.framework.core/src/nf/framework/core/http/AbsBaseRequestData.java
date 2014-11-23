@@ -20,7 +20,7 @@ public abstract class AbsBaseRequestData<T> {
 	private boolean isCacheData=false;
 	private HttpRequestInterface mHttpRequestInterface;
 	private String session;
-	
+	private boolean interrupt;
 	private CacheDataMaster cacheDataMaster;
 	public AbsBaseRequestData(Context mcontext,boolean isCacheData) {
 		if(mcontext==null){
@@ -220,6 +220,9 @@ public abstract class AbsBaseRequestData<T> {
 	public abstract void requestDataFromNet(Map<String,String> map,AbsUIResquestHandler<T> absUIResquestHandler);
 
 	public void excute(){
+		if(isInterrupt()){
+			return;
+		}
 		if(CheckInternet.checkInternet(mcontext)){
 			ServerEngine.getInstance().request(this);
 		}else{
@@ -228,6 +231,9 @@ public abstract class AbsBaseRequestData<T> {
 	}
 	
 	public void excuteWithSession(String session){
+		if(isInterrupt()){
+			return;
+		}
 		if(CheckInternet.checkInternet(mcontext)){
 			mNetworkRequest.setSessionToHeader(session);
 			ServerEngine.getInstance().request(this);
@@ -258,6 +264,14 @@ public abstract class AbsBaseRequestData<T> {
 
 	public NetworkRequest getmNetworkRequest() {
 		return mNetworkRequest;
+	}
+
+	public boolean isInterrupt() {
+		return interrupt;
+	}
+
+	public void setInterrupt(boolean interrupt) {
+		this.interrupt = interrupt;
 	}
 	
 	
