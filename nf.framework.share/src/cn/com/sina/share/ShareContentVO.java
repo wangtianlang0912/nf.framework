@@ -2,6 +2,8 @@ package cn.com.sina.share;
 
 import java.io.Serializable;
 
+import android.graphics.Bitmap;
+
 public class ShareContentVO implements Serializable{
 
 	
@@ -23,6 +25,8 @@ public class ShareContentVO implements Serializable{
 	String appLogoUrl;
 	
 	int logoResId;
+	
+	Bitmap thumbBmp;
 
 	public String getContent() {
 		return content;
@@ -78,6 +82,14 @@ public class ShareContentVO implements Serializable{
 
 	public void setLogoResId(int logoResId) {
 		this.logoResId = logoResId;
+	}
+
+	public Bitmap getThumbBmp() {
+		return thumbBmp;
+	}
+
+	public void setThumbBmp(Bitmap thumbBmp) {
+		this.thumbBmp = thumbBmp;
 	}
 
 	

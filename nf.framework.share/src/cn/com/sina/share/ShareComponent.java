@@ -18,6 +18,10 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -208,26 +212,7 @@ public class ShareComponent {
 				SendMessageToWX.Req req = new SendMessageToWX.Req();
 				WXWebpageObject appdata = new WXWebpageObject();
 				appdata.webpageUrl=shareContent.getLink();
-				Bitmap bmp = null;
-				if(!TextUtils.isEmpty(shareContent.getLocalPicPath())){
-					 bmp = BitmapFactory.decodeFile(shareContent.getLocalPicPath());
-				 }else if(!TextUtils.isEmpty(shareContent.getLocalPicPath())){
-						try {
-							bmp = BitmapFactory.decodeStream(new URL(shareContent.getPicUrl()).openStream());
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					
-				 }
-				Bitmap thumbBmp =null;
-				if(bmp!=null){
-					thumbBmp =getThumbImageBitmap(bmp);
-				}
-				if(thumbBmp ==null&&shareContent.getLogoResId()!=0){
-					thumbBmp = BitmapFactory.decodeResource(
-                            mcontext.getResources(),shareContent.getLogoResId());
-				}
+				Bitmap thumbBmp =shareContent.getThumbBmp();
 				if(thumbBmp!=null){
 					msg.thumbData = Util.bmpToByteArray(thumbBmp, true);
 				}
@@ -270,26 +255,7 @@ public class ShareComponent {
 				SendMessageToYX.Req req = new SendMessageToYX.Req();
 				YXWebPageMessageData appdata = new YXWebPageMessageData();
 				appdata.webPageUrl = shareContent.getLink();
-				Bitmap bmp = null;
-				if(!TextUtils.isEmpty(shareContent.getLocalPicPath())){
-					 bmp = BitmapFactory.decodeFile(shareContent.getLocalPicPath());
-				 }else if(!TextUtils.isEmpty(shareContent.getLocalPicPath())){
-						try {
-							bmp = BitmapFactory.decodeStream(new URL(shareContent.getPicUrl()).openStream());
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					
-				 }
-				Bitmap thumbBmp =null;
-				if(bmp!=null){
-					thumbBmp =getThumbImageBitmap(bmp);
-				}
-				if(thumbBmp ==null&&shareContent.getLogoResId()!=0){
-					thumbBmp = BitmapFactory.decodeResource(
-                            mcontext.getResources(),shareContent.getLogoResId());
-				}
+				Bitmap thumbBmp =shareContent.getThumbBmp();
 				if(thumbBmp!=null){
 					msg.thumbData = Util.bmpToByteArray(thumbBmp, true);
 				}
@@ -418,13 +384,7 @@ public class ShareComponent {
      */
     private void shareMessageToEmail(ShareContentVO shareContent) throws MalformedURLException, IOException {
 		// TODO Auto-generated method stub
-    	Bitmap bitmap = null;
-    	if(!TextUtils.isEmpty(shareContent.getLocalPicPath())){
-    		bitmap = BitmapFactory.decodeFile(shareContent.getLocalPicPath());
-    	}
-    	if(!TextUtils.isEmpty(shareContent.getPicUrl())){
-    		bitmap = BitmapFactory.decodeStream(new URL(shareContent.getPicUrl()).openStream());
-    	}
+    	Bitmap bitmap = shareContent.getThumbBmp();
     	sendInfoByEmail(mcontext,
     			shareContent.getContent()
     			, shareContent.getTitle(), null, bitmap);
@@ -443,45 +403,19 @@ public class ShareComponent {
     	
 	    	// 1. 初始化微博的分享消息
 		    WeiboMultiMessage weiboMessage = new WeiboMultiMessage();
-			if(TextUtils.isEmpty(shareContent.getLocalPicPath())&&TextUtils.isEmpty(shareContent.getPicUrl())){
+			if(shareContent.getThumbBmp()==null){
 				TextObject textObject = new TextObject();
 		        textObject.text =shareContent.getContent();
 		        weiboMessage.textObject = textObject;
 		        ShareUtils.log(ShareComponent.class,shareContent.getContent());
-			}else if(!TextUtils.isEmpty(shareContent.getLocalPicPath())){
-				ShareUtils.log(ShareComponent.class,shareContent.getLocalPicPath());
+			}else {
 				ImageObject imageObject = new ImageObject();
-				Bitmap bmp = BitmapFactory.decodeFile(shareContent.getLocalPicPath());
-				Bitmap thumbBmp =null;
-				if(bmp!=null){
-					imageObject.setImageObject(bmp);
-					thumbBmp =getThumbImageBitmap(bmp);
-				}
+				Bitmap thumbBmp =shareContent.getThumbBmp();
 				if(thumbBmp!=null){
 					imageObject.setImageObject(thumbBmp);
+					thumbBmp =getThumbImageBitmap(thumbBmp);
 				}
 		        imageObject.setThumbImage(thumbBmp);
-				weiboMessage.imageObject =imageObject;
-				
-			}else if(!TextUtils.isEmpty(shareContent.getPicUrl())){
-				ShareUtils.log(ShareComponent.class,shareContent.getPicUrl());
-				ImageObject imageObject = new ImageObject();
-				Bitmap bmp=null;
-				try {
-					bmp = BitmapFactory.decodeStream(new URL(shareContent.getPicUrl()).openStream());
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				Bitmap thumbBmp =null;
-				if(bmp!=null){
-					imageObject.setImageObject(bmp);
-					// 这里修改150参数可以测试缩略图质量情况
-					thumbBmp = getThumbImageBitmap(bmp);
-				}
-				if(thumbBmp!=null){
-			        imageObject.setThumbImage(thumbBmp);
-				}
 				weiboMessage.imageObject =imageObject;
 		    }
 		    // 2. 初始化从第三方到微博的消息请求
@@ -606,8 +540,9 @@ public class ShareComponent {
 	 */
 	public static void registerWXAPI(Context context){
 		if(WXAPI==null){
-			WXAPI = WXAPIFactory.createWXAPI(context, Constants.APP_WX_ID, false);
-			WXAPI.registerApp(Constants.APP_WX_ID);    	
+			String shareId = getMeString(context,"shareToWXAppKey");
+			WXAPI = WXAPIFactory.createWXAPI(context,shareId, false);
+			WXAPI.registerApp(shareId);    	
 		}
 	}
 	/***
@@ -616,8 +551,9 @@ public class ShareComponent {
 	 */
 	public static void registerYXAPI(Context context){
 		if(YXAPI==null){
+			String shareId = getMeString(context,"shareToYXAppKey");
 			// 通过YXAPIFactory工厂，获取IYXAPI的实例
-			YXAPI = YXAPIFactory.createYXAPI(context,Constants.YX_APP_KEY);
+			YXAPI = YXAPIFactory.createYXAPI(context,shareId);
 			// 将该app注册到易信
 			YXAPI.registerApp();
 		}
@@ -628,8 +564,9 @@ public class ShareComponent {
 	 */
 	public void regusterWeiboAPI(final Context context){
 		if(mWeiboShareAPI==null){
+			String shareId = getMeString(context,"shareToWEIBOAppKey");
 			 // 创建微博分享接口实例
-	        mWeiboShareAPI = WeiboShareSDK.createWeiboAPI(context, Constants.APP_WEIBO_KEY);
+	        mWeiboShareAPI = WeiboShareSDK.createWeiboAPI(context,shareId);
 	        
 	        // 注册第三方应用到微博客户端中，注册成功后该应用将显示在微博的应用列表中。
 	        // 但该附件栏集成分享权限需要合作申请，详情请查看 Demo 提示
@@ -657,13 +594,14 @@ public class ShareComponent {
 		
 		// Tencent类是SDK的主要实现类，开发者可通过Tencent类访问腾讯开放的OpenAPI。
 		// 其中APP_ID是分配给第三方应用的appid，类型为String。
+		String shareId = getMeString(context,"shareToQQAppKey");
 		if(mQqAuth==null){
 			
-			mQqAuth = QQAuth.createInstance(Constants.APP_QQ_ID, context.getApplicationContext());
+			mQqAuth = QQAuth.createInstance(shareId, context.getApplicationContext());
 		}
 		if(tencent==null){
 			
-			tencent = Tencent.createInstance(Constants.APP_QQ_ID, context);
+			tencent = Tencent.createInstance(shareId, context);
 		}
 		mQQShare = new QQShare(context, mQqAuth.getQQToken());
 	}
@@ -712,4 +650,22 @@ public class ShareComponent {
 		return mWeiboShareAPI;
 	}
 	
+	private static String getMeString(Context context,String key){
+	    String value =null;
+		try {
+			ApplicationInfo	info = context.getPackageManager()
+			           .getApplicationInfo(context.getPackageName(),
+			           PackageManager.GET_META_DATA);
+			 value=info.metaData.getString(key);
+			 if(TextUtils.isEmpty(value)){
+				 throw new RuntimeException("share Component find meta-data for" + key +"is null");   
+			 }
+		} catch (NameNotFoundException e) {
+			// TODO Auto-generated catch block
+			throw new RuntimeException("share Component can not find meta-data for" + key);
+		}
+		return value;
+		  
+		   
+	}
 }
