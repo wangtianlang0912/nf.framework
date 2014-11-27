@@ -106,6 +106,10 @@
 			</intent-filter>
 		</activity>
 			
+        <meta-data android:name="shareToWXAppKey" android:value="wx4911133aefcf929a" />
+        <meta-data android:name="shareToYXAppKey" android:value="yxdef7da9340bb48978e1ab31a13125a87" />
+        <meta-data android:name="shareToWEIBOAppKey" android:value="3036118005" />
+        <meta-data android:name="shareToQQAppKey" android:value="100760735" />
 			
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
