@@ -594,7 +594,7 @@ public class ShareComponent {
 		
 		// Tencent类是SDK的主要实现类，开发者可通过Tencent类访问腾讯开放的OpenAPI。
 		// 其中APP_ID是分配给第三方应用的appid，类型为String。
-		String shareId = getMeString(context,"shareToQQAppKey");
+		String shareId = getMeString(context,"shareToQQAppID");
 		if(mQqAuth==null){
 			
 			mQqAuth = QQAuth.createInstance(shareId, context.getApplicationContext());
