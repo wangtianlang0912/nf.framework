@@ -469,6 +469,8 @@ public class FileUtils {
 		}
 		byte[] data = out.toByteArray();
 		out.close();
+		instr.close();
+		instr=null;
 		return new String(data, encodeStr);
 	}
 
