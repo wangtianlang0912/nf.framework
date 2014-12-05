@@ -32,7 +32,7 @@ public abstract class AbsBaseRequestData<T> {
 			mNetworkRequest = new HttpRequest(mcontext);
 		
 		
-		String fileFolderName=mcontext.getCacheDir().getPath();
+		String fileFolderName="requestData";
 		cacheDataMaster=new CacheDataMaster(mcontext, fileFolderName);
 		
 		this.mHttpRequestInterface=getHttpRequestInterface();
