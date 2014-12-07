@@ -203,6 +203,19 @@ public class LoadSysSoft {
 				Toast.makeText(context, "您未安装任何应用市场", 0).show();
 		}
 	}
+	
+
+	/**
+	 * 安裝apk
+	 * @param file
+	 */
+	public  void defalutInstall(Activity activity,String filepath) {
+        Intent i = new Intent(Intent.ACTION_VIEW); 
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.setDataAndType(Uri.fromFile(new File(filepath)), "application/vnd.android.package-archive"); 
+        activity.startActivity(i);
+        android.os.Process.killProcess(android.os.Process.myPid());
+    }
 	 /**
 	  * 设置飞行模式状态
 	  * @param setAirPlane
