@@ -5,6 +5,7 @@ import java.util.List;
 import nf.framework.R;
 import nf.framework.expand.widgets.OnFooterLoadMoreListener;
 import nf.framework.expand.widgets.OnHeaderRefreshListener;
+import nf.framework.expand.widgets.OnScrollLoadMoreListener;
 import nf.framework.expand.widgets.UpFreshListView;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView.OnItemClickListener;
 
 public abstract class AbsListFragment<T> extends Fragment implements
-		OnItemClickListener, OnHeaderRefreshListener, OnFooterLoadMoreListener {
+		OnItemClickListener, OnHeaderRefreshListener, OnScrollLoadMoreListener {
 	private UpFreshListView mlistview;
 	private AbsListAdapter<?, ?> listItemAdapter;
 	private View viewLayout = null;
@@ -46,7 +47,7 @@ public abstract class AbsListFragment<T> extends Fragment implements
 			listItemAdapter.notifyDataSetChanged();
 		}
 		mlistview.setOnHeaderRefreshListener(this);
-		mlistview.setFooterOnClickListener(this);
+		mlistview.setOnScrollLoadMoreListener(this);
 		mlistview.setOnItemClickListener(this);
 	}
 	
