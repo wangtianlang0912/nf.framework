@@ -14,6 +14,7 @@ import nf.framework.http.imageload.ImageLoader;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -87,6 +88,7 @@ public class ImageBrowseActivity extends AbsBaseActivity {
 		 // 设置布局
 		View mainView=	 LayoutInflater.from(this).inflate(R.layout.imagebrowser_main,super.mainlayout,false);
 		super.mainlayout.addView(mainView);
+		super.framelayout.setBackgroundColor(Color.BLACK);
 		mViewPager = (HackyViewPager)mainView.findViewById(R.id.imagebrowser_main_viewpager);
  		bottomLayout=	mainView.findViewById(R.id.imagebrowser_main_des_layout);
 		desView=(TextView)mainView.findViewById(R.id.imagebrowser_main_des_txt);
