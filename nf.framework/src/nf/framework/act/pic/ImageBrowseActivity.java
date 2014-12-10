@@ -9,21 +9,25 @@ import nf.framework.act.AbsBaseActivity;
 import nf.framework.core.util.android.CloseActivityClass;
 import nf.framework.expand.widgets.HackyViewPager;
 import nf.framework.expand.widgets.zoomPhotoView.PhotoView;
+import nf.framework.expand.widgets.zoomPhotoView.PhotoViewAttacher.OnViewTapListener;
 import nf.framework.http.imageload.ImageLoader;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -42,8 +46,10 @@ public class ImageBrowseActivity extends AbsBaseActivity {
 	private int currentPosition=0;
 	private View bottomLayout;
 	private TextView desView;
+	private boolean isHidden;
 //	private DisplayImageOptions options;
 //	protected  ImageLoader imageLoader = ImageLoader.getInstance();
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -125,6 +131,7 @@ public class ImageBrowseActivity extends AbsBaseActivity {
 				// TODO Auto-generated method stub
 			}
 		});
+		
 
 	}
 	@Override
@@ -154,6 +161,26 @@ public class ImageBrowseActivity extends AbsBaseActivity {
 		finish();
 	}
 	
+	private OnViewTapListener onImageViewTapListener(){
+		return new OnViewTapListener() {
+			
+			@Override
+			public void onViewTap(View view, float x, float y) {
+				// TODO Auto-generated method stub
+				isHidden =!isHidden;
+				navigationBarLayout.setVisibility(isHidden?View.GONE:View.VISIBLE);
+				setPullDownAnimation(navigationBarLayout,isHidden);
+				bottomLayout.setVisibility(isHidden?View.GONE:View.VISIBLE);
+			}
+		};
+		
+	}
+	
+	private void setPullDownAnimation(View view ,boolean isHidden){
+		
+		Animation animation = AnimationUtils.loadAnimation(this,isHidden? R.anim.common_slide_down_out:R.anim.common_slide_up_in);   
+		view.startAnimation(animation); 
+	}
 	 class WallPaperBrowseAdapter extends PagerAdapter {
 
 		List<ImageBrowserVO> mlist = new ArrayList<ImageBrowserVO>();
@@ -182,7 +209,7 @@ public class ImageBrowseActivity extends AbsBaseActivity {
 			new DownloadImgTask(mcontext,loadImage,imageView, progressBar,R.drawable.package_loading,wallPaper).execute();
 			container.addView(imageLayout, LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
 			mcontainer = container;
-			
+			imageView.setOnViewTapListener(onImageViewTapListener());
 			return imageLayout;
 		}
 
