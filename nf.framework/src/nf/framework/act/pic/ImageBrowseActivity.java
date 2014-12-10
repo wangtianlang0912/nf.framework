@@ -62,7 +62,7 @@ public class ImageBrowseActivity extends AbsBaseActivity {
 		mViewPager.setAdapter(wallPaperAdapter);
 		mViewPager.setCurrentItem(currentPosition, true);
 		top_textview.setText((currentPosition+1) + "/" + list.size());
-		
+		desView.setText(list.get(currentPosition).getDescription());
 //		options = new DisplayImageOptions.Builder()
 //		.showImageForEmptyUri(R.drawable.icon_empty)
 //		.showImageOnFail(R.drawable.ic_error)
@@ -79,11 +79,12 @@ public class ImageBrowseActivity extends AbsBaseActivity {
 	 */
 	private void initView() {
 		 // 设置布局
-		 View mainView=	 LayoutInflater.from(this).inflate(R.layout.imagebrowser_main,super.mainlayout,false);
-		mViewPager = (HackyViewPager)this.findViewById(R.id.imagebrowser_main_viewpager);
-		mViewPager.setBackgroundColor(Color.BLACK);
-		
+		View mainView=	 LayoutInflater.from(this).inflate(R.layout.imagebrowser_main,super.mainlayout,false);
 		super.mainlayout.addView(mainView);
+		mViewPager = (HackyViewPager)mainView.findViewById(R.id.imagebrowser_main_viewpager);
+ 		bottomLayout=	mainView.findViewById(R.id.imagebrowser_main_des_layout);
+		desView=(TextView)mainView.findViewById(R.id.imagebrowser_main_des_txt);
+
 		super.leftButton.setVisibility(View.VISIBLE);
 		super.leftButton.setImageResource(R.drawable.common_navigate_back_btn);
 		super.leftButton.setOnClickListener(new OnClickListener() {
@@ -102,8 +103,6 @@ public class ImageBrowseActivity extends AbsBaseActivity {
 			}
 		});
 		
-		bottomLayout=	this.findViewById(R.id.imagebrowser_main_des_layout);
-		desView=(TextView)findViewById(R.id.imagebrowser_main_des_txt);
 		mViewPager.setOnPageChangeListener(new OnPageChangeListener() {
 
 			@Override
