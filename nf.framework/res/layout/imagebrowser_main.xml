@@ -13,7 +13,8 @@
     <ScrollView 
         android:layout_width="fill_parent"
    		android:layout_height="100dp"
-   		android:background="@color/lightgrey"
+   		android:background="#50111111"
+   		android:layout_alignParentBottom="true"
         android:id="@+id/imagebrowser_main_des_layout"
         >
         <TextView 
@@ -22,6 +23,7 @@
    			android:layout_height="fill_parent"
    			android:id="@+id/imagebrowser_main_des_txt"
    			android:textColor="@color/white"
+   			android:padding="10dp"
    			android:textSize="13sp"
             />
         
