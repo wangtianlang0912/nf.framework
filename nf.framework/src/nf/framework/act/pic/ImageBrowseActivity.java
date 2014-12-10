@@ -7,8 +7,6 @@ import java.util.List;
 import nf.framework.R;
 import nf.framework.act.AbsBaseActivity;
 import nf.framework.core.util.android.CloseActivityClass;
-import nf.framework.expand.menu.TabMenu;
-import nf.framework.expand.menu.TabMenu.OnBodyItemClickListener;
 import nf.framework.expand.widgets.HackyViewPager;
 import nf.framework.expand.widgets.zoomPhotoView.PhotoView;
 import nf.framework.http.imageload.ImageLoader;
@@ -20,16 +18,14 @@ import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.AdapterView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 
 public class ImageBrowseActivity extends AbsBaseActivity {
@@ -44,6 +40,8 @@ public class ImageBrowseActivity extends AbsBaseActivity {
 	private WallPaperBrowseAdapter wallPaperAdapter = null;
 	private Context mcontext;
 	private int currentPosition=0;
+	private View bottomLayout;
+	private TextView desView;
 //	private DisplayImageOptions options;
 //	protected  ImageLoader imageLoader = ImageLoader.getInstance();
 	@Override
@@ -80,12 +78,12 @@ public class ImageBrowseActivity extends AbsBaseActivity {
 	 * 初始化视图控件
 	 */
 	private void initView() {
-		// // 设置布局
-		// View mainView=
-		// LayoutInflater.from(this).inflate(R.layout.wallpaper_list_main,null);
-		mViewPager = new HackyViewPager(this);
+		 // 设置布局
+		 View mainView=	 LayoutInflater.from(this).inflate(R.layout.imagebrowser_main,super.mainlayout,false);
+		mViewPager = (HackyViewPager)this.findViewById(R.id.imagebrowser_main_viewpager);
 		mViewPager.setBackgroundColor(Color.BLACK);
-		super.mainlayout.addView(mViewPager);
+		
+		super.mainlayout.addView(mainView);
 		super.leftButton.setVisibility(View.VISIBLE);
 		super.leftButton.setImageResource(R.drawable.common_navigate_back_btn);
 		super.leftButton.setOnClickListener(new OnClickListener() {
@@ -103,12 +101,17 @@ public class ImageBrowseActivity extends AbsBaseActivity {
 				openOptionsMenu();
 			}
 		});
+		
+		bottomLayout=	this.findViewById(R.id.imagebrowser_main_des_layout);
+		desView=(TextView)findViewById(R.id.imagebrowser_main_des_txt);
 		mViewPager.setOnPageChangeListener(new OnPageChangeListener() {
 
 			@Override
 			public void onPageSelected(int arg0) {
 				// TODO Auto-generated method stub
 				currentPosition=arg0;
+				if(list!=null&&desView!=null)
+					desView.setText(list.get(arg0).getDescription());
 			}
 
 			@Override
@@ -180,6 +183,7 @@ public class ImageBrowseActivity extends AbsBaseActivity {
 			new DownloadImgTask(mcontext,loadImage,imageView, progressBar,R.drawable.package_loading,wallPaper).execute();
 			container.addView(imageLayout, LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
 			mcontainer = container;
+			
 			return imageLayout;
 		}
 
