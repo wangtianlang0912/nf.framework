@@ -1,0 +1,30 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/black" >
+
+    <nf.framework.expand.widgets.HackyViewPager
+        
+        android:layout_width="fill_parent"
+   		android:layout_height="fill_parent"
+        android:id="@+id/imagebrowser_main_viewpager"
+        />
+    
+    <ScrollView 
+        android:layout_width="fill_parent"
+   		android:layout_height="100dp"
+   		android:background="@color/lightgrey"
+        android:id="@+id/imagebrowser_main_des_layout"
+        >
+        <TextView 
+            
+            android:layout_width="fill_parent"
+   			android:layout_height="fill_parent"
+   			android:id="@+id/imagebrowser_main_des_txt"
+   			android:textColor="@color/white"
+   			android:textSize="13sp"
+            />
+        
+    </ScrollView>
+    
+</RelativeLayout>
