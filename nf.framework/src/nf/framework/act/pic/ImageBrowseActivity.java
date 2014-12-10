@@ -29,6 +29,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -86,16 +87,17 @@ public class ImageBrowseActivity extends AbsBaseActivity {
 	 */
 	private void initView() {
 		 // 设置布局
-		View mainView=	 LayoutInflater.from(this).inflate(R.layout.imagebrowser_main,super.mainlayout,false);
-		super.mainlayout.addView(mainView);
-		super.framelayout.setBackgroundColor(Color.BLACK);
-		mViewPager = (HackyViewPager)mainView.findViewById(R.id.imagebrowser_main_viewpager);
- 		bottomLayout=	mainView.findViewById(R.id.imagebrowser_main_des_layout);
-		desView=(TextView)mainView.findViewById(R.id.imagebrowser_main_des_txt);
-
-		super.leftButton.setVisibility(View.VISIBLE);
-		super.leftButton.setImageResource(R.drawable.common_navigate_back_btn);
-		super.leftButton.setOnClickListener(new OnClickListener() {
+		setContentView(R.layout.imagebrowser_main);
+		mViewPager = (HackyViewPager)this.findViewById(R.id.imagebrowser_main_viewpager);
+ 		bottomLayout=	this.findViewById(R.id.imagebrowser_main_des_layout);
+		desView=(TextView)this.findViewById(R.id.imagebrowser_main_des_txt);
+		top_textview = (TextView) this.findViewById(R.id.common_base_top_title_textview);
+		leftButton = (ImageButton) findViewById(R.id.common_base_toptitle_left_img);
+		rightButton = (ImageButton) findViewById(R.id.common_base_toptitle_right_img);
+		navigationBarLayout = (ViewGroup) findViewById(R.id.common_basemain_navigationbar_layout);
+		leftButton.setVisibility(View.VISIBLE);
+		leftButton.setImageResource(R.drawable.common_navigate_back_btn);
+		leftButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -170,17 +172,25 @@ public class ImageBrowseActivity extends AbsBaseActivity {
 			public void onViewTap(View view, float x, float y) {
 				// TODO Auto-generated method stub
 				isHidden =!isHidden;
-				navigationBarLayout.setVisibility(isHidden?View.GONE:View.VISIBLE);
-				setPullDownAnimation(navigationBarLayout,isHidden);
-				bottomLayout.setVisibility(isHidden?View.GONE:View.VISIBLE);
+				
+				setTopViewAnimation(navigationBarLayout,isHidden);
+				navigationBarLayout.setVisibility(isHidden?View.INVISIBLE:View.VISIBLE);
+				setBottomViewAnimation(bottomLayout,isHidden);
+				bottomLayout.setVisibility(isHidden?View.INVISIBLE:View.VISIBLE);
+				
 			}
 		};
 		
 	}
 	
-	private void setPullDownAnimation(View view ,boolean isHidden){
+	private void setBottomViewAnimation(View view ,boolean isHidden){
 		
-		Animation animation = AnimationUtils.loadAnimation(this,isHidden? R.anim.common_slide_down_out:R.anim.common_slide_up_in);   
+		Animation animation = AnimationUtils.loadAnimation(this,isHidden? R.anim.imagebrowser_bottomview_exit:R.anim.imagebrowser_bottomview_enter);   
+		view.startAnimation(animation); 
+	}
+	private void setTopViewAnimation(View view,boolean isHidden){
+		
+		Animation animation = AnimationUtils.loadAnimation(this,isHidden? R.anim.imagebrowser_topview_exit:R.anim.imagebrowser_topview_enter);   
 		view.startAnimation(animation); 
 	}
 	 class WallPaperBrowseAdapter extends PagerAdapter {
