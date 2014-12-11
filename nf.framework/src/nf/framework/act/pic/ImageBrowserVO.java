@@ -1,6 +1,10 @@
 package nf.framework.act.pic;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import nf.framework.expand.widgets.zoomPhotoView.ImageTagVO;
 
 public class ImageBrowserVO implements Serializable{
 
@@ -14,6 +18,7 @@ public class ImageBrowserVO implements Serializable{
 	String picUrl;
 	String itemtype;
 	String smailPicUrlLocalPath;
+	List<ImageTagVO> tagList=new ArrayList<ImageTagVO>();
 	Object object;
 	public String getDescription() {
 		return description;
@@ -62,6 +67,12 @@ public class ImageBrowserVO implements Serializable{
 	}
 	public void setObject(Object object) {
 		this.object = object;
+	}
+	public List<ImageTagVO> getTagList() {
+		return tagList;
+	}
+	public void setTagList(List<ImageTagVO> tagList) {
+		this.tagList = tagList;
 	}
 	
 }

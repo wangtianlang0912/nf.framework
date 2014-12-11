@@ -8,23 +8,22 @@ import nf.framework.R;
 import nf.framework.act.AbsBaseActivity;
 import nf.framework.core.util.android.CloseActivityClass;
 import nf.framework.expand.widgets.HackyViewPager;
+import nf.framework.expand.widgets.zoomPhotoView.ImageTagVO;
 import nf.framework.expand.widgets.zoomPhotoView.PhotoView;
+import nf.framework.expand.widgets.zoomPhotoView.PhotoView.OnImageTagItemClickListener;
 import nf.framework.expand.widgets.zoomPhotoView.PhotoViewAttacher.OnViewTapListener;
 import nf.framework.http.imageload.ImageLoader;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
@@ -32,6 +31,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class ImageBrowseActivity extends AbsBaseActivity {
@@ -182,6 +182,17 @@ public class ImageBrowseActivity extends AbsBaseActivity {
 		};
 		
 	}
+	private OnImageTagItemClickListener onImageTagItemClickListener(){
+		
+		return new OnImageTagItemClickListener() {
+			
+			@Override
+			public void onImageTagItemClicked(ImageTagVO imageTag) {
+				// TODO Auto-generated method stub
+				Toast.makeText(getApplicationContext(),imageTag.getLink(),0).show();
+			}
+		};
+	}
 	
 	private void setBottomViewAnimation(View view ,boolean isHidden){
 		
@@ -222,6 +233,8 @@ public class ImageBrowseActivity extends AbsBaseActivity {
 			container.addView(imageLayout, LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
 			mcontainer = container;
 			imageView.setOnViewTapListener(onImageViewTapListener());
+			imageView.setImageTagList(wallPaper.getTagList());
+			imageView.setOnImageTagItemClickListener(onImageTagItemClickListener());
 			return imageLayout;
 		}
 
