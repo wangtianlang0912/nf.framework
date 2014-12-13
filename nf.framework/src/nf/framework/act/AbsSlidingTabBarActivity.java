@@ -159,19 +159,17 @@ public abstract class AbsSlidingTabBarActivity extends AbsSlidingBaseActivity{
 			return tabBarList.size();
 		}
 		public void setFragments( List<Fragment> fragmentList) {
-		   if(this.dataFragmentList != null){
-			   this.dataFragmentList.clear();
-		   }
-		   this.dataFragmentList = fragmentList;
-	      FragmentTransaction ft = mFragmentManager.beginTransaction();
-	      for(Fragment f:this.dataFragmentList){
-	        ft.remove(f);
-	      }
-	      ft.commit();
-	      ft=null;
-	      mFragmentManager.executePendingTransactions();
-		  
-		  notifyDataSetChanged();
+			if(this.dataFragmentList != null){
+			      FragmentTransaction ft = mFragmentManager.beginTransaction();
+			      for(Fragment f:this.dataFragmentList){
+			        ft.remove(f);
+			      }
+			      ft.commit();
+			      ft=null;
+			      mFragmentManager.executePendingTransactions();
+			   }
+			  this.dataFragmentList = fragmentList;
+			  notifyDataSetChanged();
 		}
 
 		@Override
