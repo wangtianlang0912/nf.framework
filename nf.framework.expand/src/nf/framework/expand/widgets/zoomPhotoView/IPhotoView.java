@@ -58,6 +58,11 @@ public interface IPhotoView {
      * @return float - current scale value
      */
     float getScale();
+    /**
+     * 返回初始显示时scale value
+     * @return
+     */
+    float getInitScale();
 
     /**
      * Return the current scale type in use by the ImageView.

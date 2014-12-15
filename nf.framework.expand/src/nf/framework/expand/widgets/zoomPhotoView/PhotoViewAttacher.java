@@ -47,6 +47,8 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, Vers
 	public static final float DEFAULT_MAX_SCALE = 3.0f;
 	public static final float DEFAULT_MID_SCALE = 1.75f;
 	public static final float DEFAULT_MIN_SCALE = 1.0f;
+	
+	private float mInitScale=1.0f;
 
 	private float mMinScale = DEFAULT_MIN_SCALE;
 	private float mMidScale = DEFAULT_MID_SCALE;
@@ -681,6 +683,8 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, Vers
 		final float widthScale = viewWidth / drawableWidth;
 		final float heightScale = viewHeight / drawableHeight;
 
+		this.mInitScale=widthScale;
+		
 		if (mScaleType == ScaleType.CENTER) {
 			mBaseMatrix.postTranslate((viewWidth - drawableWidth) / 2F, (viewHeight - drawableHeight) / 2F);
 
@@ -723,6 +727,11 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, Vers
 		}
 
 		resetMatrix();
+	}
+	@Override
+	public float getInitScale() {
+		// TODO Auto-generated method stub
+		return mInitScale;
 	}
 
 	/**
@@ -910,4 +919,6 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, Vers
 			}
 		}
 	}
+
+	
 }

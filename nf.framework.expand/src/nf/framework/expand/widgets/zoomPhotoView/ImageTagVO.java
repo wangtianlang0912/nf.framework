@@ -20,6 +20,8 @@ public class ImageTagVO implements Serializable{
 	String link;
 	
 	Rect rect;
+	
+	float scale=1.0f;
 
 	public String getName() {
 		return name;
@@ -30,7 +32,7 @@ public class ImageTagVO implements Serializable{
 	}
 
 	public int getX() {
-		return x;
+		return (int) (this.scale*x);
 	}
 
 	public void setX(int x) {
@@ -38,11 +40,11 @@ public class ImageTagVO implements Serializable{
 	}
 
 	public int getY() {
-		return y;
+		return (int) (this.scale*y);
 	}
 
 	public void setY(int y) {
-		this.y = y;
+		this.y =y;
 	}
 
 	public int getStyle() {
@@ -68,6 +70,12 @@ public class ImageTagVO implements Serializable{
 	public void setRect(Rect rect) {
 		this.rect = rect;
 	}
-	
-	
+
+	public float getScale() {
+		return scale;
+	}
+
+	public void setScale(float scale) {
+		this.scale = scale;
+	}
 }

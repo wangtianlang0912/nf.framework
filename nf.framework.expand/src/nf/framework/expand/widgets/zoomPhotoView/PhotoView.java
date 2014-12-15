@@ -31,6 +31,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -110,9 +111,10 @@ public class PhotoView extends ImageView implements IPhotoView {
 	protected void onDraw(Canvas canvas) {
 		// TODO Auto-generated method stub
 		super.onDraw(canvas);
-	
+		Log.d("--------------------------", "-----------------------"+getInitScale());
 		if(imageTagList!=null&&isShowTag()){
 			for(ImageTagVO imageTag :imageTagList){
+				imageTag.setScale(getInitScale());
 				drawRing(canvas,this.paint,imageTag);
 			}
 		}
@@ -191,7 +193,11 @@ public class PhotoView extends ImageView implements IPhotoView {
 	public ScaleType getScaleType() {
 		return mAttacher.getScaleType();
 	}
-
+	@Override
+	public float getInitScale() {
+		// TODO Auto-generated method stub
+		return mAttacher.getInitScale();
+	}
     @Override
     public void setAllowParentInterceptOnEdge(boolean allow) {
         mAttacher.setAllowParentInterceptOnEdge(allow);
@@ -365,4 +371,6 @@ public class PhotoView extends ImageView implements IPhotoView {
     	
     	public void onImageTagItemClicked(ImageTagVO imageTag);
     }
+
+
 }
