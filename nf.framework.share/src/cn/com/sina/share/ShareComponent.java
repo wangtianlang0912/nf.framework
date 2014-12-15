@@ -565,6 +565,9 @@ public class ShareComponent {
 	public void regusterWeiboAPI(final Context context){
 		if(mWeiboShareAPI==null){
 			String shareId = getMeString(context,"shareToWEIBOAppKey");
+			if(shareId!=null&&shareId.startsWith("wb")){
+				shareId=shareId.substring("wb".length());
+			}
 			 // 创建微博分享接口实例
 	        mWeiboShareAPI = WeiboShareSDK.createWeiboAPI(context,shareId);
 	        
@@ -595,6 +598,9 @@ public class ShareComponent {
 		// Tencent类是SDK的主要实现类，开发者可通过Tencent类访问腾讯开放的OpenAPI。
 		// 其中APP_ID是分配给第三方应用的appid，类型为String。
 		String shareId = getMeString(context,"shareToQQAppID");
+		if(shareId!=null&&shareId.startsWith("qq")){
+			shareId=shareId.substring("qq".length());
+		}
 		if(mQqAuth==null){
 			
 			mQqAuth = QQAuth.createInstance(shareId, context.getApplicationContext());
