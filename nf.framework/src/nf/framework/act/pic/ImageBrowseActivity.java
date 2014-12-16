@@ -6,6 +6,7 @@ import java.util.List;
 
 import nf.framework.R;
 import nf.framework.act.AbsBaseActivity;
+import nf.framework.act.NFIntentUtils;
 import nf.framework.core.util.android.CloseActivityClass;
 import nf.framework.expand.widgets.HackyViewPager;
 import nf.framework.expand.widgets.zoomPhotoView.ImageTagVO;
@@ -189,7 +190,10 @@ public class ImageBrowseActivity extends AbsBaseActivity {
 			@Override
 			public void onImageTagItemClicked(ImageTagVO imageTag) {
 				// TODO Auto-generated method stub
-				Toast.makeText(getApplicationContext(),imageTag.getLink(),0).show();
+				if(imageTag!=null){
+					NFIntentUtils.intentToInnerBrowserAct(
+						mcontext, "image",imageTag.getName(), imageTag.getLink());
+				}
 			}
 		};
 	}
