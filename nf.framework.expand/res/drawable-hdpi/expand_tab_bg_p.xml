@@ -8,7 +8,7 @@
 
     <item android:bottom="5dp">
         <shape android:shape="rectangle">
-            <solid android:color="@color/expand_btn_selector_pressed" />
+            <solid android:color="@color/white" />
         </shape>
     </item>
 </layer-list>
