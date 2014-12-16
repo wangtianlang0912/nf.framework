@@ -79,7 +79,7 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
 
     private int mTabViewGravity = Gravity.CENTER;
     
-    private int mTabViewBackground = R.drawable.vpi__tab_indicator;
+    private int mTabViewBackground = R.drawable.expand_tab_indicator_bg;
     
     private int mTabViewPaddingTop =10;
     private int mTabViewPaddingLeft =10;
