@@ -33,7 +33,7 @@ public abstract class AbsSlidingTabBarActivity extends AbsSlidingBaseActivity{
 	private List<TabBarVO> tabBarList = new ArrayList<TabBarVO>();// 页卡头标
 	
 	private List<Fragment> fragmentList = new ArrayList<Fragment>();
-	private TabPageIndicator indicator = null;
+	protected TabPageIndicator indicator = null;
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	private ViewGroup mainLanderView;
 
