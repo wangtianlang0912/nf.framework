@@ -6,6 +6,7 @@ import im.yixin.sdk.api.YXAPIFactory;
 import im.yixin.sdk.api.YXMessage;
 import im.yixin.sdk.api.YXWebPageMessageData;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -18,12 +19,13 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -214,7 +216,7 @@ public class ShareComponent {
 				appdata.webpageUrl=shareContent.getLink();
 				Bitmap thumbBmp =shareContent.getThumbBmp();
 				if(thumbBmp!=null){
-					msg.thumbData = Util.bmpToByteArray(thumbBmp, true);
+					msg.thumbData =bmpToByteArray(thumbBmp, true);
 				}
 				msg.mediaObject = appdata;
 				msg.setThumbImage(thumbBmp);
@@ -228,11 +230,43 @@ public class ShareComponent {
 				ShareUtils.log(getClass(),"ShareContent ：：：：：："+ req.toString());
 			}
 		}).start();
-		
-		
-		
-		
 	}
+	
+	public static byte[] bmpToByteArray(final Bitmap bmp, final boolean needRecycle) {
+
+        int i;
+        int j;
+        if (bmp.getHeight() > bmp.getWidth()) {
+            i = bmp.getWidth();
+            j = bmp.getWidth();
+        } else {
+            i = bmp.getHeight();
+            j = bmp.getHeight();
+        }
+        
+        Bitmap localBitmap = Bitmap.createBitmap(i, j, Bitmap.Config.RGB_565);
+        Canvas localCanvas = new Canvas(localBitmap);
+        
+        while (true) {
+            localCanvas.drawBitmap(bmp, new Rect(0, 0, i, j), new Rect(0, 0,i, j), null);
+            if (needRecycle)
+                bmp.recycle();
+            ByteArrayOutputStream localByteArrayOutputStream = new ByteArrayOutputStream();
+            localBitmap.compress(Bitmap.CompressFormat.JPEG, 100,
+                    localByteArrayOutputStream);
+            localBitmap.recycle();
+            byte[] arrayOfByte = localByteArrayOutputStream.toByteArray();
+            try {
+                localByteArrayOutputStream.close();
+                return arrayOfByte;
+            } catch (Exception e) {
+                //F.out(e);
+            }
+            i = bmp.getHeight();
+            j = bmp.getHeight();
+        }
+    }
+	
 	private String buildTransaction(final String type) {
 		return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
 	}
