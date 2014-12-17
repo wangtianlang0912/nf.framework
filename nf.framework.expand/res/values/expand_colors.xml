@@ -14,4 +14,7 @@
     <color name="expand_btn_selector_pressed">@color/common_btn_selector_pressed</color>
   <!-- menu 文字颜色 -->
     <color name="expand_menu_txt_color">#333333</color>
+    <!-- tab 颜色值 -->
+    <color name="expend_tab_bottom_bg">@color/common_navigate_bg</color>
+    <color name="expend_tab_front_bg">@color/white</color>
 </resources>
