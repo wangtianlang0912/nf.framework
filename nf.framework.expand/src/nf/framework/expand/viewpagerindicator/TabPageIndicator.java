@@ -87,7 +87,7 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
     private int mTabViewPaddingBottom =10;
     
     private int mTabViewTextSize =14;
-    private int mTabViewTextColor = Color.BLACK;
+    private int mTabViewTextColor = android.R.color.black;
     
     private TabImgPosition mImgPosition= TabImgPosition.Left;
     public TabPageIndicator(Context context) {
@@ -171,7 +171,7 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
         tabView.setOnClickListener(mTabClickListener);
         tabView.setText(text);
         tabView.setSingleLine(true);
-        tabView.setTextColor(mTabViewTextColor);
+        tabView.setTextColor(getResources().getColorStateList(mTabViewTextColor));
         tabView.setTextSize(TypedValue.COMPLEX_UNIT_SP, mTabViewTextSize);
         tabView.setGravity(mTabViewGravity);
         tabView.setBackgroundResource(mTabViewBackground);
@@ -245,6 +245,7 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
     		}
     	}
     }
+    
     public void setTabViewTextColor(int textColor){
     	
     	this.mTabViewTextColor =textColor;
