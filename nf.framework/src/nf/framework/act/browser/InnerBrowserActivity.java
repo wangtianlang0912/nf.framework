@@ -115,7 +115,13 @@ public class InnerBrowserActivity extends AbsBaseActivity {
 					new LoadSysSoft().OpenMarketApp(mcontext, appPackageName);
 				}
 			}
-		}, "detailJS");
+			@SuppressWarnings("unused")
+			@JavascriptInterface
+			public void onFinish(){
+				
+				onBackPressed();
+			}
+		}, "JsCallBack");
 		gobackBtn.setOnClickListener(new OnClickListener() {
 
 			@Override

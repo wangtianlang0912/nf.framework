@@ -118,7 +118,7 @@ public class InnerBrowserByTitleActivity extends AbsBaseActivity {
 				BaseDialog baseDialog = new BaseDialog(mcontext,
 						AbsBaseDialog.DIALOG_BUTTON_STYLE_ONE);
 				baseDialog.show();
-				baseDialog.setTitle("��ʾ");
+				baseDialog.setTitle("提示");
 				baseDialog.setContent(message);
 				baseDialog
 						.setDialogUpBtnOnClickListener(new DialogUpBtnOnClickListener() {
@@ -136,10 +136,10 @@ public class InnerBrowserByTitleActivity extends AbsBaseActivity {
 				BaseDialog baseDialog = new BaseDialog(mcontext,
 						AbsBaseDialog.DIALOG_BUTTON_STYLE_ONE);
 				baseDialog.show();
-				baseDialog.setTitle("��ʾ");
+				baseDialog.setTitle("提示");
 				baseDialog.setContent(message);
 			}
-		}, "userInfoJS");
+		}, "JsCallBack");
 		detailwebview.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
