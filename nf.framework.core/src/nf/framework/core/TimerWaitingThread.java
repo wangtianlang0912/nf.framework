@@ -22,6 +22,7 @@ public class TimerWaitingThread extends Thread {
 	Handler handler = new Handler();
 	private String progressRefer;
 	private long progress;
+	
 	private Runnable timerRunnable = new Runnable() {
 
 		@Override
@@ -52,6 +53,7 @@ public class TimerWaitingThread extends Thread {
 			});
 		}
 	};
+	
 	/***
 	 * 
 	 * @param activity
@@ -71,9 +73,13 @@ public class TimerWaitingThread extends Thread {
 	public void run() {
 		// TODO Auto-generated method stub
 		long currentTime = System.currentTimeMillis();
-		iTimerThreadInter.onAysncPreExecute();
+		boolean isCancel =iTimerThreadInter.onAysncPreExecute();
 		preExecuteTime = System.currentTimeMillis() - currentTime;
 		System.out.println("TimerWaitingThread.run()" + preExecuteTime);
+		if(isCancel){
+			timerRunnable=null;
+			return;
+		}
 		if (preExecuteTime < milliseconds) {
 			handler.postDelayed(timerRunnable, milliseconds - preExecuteTime);
 		} else {
