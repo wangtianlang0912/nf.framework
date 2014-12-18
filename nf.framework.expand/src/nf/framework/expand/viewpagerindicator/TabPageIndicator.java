@@ -251,7 +251,7 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
     	for(int i= 0;i<mTabLayout.getChildCount();i++){
     		View childView =mTabLayout.getChildAt(i);
     		if(childView instanceof TabView){
-    			((TabView) childView).setTextColor(mTabViewTextColor);
+    			((TabView) childView).setTextColor(getResources().getColorStateList(mTabViewTextColor));
     		}
     	}
     }
