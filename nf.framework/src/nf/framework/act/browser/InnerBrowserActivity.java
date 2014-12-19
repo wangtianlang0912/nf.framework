@@ -65,24 +65,8 @@ public class InnerBrowserActivity extends AbsBaseActivity {
 		webview.setVerticalScrollBarEnabled(true);
 		webview.getSettings().setBuiltInZoomControls(true); 
 		webview.requestFocus();
-		webview.setWebChromeClient(new WebChromeClient() {
-			@Override
-			public void onProgressChanged(WebView view, int newProgress) {
+		webview.setWebChromeClient(new mWebChromeClient()); 
 
-				if (newProgress == 100) {
-					refeshProgressbar.setVisibility(View.INVISIBLE);
-					setToolbarState(true, gobackBtn);
-					setToolbarState(view.canGoBack(), gobackBtn);
-					setToolbarState(view.canGoForward(), goforwardBtn);
-				} else {
-					refeshProgressbar.setVisibility(View.VISIBLE);
-					setToolbarState(false, gobackBtn);
-					setToolbarState(false, goforwardBtn);
-				}
-
-			}
-		});
-		
 		webview.addJavascriptInterface(new Object() {
 			@SuppressWarnings("unused")
 			// @JavascriptInterface
@@ -118,8 +102,15 @@ public class InnerBrowserActivity extends AbsBaseActivity {
 			@SuppressWarnings("unused")
 			@JavascriptInterface
 			public void onFinish(){
+				runOnUiThread(new Runnable() {
+					
+					@Override
+					public void run() {
+
+						onBackPressed();
+					}
+				});
 				
-				onBackPressed();
 			}
 		}, "JsCallBack");
 		gobackBtn.setOnClickListener(new OnClickListener() {
@@ -211,10 +202,6 @@ public class InnerBrowserActivity extends AbsBaseActivity {
 		} else {
 		}
 	}
-
-	/**
-	 * �ر�activity
-	 */
 	private void FinishActivity() {
 
 		if (intentSource != null) {
@@ -225,5 +212,25 @@ public class InnerBrowserActivity extends AbsBaseActivity {
 		finish();
 		overridePendingTransition(R.anim.common_slide_up_in,
 				R.anim.common_slide_down_out);
+	}
+	
+	
+	private class mWebChromeClient extends InnerWebChromeClient{
+		
+		@Override
+		public void onProgressChanged(WebView view, int newProgress) {
+
+			if (newProgress == 100) {
+				refeshProgressbar.setVisibility(View.INVISIBLE);
+				setToolbarState(true, gobackBtn);
+				setToolbarState(view.canGoBack(), gobackBtn);
+				setToolbarState(view.canGoForward(), goforwardBtn);
+			} else {
+				refeshProgressbar.setVisibility(View.VISIBLE);
+				setToolbarState(false, gobackBtn);
+				setToolbarState(false, goforwardBtn);
+			}
+
+		}
 	}
 }
