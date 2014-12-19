@@ -2,6 +2,8 @@ package nf.framework.act;
 
 import java.util.List;
 
+import nf.framework.statistic.MobStatisticUtils;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -23,10 +25,13 @@ import com.slidingmenu.lib.app.SlidingTabActivity;
 public abstract class AbsSlidingTabActivity extends SlidingTabActivity{
 
     protected SlidingMenu slidingMenu;
+    private MobStatisticUtils mobStatisticUtils;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        
+        mobStatisticUtils=new MobStatisticUtils(this);
         
         TabHost  tabHost = getTabHostView();
         setContentView(tabHost);
@@ -74,6 +79,18 @@ public abstract class AbsSlidingTabActivity extends SlidingTabActivity{
 		
     }
     
+    @Override
+    protected void onResume() {
+    	// TODO Auto-generated method stub
+    	super.onResume();
+    	mobStatisticUtils.onStatisticResume();
+    }
+    @Override
+    protected void onPause() {
+    	// TODO Auto-generated method stub
+    	super.onPause();
+    	mobStatisticUtils.onStatisticPause();
+    }
     /**
 	 * @return
 	 *

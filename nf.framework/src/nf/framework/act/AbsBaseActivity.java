@@ -13,6 +13,7 @@ import nf.framework.R;
 import nf.framework.act.MyLeftRightGestureListener.LeftRightGestureListenerCallback;
 import nf.framework.act.lockscreen.LockScreen;
 import nf.framework.expand.dialog.ProgressDialog;
+import nf.framework.statistic.MobStatisticUtils;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -48,15 +49,32 @@ public abstract class AbsBaseActivity extends FragmentActivity{
 	private GestureDetector leftRightDetector = null;
 	private LockScreen mLockScreen = new LockScreen(this);
 	private ProgressDialog progressDialog=null;
-	
+	private MobStatisticUtils mobStatisticUtils;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		mobStatisticUtils=new MobStatisticUtils(this);
+		
 		setBaseContentView();
 		this.leftRightDetector = new GestureDetector(getApplicationContext(),
 				new MyLeftRightGestureListener(new MyCallBack()));
 	}
 
+	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		mobStatisticUtils.onStatisticResume();
+	}
+	
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		mobStatisticUtils.onStatisticPause();
+	}
 	/***
 	 * 设置布局
 	 */

@@ -10,6 +10,7 @@ package nf.framework.act;
 
 
 import nf.framework.R;
+import nf.framework.statistic.MobStatisticUtils;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -39,11 +40,12 @@ public abstract class AbsSlidingBaseActivity extends SlidingFragmentActivity{
 	protected LinearLayout mainlayout;
 	protected FrameLayout framelayout;
 	protected ViewGroup navigationBarLayout;
-
+	private MobStatisticUtils mobStatisticUtils;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setBaseContentView();
+		mobStatisticUtils=new MobStatisticUtils(this);
 	}
 
 	/***
@@ -75,7 +77,21 @@ public abstract class AbsSlidingBaseActivity extends SlidingFragmentActivity{
 			right_textview.setText(referNum + "");
 		}
 	}
-
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+	
+		mobStatisticUtils.onStatisticResume();
+	}
+	
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+	
+		mobStatisticUtils.onStatisticPause();
+	}
 	/**
 	 * 制定位置替换fragment replace()这个方法只是在上一个Fragment不再需要时采用的简便方法。
 	 * 
