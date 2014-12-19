@@ -275,6 +275,11 @@ public class ImageBrowseActivity extends AbsBaseActivity {
 		}
 
 	}
+	 
+	 public ImageBrowserVO getCurrentShowImageVO(){
+		 
+		 return list.get(currentPosition);
+	 }
 	/***
 	 * return current pic name
 	 * @return
