@@ -3,10 +3,10 @@ package nf.framework.fragment;
 import java.util.List;
 
 import nf.framework.R;
-import nf.framework.expand.widgets.OnFooterLoadMoreListener;
 import nf.framework.expand.widgets.OnHeaderRefreshListener;
 import nf.framework.expand.widgets.OnScrollLoadMoreListener;
 import nf.framework.expand.widgets.UpFreshListView;
+import nf.framework.statistic.MobStatisticUtils;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -19,7 +19,15 @@ public abstract class AbsListFragment<T> extends Fragment implements
 	private UpFreshListView mlistview;
 	private AbsListAdapter<?, ?> listItemAdapter;
 	private View viewLayout = null;
-
+	
+	private MobStatisticUtils mobStatisticUtils;
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+	
+		mobStatisticUtils=new MobStatisticUtils(getActivity());
+	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -32,8 +40,16 @@ public abstract class AbsListFragment<T> extends Fragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
+		mobStatisticUtils.onStaFragmentResume(
+				getPageName()!=null?getPageName():getClass().getSimpleName());
 	}
 
+	@Override
+	public void onPause() {
+		super.onPause();
+		mobStatisticUtils.onStaFragmentPause(
+				getPageName()!=null?getPageName():getClass().getSimpleName());
+	}
 	protected void initView(View v) {
 
 		mlistview = (UpFreshListView) v.findViewById(R.id.common_listview);
@@ -96,4 +112,6 @@ public abstract class AbsListFragment<T> extends Fragment implements
 		}
 		absListview.onRefreshComplete();
 	}
+	
+	protected abstract String getPageName();
 }
