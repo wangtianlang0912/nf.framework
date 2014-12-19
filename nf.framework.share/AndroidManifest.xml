@@ -14,7 +14,6 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-
     <application
         android:allowBackup="true"
         android:label="@string/app_name" >
@@ -108,13 +107,9 @@
 			
         <meta-data android:name="shareToWXAppKey" android:value="wx4911133aefcf929a" />
         <meta-data android:name="shareToYXAppKey" android:value="yxdef7da9340bb48978e1ab31a13125a87" />
-        <meta-data android:name="shareToWEIBOAppKey" android:value="3036118005" />
-        <meta-data android:name="shareToQQAppKey" android:value="100760735" />
+        <meta-data android:name="shareToWEIBOAppKey" android:value="wb3036118005" />
+        <meta-data android:name="shareToQQAppKey" android:value="qq100760735" />
 			
     </application>
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     
 </manifest>
