@@ -17,8 +17,6 @@ package nf.framework.app;
 
 import nf.framework.core.AbsApplication;
 import android.content.Context;
-import android.os.Build;
-import android.os.StrictMode;
 
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;

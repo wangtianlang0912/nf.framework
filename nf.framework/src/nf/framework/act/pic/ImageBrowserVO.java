@@ -18,6 +18,7 @@ public class ImageBrowserVO implements Serializable{
 	String picUrl;
 	String itemtype;
 	String smailPicUrlLocalPath;
+	String picPath;//local path
 	List<ImageTagVO> tagList=new ArrayList<ImageTagVO>();
 	Object object;
 	public String getDescription() {
@@ -73,6 +74,12 @@ public class ImageBrowserVO implements Serializable{
 	}
 	public void setTagList(List<ImageTagVO> tagList) {
 		this.tagList = tagList;
+	}
+	public String getPicPath() {
+		return picPath;
+	}
+	public void setPicPath(String picPath) {
+		this.picPath = picPath;
 	}
 	
 }

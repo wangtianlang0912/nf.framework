@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 
 public class ImageBrowseUtil {
@@ -81,13 +82,14 @@ public class ImageBrowseUtil {
            stream = new BufferedOutputStream(fstream);
            stream.write(b);
        } catch (Exception e) {
-           e.printStackTrace();
+           
+    	   Log.e("IamgeBrowseUtil","------"+e.getStackTrace().toString());
        } finally {
            if (stream != null) {
                try {
                    stream.close();
                } catch (IOException e1) {
-                   e1.printStackTrace();
+            	   Log.e("IamgeBrowseUtil","------"+e1.getStackTrace().toString());
                }
            }
        }

@@ -1,6 +1,7 @@
 package nf.framework.act.pic;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.InputStream;
 
 import nf.framework.core.exception.LogUtil;
@@ -131,7 +132,8 @@ public class DownloadImgTask extends AsyncTask<String, Integer, Bitmap> {
 									if(loadImage!=null){
 										loadImage.addBitmapToMemoryCache(imageUrl, bitmap);
 									}
-									ImageBrowseUtil.getFileFromBytes(bytes,mcontext,imageUrl);
+									String imgPath =ImageBrowseUtil.getFileFromBytes(bytes,mcontext,imageUrl).getPath();
+									imageVo.setPicPath(imgPath);
 								}
 								bytes = null;
 								
