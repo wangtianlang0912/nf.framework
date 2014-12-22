@@ -9,4 +9,5 @@
     android:dividerHeight="1dp"
     android:fadeScrollbars="true"
     android:fadingEdge="none"
+    android:headerDividersEnabled="false"
     android:scrollingCache="false" />
