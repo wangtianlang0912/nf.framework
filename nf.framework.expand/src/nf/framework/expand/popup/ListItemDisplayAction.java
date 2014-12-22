@@ -100,6 +100,13 @@ public class ListItemDisplayAction extends PopupWindows implements
 		return mRootViewLayout;
 	}
 	
+	public void setRootViewBackgroundColor(int color){
+		
+		if(mRootViewLayout!=null){
+			mRootViewLayout.setBackgroundColor(color);
+		}
+		
+	}
 	/**
 	 * Set listener for action item clicked.
 	 * 
