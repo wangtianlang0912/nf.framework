@@ -8,22 +8,29 @@
 */
 package nf.framework.fragment;
 
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import nf.framework.R;
 import nf.framework.expand.widgets.UpFreshListView;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListener;
+import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 
@@ -31,8 +38,19 @@ public abstract class AbsListAdapter<T,ViewHolder> extends BaseAdapter {
 	
 	protected List<T> mList;
 	protected LayoutInflater mLayoutInflater;
-	protected DisplayImageOptions options;
+	protected DisplayImageOptions options= new DisplayImageOptions.Builder()
+	.showImageOnLoading(R.color.lightblue)
+	.showImageForEmptyUri(R.color.lightblue)
+	.showImageOnFail(R.color.lightblue)
+	.cacheInMemory(true)
+	.cacheOnDisk(true)
+	.considerExifParams(true)
+	.displayer(new RoundedBitmapDisplayer(20))
+	.build();
+	protected ImageLoader imageLoader =ImageLoader.getInstance();
 	protected int currentPos=0;
+	
+	protected AnimateFirstDisplayListener animateFirstListener = new AnimateFirstDisplayListener();
 	/**
 	 * @param mcontext
 	 * @param list
@@ -42,31 +60,23 @@ public abstract class AbsListAdapter<T,ViewHolder> extends BaseAdapter {
 		this(mcontext,null,list);
 		
 	}
-	/**
-	 * @param mcontext
-	 * @param category_listview
-	 * @param list
-	 */
-	public AbsListAdapter(Context mcontext, UpFreshListView category_listview,List<T> list) {
+	public AbsListAdapter(Context mcontext, ListView listView,List<T> list) {
 		// TODO Auto-generated constructor stub
-		mList=list;
-		mLayoutInflater=LayoutInflater.from(mcontext);
-		options = new DisplayImageOptions.Builder()
-		.showImageOnLoading(R.color.lightblue)
-		.showImageForEmptyUri(R.color.lightblue)
-		.showImageOnFail(R.color.lightblue)
-		.cacheInMemory(true)
-		.cacheOnDisk(true)
-		.considerExifParams(true)
-		.displayer(new RoundedBitmapDisplayer(20))
-		.build();
+		this(mcontext,listView,list,null);
 	}
 	
-	public AbsListAdapter(Context mcontext, UpFreshListView category_listview,List<T> list,DisplayImageOptions options) {
+	public AbsListAdapter(Context mcontext,ListView listView,List<T> list,DisplayImageOptions options) {
 		
 		mList=list;
 		mLayoutInflater=LayoutInflater.from(mcontext);
 		this.options=options;
+		if(listView!=null){
+			OnScrollListener onScrollListener=null;
+			if(listView instanceof UpFreshListView ){
+				onScrollListener=	(OnScrollListener)listView;
+			}
+			listView.setOnScrollListener(new PauseOnScrollListener(imageLoader, true, true,onScrollListener));
+		}
 		
 	}
 	/* (non-Javadoc)
@@ -136,7 +146,7 @@ public abstract class AbsListAdapter<T,ViewHolder> extends BaseAdapter {
 	
 	protected  void setImageLoader(ImageView imageView,String url,SimpleImageLoadingListener simpleImageLoadingListener){
 		
-		setImageLoader(imageView, url, simpleImageLoadingListener,null);
+		setImageLoader(imageView, url, simpleImageLoadingListener==null?animateFirstListener:simpleImageLoadingListener,null);
 	}
 	
 	protected  void setImageLoader(ImageView imageView,String url,SimpleImageLoadingListener simpleImageLoadingListener,ImageLoadingProgressListener progressListener){
@@ -153,4 +163,35 @@ public abstract class AbsListAdapter<T,ViewHolder> extends BaseAdapter {
 	
 	
 	protected abstract void bindDataToView(T object, ViewHolder holder);
+	
+	/**
+	 * 清空显示图片
+	 */
+	public void clearDisplayedImages(){
+		
+		if(animateFirstListener!=null){
+			((AnimateFirstDisplayListener) animateFirstListener).getDisplayedImages().clear();
+		}
+	}
+	
+	private class AnimateFirstDisplayListener extends SimpleImageLoadingListener {
+
+		final List<String> displayedImages = Collections.synchronizedList(new LinkedList<String>());
+
+		public List<String> getDisplayedImages(){
+			return displayedImages;
+		}
+		@Override
+		public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+			if (loadedImage != null) {
+				ImageView imageView = (ImageView) view;
+				boolean firstDisplay = !displayedImages.contains(imageUri);
+				if (firstDisplay) {
+					FadeInBitmapDisplayer.animate(imageView, 500);
+					displayedImages.add(imageUri);
+				}
+			}
+		}
+		
+	}
 }

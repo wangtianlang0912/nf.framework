@@ -114,4 +114,15 @@ public abstract class AbsListFragment<T> extends Fragment implements
 	}
 	
 	protected abstract String getPageName();
+	
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+	
+		if(listItemAdapter!=null){
+			listItemAdapter.clearDisplayedImages();
+		}
+		
+	}
 }
