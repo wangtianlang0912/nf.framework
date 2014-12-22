@@ -278,7 +278,9 @@ public class ImageBrowseActivity extends AbsBaseActivity {
 	 
 	 public ImageBrowserVO getCurrentShowImageVO(){
 		 
-		 return list.get(currentPosition);
+		 ImageBrowserVO imageBrowser= list.get(currentPosition);
+		 imageBrowser.setPicPath(getCurrentPosPicUrl());
+		 return imageBrowser;
 	 }
 	/***
 	 * return current pic name

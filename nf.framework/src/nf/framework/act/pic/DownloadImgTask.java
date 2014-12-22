@@ -132,8 +132,7 @@ public class DownloadImgTask extends AsyncTask<String, Integer, Bitmap> {
 									if(loadImage!=null){
 										loadImage.addBitmapToMemoryCache(imageUrl, bitmap);
 									}
-									String imgPath =ImageBrowseUtil.getFileFromBytes(bytes,mcontext,imageUrl).getPath();
-									imageVo.setPicPath(imgPath);
+									ImageBrowseUtil.getFileFromBytes(bytes,mcontext,imageUrl);
 								}
 								bytes = null;
 								

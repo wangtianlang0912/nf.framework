@@ -161,18 +161,22 @@ public class InnerWebChromeClient extends WebChromeClient {
 	@Override
 	public void onProgressChanged(WebView view, int newProgress) {
 		super.onProgressChanged(view, newProgress);
-		if (newProgress == 100) {
-			if(progressBarDialog!=null&&progressBarDialog.isShowing()){
-				progressBarDialog.dismiss();	
-				progressBarDialog=null;
+		try{
+			if (newProgress == 100) {
+				if(progressBarDialog!=null&&progressBarDialog.isShowing()){
+					progressBarDialog.dismiss();	
+					progressBarDialog=null;
+				}
+			}else{
+				if(progressBarDialog==null){
+					progressBarDialog =new ProgressDialog(view.getContext());
+				}
+				if(progressBarDialog!=null&&!progressBarDialog.isShowing()){
+					progressBarDialog.show();
+				}
 			}
-		}else{
-			if(progressBarDialog==null){
-				progressBarDialog =new ProgressDialog(view.getContext());
-			}
-			if(progressBarDialog!=null&&!progressBarDialog.isShowing()){
-				progressBarDialog.show();
-			}
+		}catch(Exception e){
+			
 		}
 	}
 
