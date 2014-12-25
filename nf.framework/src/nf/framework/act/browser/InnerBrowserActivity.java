@@ -210,8 +210,10 @@ public class InnerBrowserActivity extends AbsBaseActivity {
 			setResult(RESULT_OK, homeIntent);
 		}
 		finish();
-		overridePendingTransition(R.anim.common_slide_up_in,
-				R.anim.common_slide_down_out);
+//		overridePendingTransition(R.anim.common_slide_up_in,
+//				R.anim.common_slide_down_out);
+		overridePendingTransition(R.anim.common_push_right_in,
+				R.anim.common_push_right_out);
 	}
 	
 	
