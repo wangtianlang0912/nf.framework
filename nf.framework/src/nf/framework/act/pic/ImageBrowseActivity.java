@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -120,8 +121,15 @@ public class ImageBrowseActivity extends AbsBaseActivity {
 			public void onPageSelected(int arg0) {
 				// TODO Auto-generated method stub
 				currentPosition=arg0;
-				if(list!=null&&desView!=null)
-					desView.setText(list.get(arg0).getDescription());
+				if(list!=null&&desView!=null){
+					String description=list.get(arg0).getDescription();
+					if(!TextUtils.isEmpty(description)){
+						desView.setText(description);
+					}else{
+						bottomLayout.setVisibility(View.GONE);
+					}
+				}
+					
 			}
 
 			@Override
@@ -176,9 +184,10 @@ public class ImageBrowseActivity extends AbsBaseActivity {
 				
 				setTopViewAnimation(navigationBarLayout,isHidden);
 				navigationBarLayout.setVisibility(isHidden?View.INVISIBLE:View.VISIBLE);
-				setBottomViewAnimation(bottomLayout,isHidden);
-				bottomLayout.setVisibility(isHidden?View.INVISIBLE:View.VISIBLE);
-				
+				if(!TextUtils.isEmpty(desView.getText())){
+					setBottomViewAnimation(bottomLayout,isHidden);
+					bottomLayout.setVisibility(isHidden?View.INVISIBLE:View.VISIBLE);
+				}
 			}
 		};
 		
