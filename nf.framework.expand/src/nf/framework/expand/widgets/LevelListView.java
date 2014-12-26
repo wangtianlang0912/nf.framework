@@ -3,18 +3,16 @@ package nf.framework.expand.widgets;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.Button;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 
-public class LevelListView extends ExpandableListView implements OnScrollListener,OnGroupClickListener {
+public class LevelListView extends AnimatedExpandableListView implements OnScrollListener,OnGroupClickListener {
 	/**
 	 *记录最后展开的组别Id
 	 */
