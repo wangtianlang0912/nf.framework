@@ -55,7 +55,7 @@ public abstract class AbsListFragment<T> extends Fragment implements
 		mlistview = (UpFreshListView) v.findViewById(R.id.common_listview);
 		View headerView=getListHeaderView();
 		if(headerView!=null){
-			mlistview.addHeaderView(headerView);
+			mlistview.addHeaderView(headerView,null, false);
 		}
 		listItemAdapter=createAbsListAdapter();
 		if(listItemAdapter!=null){

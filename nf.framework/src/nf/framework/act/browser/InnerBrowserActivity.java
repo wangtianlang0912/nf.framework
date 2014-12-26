@@ -42,9 +42,8 @@ public class InnerBrowserActivity extends AbsBaseActivity {
 	}
 
 	private void initView() {
-		View view = LayoutInflater.from(mcontext).inflate(
-				R.layout.common_web_browser_main, null);
-		super.mainlayout.addView(view,new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));
+		View view = LayoutInflater.from(mcontext).inflate(R.layout.common_web_browser_main, super.mainlayout,false);
+		super.mainlayout.addView(view);
 		super.leftButton.setVisibility(View.VISIBLE);
 		super.leftButton.setImageResource(R.drawable.common_navigate_back_btn);
 		refeshProgressbar = (RelativeLayout) this
@@ -227,6 +226,7 @@ public class InnerBrowserActivity extends AbsBaseActivity {
 				setToolbarState(true, gobackBtn);
 				setToolbarState(view.canGoBack(), gobackBtn);
 				setToolbarState(view.canGoForward(), goforwardBtn);
+				webview.requestFocus();
 			} else {
 				refeshProgressbar.setVisibility(View.VISIBLE);
 				setToolbarState(false, gobackBtn);

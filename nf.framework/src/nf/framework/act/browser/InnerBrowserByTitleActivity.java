@@ -2,6 +2,7 @@ package nf.framework.act.browser;
 
 import nf.framework.R;
 import nf.framework.act.AbsBaseActivity;
+import nf.framework.act.NFIntentUtils;
 import nf.framework.core.LoadSysSoft;
 import nf.framework.core.util.android.CloseActivityClass;
 import nf.framework.expand.dialog.AbsBaseDialog;
@@ -12,6 +13,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -46,10 +48,9 @@ public class InnerBrowserByTitleActivity extends AbsBaseActivity {
 	private void initView() {
 		super.leftButton.setVisibility(View.VISIBLE);
 		super.leftButton.setImageResource(R.drawable.common_navigate_back_btn);
-		detailwebview = new WebView(this);
-		detailwebview.setLayoutParams(new LayoutParams(
-				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-		super.mainlayout.addView(detailwebview);
+		View webviewLayout = LayoutInflater.from(this).inflate(R.layout.common_web_layout,super.mainlayout,false);
+		super.mainlayout.addView(webviewLayout);
+		detailwebview=(WebView) findViewById(R.id.common_web_main_web_view);
 		detailwebview.getSettings().setJavaScriptEnabled(true);
 		detailwebview.canGoBack();
 		detailwebview.setVerticalScrollBarEnabled(true);
@@ -61,7 +62,7 @@ public class InnerBrowserByTitleActivity extends AbsBaseActivity {
 			@JavascriptInterface
 			public void getUrl(String param, String url) {
 				if (url != null) {
-
+					NFIntentUtils.intentToInnerBrowserAct(mcontext, "web","web", url);
 				}
 			}
 

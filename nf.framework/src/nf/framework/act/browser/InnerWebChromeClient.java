@@ -166,6 +166,7 @@ public class InnerWebChromeClient extends WebChromeClient {
 				if(progressBarDialog!=null&&progressBarDialog.isShowing()){
 					progressBarDialog.dismiss();	
 					progressBarDialog=null;
+					view.requestFocus();
 				}
 			}else{
 				if(progressBarDialog==null){
