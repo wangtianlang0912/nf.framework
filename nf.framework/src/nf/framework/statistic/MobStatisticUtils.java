@@ -1,8 +1,9 @@
 package nf.framework.statistic;
 
-import com.umeng.analytics.MobclickAgent;
-
 import android.app.Activity;
+import android.content.Context;
+
+import com.umeng.analytics.MobclickAgent;
 /***
  * 统计事件
  * @author niufei
@@ -37,7 +38,13 @@ public class MobStatisticUtils {
 		MobclickAgent.onPageEnd(pageName);
 	}
 	
-	public void onEvent(){
+	public static void onEvent(Context context,String value){
 		
+		MobclickAgent.onEvent(context, value);
+	}
+	
+	public static void onEvent(Context context,String value,String param){
+		
+		MobclickAgent.onEvent(context, value, param);
 	}
 }

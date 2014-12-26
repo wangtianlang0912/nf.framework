@@ -72,7 +72,7 @@ public class ImageBrowseActivity extends AbsBaseActivity {
 		mViewPager.setAdapter(wallPaperAdapter);
 		mViewPager.setCurrentItem(currentPosition, true);
 		top_textview.setText((currentPosition+1) + "/" + list.size());
-		desView.setText(list.get(currentPosition).getDescription());
+		setBottomViewShow(list.get(currentPosition).getDescription());
 //		options = new DisplayImageOptions.Builder()
 //		.showImageForEmptyUri(R.drawable.icon_empty)
 //		.showImageOnFail(R.drawable.ic_error)
@@ -123,11 +123,7 @@ public class ImageBrowseActivity extends AbsBaseActivity {
 				currentPosition=arg0;
 				if(list!=null&&desView!=null){
 					String description=list.get(arg0).getDescription();
-					if(!TextUtils.isEmpty(description)){
-						desView.setText(description);
-					}else{
-						bottomLayout.setVisibility(View.GONE);
-					}
+					setBottomViewShow(description);
 				}
 					
 			}
@@ -144,8 +140,15 @@ public class ImageBrowseActivity extends AbsBaseActivity {
 				// TODO Auto-generated method stub
 			}
 		});
+	}
+	
+	private void setBottomViewShow(String description){
 		
-
+		if(!TextUtils.isEmpty(description)){
+			desView.setText(description);
+		}else{
+			bottomLayout.setVisibility(View.GONE);
+		}
 	}
 	@Override
 	protected void onResume() {
