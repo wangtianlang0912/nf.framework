@@ -38,14 +38,13 @@ public abstract class AbsListAdapter<T,ViewHolder> extends BaseAdapter {
 	
 	protected List<T> mList;
 	protected LayoutInflater mLayoutInflater;
-	protected DisplayImageOptions options= new DisplayImageOptions.Builder()
-	.showImageOnLoading(R.color.lightblue)
-	.showImageForEmptyUri(R.color.lightblue)
-	.showImageOnFail(R.color.lightblue)
+	protected static DisplayImageOptions options= new DisplayImageOptions.Builder()
+	.showImageForEmptyUri(R.color.white)
+	.showImageOnFail(R.color.white)
+	.showImageOnLoading(R.color.white)
 	.cacheInMemory(true)
 	.cacheOnDisk(true)
 	.considerExifParams(true)
-	.displayer(new RoundedBitmapDisplayer(20))
 	.build();
 	protected ImageLoader imageLoader =ImageLoader.getInstance();
 	protected int currentPos=0;
@@ -62,7 +61,7 @@ public abstract class AbsListAdapter<T,ViewHolder> extends BaseAdapter {
 	}
 	public AbsListAdapter(Context mcontext, ListView listView,List<T> list) {
 		// TODO Auto-generated constructor stub
-		this(mcontext,listView,list,null);
+		this(mcontext,listView,list,options);
 	}
 	
 	public AbsListAdapter(Context mcontext,ListView listView,List<T> list,DisplayImageOptions options) {
