@@ -20,11 +20,11 @@ import java.util.List;
 import nf.framework.expand.widgets.zoomPhotoView.PhotoViewAttacher.OnMatrixChangedListener;
 import nf.framework.expand.widgets.zoomPhotoView.PhotoViewAttacher.OnPhotoTapListener;
 import nf.framework.expand.widgets.zoomPhotoView.PhotoViewAttacher.OnViewTapListener;
+import android.R.integer;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -44,7 +44,6 @@ public class PhotoView extends ImageView implements IPhotoView {
 	private ScaleType mPendingScaleType;
 
 	private boolean isShowTag=true;
-	private Paint paint;
 	private int innerCircle=3;
 	private int ringWidth=1;
 	private int rectHeight=20;
@@ -78,9 +77,6 @@ public class PhotoView extends ImageView implements IPhotoView {
         rectWidth =dip2px(getContext(), 40);
         padding=dip2px(getContext(), 5);
         
-		this.paint = new Paint();  
-        this.paint.setAntiAlias(true); //消除锯齿  
-	    this.paint.setStyle(Paint.Style.STROKE); //绘制空心圆   
 	    
 	    mAttacher.setOnViewTapListener(new OnViewTapListener() {
 			
@@ -115,49 +111,96 @@ public class PhotoView extends ImageView implements IPhotoView {
 		if(imageTagList!=null&&isShowTag()){
 			for(ImageTagVO imageTag :imageTagList){
 				imageTag.setScale(getInitScale());
-				drawRing(canvas,this.paint,imageTag);
+				drawIamgeTagView(canvas,imageTag);
 			}
 		}
 	}
 	
-	private void drawRing(Canvas canvas,Paint paint,ImageTagVO imageTag){
+	private void drawIamgeTagView(Canvas canvas,ImageTagVO imageTag){
 		
         if(currentDrawRectF==null){
     	   return;
         }
         float circleCenterX =currentDrawRectF.left+imageTag.getX()*getScale();
         float circleCenterY =currentDrawRectF.top+imageTag.getY()*getScale();
-        //绘制内圆  
-		paint.setARGB(155, 167, 190, 206);  
-		paint.setStrokeWidth(2);  
-        canvas.drawCircle(circleCenterX,circleCenterY, innerCircle, paint);  
-          
-        //绘制圆环  
-        paint.setARGB(255, 212 ,225, 233);  
-        paint.setStrokeWidth(ringWidth);  
-        canvas.drawCircle(circleCenterX,circleCenterY, innerCircle+1+ringWidth/2, paint);  
-          
-        //绘制外圆  
-        paint.setARGB(155, 167, 190, 206);  
-        paint.setStrokeWidth(2);  
-        canvas.drawCircle(circleCenterX,circleCenterY, innerCircle+ringWidth,paint); 
-        
-        
-        Paint textPaint = new Paint( Paint.ANTI_ALIAS_FLAG);  
-        textPaint.setTextSize(sp2px(getContext(), 14));  
-        textPaint.setColor(Color.LTGRAY);  
-        canvas.drawText(imageTag.getName(),circleCenterX+innerCircle+ringWidth+padding
-        		,circleCenterY+sp2px(getContext(), 5), textPaint);  
-       
-        paint.setStrokeWidth(ringWidth);
-        Rect rect=new Rect((int)circleCenterX+innerCircle+ringWidth
-        		,(int)circleCenterY-rectHeight/2
-        		, (int)circleCenterX+innerCircle+ringWidth+rectWidth
-        		, (int)circleCenterY+rectHeight/2);
-        canvas.drawRect(rect, paint);
-        imageTag.setRect(rect);
+        //圆环
+        drawRing(canvas, circleCenterX, circleCenterY);
+        //标签显示
+        drawImageTag(canvas, imageTag, circleCenterX, circleCenterY);
 	}
 	
+	private int[] getTextRectSize(String text,Paint paint){
+		
+		Rect rect = new Rect();
+        paint.getTextBounds(text, 0, text.length(), rect);
+        return new int[]{rect.width(),rect.height()};
+	}
+	/***
+	 * 绘制圆环
+	 * @param canvas
+	 * @param circleCenterX
+	 * @param circleCenterY
+	 */
+	private void drawRing(Canvas canvas,float circleCenterX,float circleCenterY){
+		
+		Paint circlePaint = new Paint();  
+        circlePaint.setAntiAlias(true); //消除锯齿  
+        circlePaint.setStyle(Paint.Style.STROKE); //绘制空心圆   
+        
+        //绘制内圆  
+        circlePaint.setARGB(155, 167, 190, 206);  
+        circlePaint.setStrokeWidth(2);  
+        canvas.drawCircle(circleCenterX,circleCenterY, innerCircle, circlePaint);  
+          
+        //绘制圆环  
+        circlePaint.setARGB(255, 212 ,225, 233);  
+        circlePaint.setStrokeWidth(ringWidth);  
+        canvas.drawCircle(circleCenterX,circleCenterY, innerCircle+1+ringWidth/2, circlePaint);  
+          
+        //绘制外圆  
+        circlePaint.setARGB(155, 167, 190, 206);  
+        circlePaint.setStrokeWidth(2);  
+        canvas.drawCircle(circleCenterX,circleCenterY, innerCircle+ringWidth,circlePaint); 
+	}
+	
+	private void drawImageTag(Canvas canvas,ImageTagVO imageTag,float circleCenterX,float circleCenterY){
+		
+		 //文字
+        Paint textPaint = new Paint( Paint.ANTI_ALIAS_FLAG);  
+        textPaint.setTextSize(sp2px(getContext(), 14));  
+        textPaint.setColor(Color.GRAY);  
+       
+        //文字背景框
+        int[] titleSize= getTextRectSize(imageTag.getName(), textPaint);
+       
+        Paint bgPaint = new Paint(); 
+        bgPaint.setStrokeWidth(ringWidth);
+        bgPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        bgPaint.setAlpha(50);
+        bgPaint.setARGB(155, 167, 190, 206);  
+        Rect bgRect= null; 
+        //如果圆点距离图片右边太近，则考虑将显示标签放到环左侧
+        if(circleCenterX>currentDrawRectF.right-100){ 
+        	bgRect=new Rect( (int)circleCenterX-innerCircle-ringWidth-titleSize[0]-padding*2
+            		,(int)circleCenterY-titleSize[1]/2-padding
+            		,(int)circleCenterX-innerCircle-ringWidth
+            		, (int)circleCenterY+titleSize[1]/2+padding);
+        	//文字显示
+        	canvas.drawText(imageTag.getName(),circleCenterX-innerCircle-ringWidth-padding-titleSize[0]
+         		,circleCenterY+sp2px(getContext(), 5), textPaint);  
+        }else{
+        	bgRect=new Rect((int)circleCenterX+innerCircle+ringWidth
+        		,(int)circleCenterY-titleSize[1]/2-padding
+        		, (int)circleCenterX+innerCircle+ringWidth+titleSize[0]+padding*2
+        		, (int)circleCenterY+titleSize[1]/2+padding);
+        	//文字显示
+        	canvas.drawText(imageTag.getName(),circleCenterX+innerCircle+ringWidth+padding
+         		,circleCenterY+sp2px(getContext(), 5), textPaint);  
+        }
+        canvas.drawRect(bgRect, bgPaint);
+        
+        imageTag.setRect(bgRect);
+	}
 	
 	@Override
 	public boolean canZoom() {
