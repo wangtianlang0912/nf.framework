@@ -14,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -62,6 +63,7 @@ public class InnerBrowserActivity extends AbsBaseActivity {
 		webview.getSettings().setUseWideViewPort(true);
 		webview.getSettings().setJavaScriptEnabled(true);
 		webview.setVerticalScrollBarEnabled(true);
+		webview.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);  //设置 缓存模式
 		webview.getSettings().setBuiltInZoomControls(true); 
 		webview.requestFocus();
 		webview.setWebChromeClient(new mWebChromeClient()); 
@@ -161,6 +163,7 @@ public class InnerBrowserActivity extends AbsBaseActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		webview.onResume();
 		homeIntent = this.getIntent();
 		String titleName = homeIntent.getStringExtra(INTENT_TITLE);
 		if (!TextUtils.isEmpty(titleName)) {
@@ -186,12 +189,15 @@ public class InnerBrowserActivity extends AbsBaseActivity {
 
 	protected void onPause() {
 		super.onPause();
+		webview.onPause();
 	}
 
 	@Override
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
 		super.onBackPressed();
+		webview.clearCache(true);
+		webview.clearHistory();
 		FinishActivity();
 	}
 

@@ -39,9 +39,9 @@ public abstract class AbsListAdapter<T,ViewHolder> extends BaseAdapter {
 	protected List<T> mList;
 	protected LayoutInflater mLayoutInflater;
 	protected static DisplayImageOptions options= new DisplayImageOptions.Builder()
-	.showImageForEmptyUri(R.color.white)
-	.showImageOnFail(R.color.white)
-	.showImageOnLoading(R.color.white)
+	.showImageForEmptyUri(R.drawable.empty_photo)
+	.showImageOnFail(R.drawable.empty_photo)
+	.showImageOnLoading(R.drawable.empty_photo)
 	.cacheInMemory(true)
 	.cacheOnDisk(true)
 	.considerExifParams(true)

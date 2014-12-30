@@ -20,6 +20,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 public class InnerBrowserByTitleActivity extends AbsBaseActivity {
@@ -55,6 +56,7 @@ public class InnerBrowserByTitleActivity extends AbsBaseActivity {
 		detailwebview.canGoBack();
 		detailwebview.setVerticalScrollBarEnabled(true);
 		detailwebview.requestFocus();
+		detailwebview.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
 		detailwebview.setWebViewClient(new InnerWebViewClient(this));
 		detailwebview.setWebChromeClient(new InnerWebChromeClient()); 
 		detailwebview.addJavascriptInterface(new Object() {
@@ -139,15 +141,15 @@ public class InnerBrowserByTitleActivity extends AbsBaseActivity {
 		});
 	}
 
+	@Override
 	protected void onResume() {
-
 		super.onResume();
+		detailwebview.onResume();
 	}
-
+	@Override
 	protected void onPause() {
 		super.onPause();
-		Log.d("MoreDetailActivity",
-				"onPause=========================================");
+		detailwebview.onPause();
 	}
 
 	@Override
@@ -164,6 +166,8 @@ public class InnerBrowserByTitleActivity extends AbsBaseActivity {
 		return false;
 	}
 	private void FinishActivity() {
+		detailwebview.clearCache(true);
+		detailwebview.clearHistory();
 		setResult(RESULT_OK, homeIntent);
 		finish();
 		overridePendingTransition(R.anim.common_push_right_in,
