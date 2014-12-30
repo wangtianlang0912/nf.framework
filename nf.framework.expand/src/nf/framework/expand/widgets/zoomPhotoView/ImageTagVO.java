@@ -3,6 +3,7 @@ package nf.framework.expand.widgets.zoomPhotoView;
 import java.io.Serializable;
 
 import android.graphics.Rect;
+import android.graphics.RectF;
 
 public class ImageTagVO implements Serializable{
 
@@ -19,7 +20,7 @@ public class ImageTagVO implements Serializable{
 	
 	String link;
 	
-	Rect rect;
+	RectF rectF;
 	
 	float scale=1.0f;
 
@@ -63,12 +64,12 @@ public class ImageTagVO implements Serializable{
 		this.link = link;
 	}
 
-	public Rect getRect() {
-		return rect;
+	public RectF getRectF() {
+		return rectF;
 	}
 
-	public void setRect(Rect rect) {
-		this.rect = rect;
+	public void setRectF(RectF rectF) {
+		this.rectF = rectF;
 	}
 
 	public float getScale() {

@@ -143,22 +143,22 @@ public class PhotoView extends ImageView implements IPhotoView {
 	 */
 	private void drawRing(Canvas canvas,float circleCenterX,float circleCenterY){
 		
-		Paint circlePaint = new Paint();  
+        //绘制内圆  
+    	Paint innerCirclePaint = new Paint();  
+    	innerCirclePaint.setAntiAlias(true); //消除锯齿  
+    	innerCirclePaint.setStyle(Paint.Style.FILL);
+    	innerCirclePaint.setColor(Color.WHITE);  
+    	innerCirclePaint.setStrokeWidth(2);  
+        canvas.drawCircle(circleCenterX,circleCenterY, innerCircle, innerCirclePaint);  
+          
+    	Paint circlePaint = new Paint();  
         circlePaint.setAntiAlias(true); //消除锯齿  
         circlePaint.setStyle(Paint.Style.STROKE); //绘制空心圆   
-        
-        //绘制内圆  
-        circlePaint.setARGB(155, 167, 190, 206);  
-        circlePaint.setStrokeWidth(2);  
-        canvas.drawCircle(circleCenterX,circleCenterY, innerCircle, circlePaint);  
-          
         //绘制圆环  
-        circlePaint.setARGB(255, 212 ,225, 233);  
+        circlePaint.setColor(Color.BLACK);  
         circlePaint.setStrokeWidth(ringWidth);  
         canvas.drawCircle(circleCenterX,circleCenterY, innerCircle+1+ringWidth/2, circlePaint);  
-          
         //绘制外圆  
-        circlePaint.setARGB(155, 167, 190, 206);  
         circlePaint.setStrokeWidth(2);  
         canvas.drawCircle(circleCenterX,circleCenterY, innerCircle+ringWidth,circlePaint); 
 	}
@@ -166,40 +166,50 @@ public class PhotoView extends ImageView implements IPhotoView {
 	private void drawImageTag(Canvas canvas,ImageTagVO imageTag,float circleCenterX,float circleCenterY){
 		
 		 //文字
-        Paint textPaint = new Paint( Paint.ANTI_ALIAS_FLAG);  
+        Paint textPaint = new Paint(); 
         textPaint.setTextSize(sp2px(getContext(), 14));  
-        textPaint.setColor(Color.GRAY);  
-       
-        //文字背景框
+        textPaint.setStrokeWidth(2);
+        textPaint.setColor(Color.WHITE);  
+      //文字背景框
         int[] titleSize= getTextRectSize(imageTag.getName(), textPaint);
        
         Paint bgPaint = new Paint(); 
         bgPaint.setStrokeWidth(ringWidth);
+        bgPaint.setAntiAlias(true); //消除锯齿  
         bgPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        bgPaint.setAlpha(50);
-        bgPaint.setARGB(155, 167, 190, 206);  
-        Rect bgRect= null; 
+        bgPaint.setColor(Color.BLACK);
+        bgPaint.setAlpha(100); 
+        RectF bgRect= null; 
         //如果圆点距离图片右边太近，则考虑将显示标签放到环左侧
         if(circleCenterX>currentDrawRectF.right-100){ 
-        	bgRect=new Rect( (int)circleCenterX-innerCircle-ringWidth-titleSize[0]-padding*2
+        	
+        	bgRect=new RectF( (int)circleCenterX-innerCircle-ringWidth-titleSize[0]-padding*3
             		,(int)circleCenterY-titleSize[1]/2-padding
-            		,(int)circleCenterX-innerCircle-ringWidth
+            		,(int)circleCenterX-innerCircle-ringWidth-padding
             		, (int)circleCenterY+titleSize[1]/2+padding);
-        	//文字显示
-        	canvas.drawText(imageTag.getName(),circleCenterX-innerCircle-ringWidth-padding-titleSize[0]
-         		,circleCenterY+sp2px(getContext(), 5), textPaint);  
+        	
         }else{
-        	bgRect=new Rect((int)circleCenterX+innerCircle+ringWidth
+        	
+        	bgRect=new RectF((int)circleCenterX+innerCircle+ringWidth+padding
         		,(int)circleCenterY-titleSize[1]/2-padding
-        		, (int)circleCenterX+innerCircle+ringWidth+titleSize[0]+padding*2
+        		, (int)circleCenterX+innerCircle+ringWidth+titleSize[0]+padding*3
         		, (int)circleCenterY+titleSize[1]/2+padding);
-        	//文字显示
-        	canvas.drawText(imageTag.getName(),circleCenterX+innerCircle+ringWidth+padding
-         		,circleCenterY+sp2px(getContext(), 5), textPaint);  
+        	 
         }
-        canvas.drawRect(bgRect, bgPaint);
+        canvas.drawRoundRect(bgRect,5,5, bgPaint);
         
-        imageTag.setRect(bgRect);
+        imageTag.setRectF(bgRect);
+        
+      //如果圆点距离图片右边太近，则考虑将显示标签放到环左侧
+        if(circleCenterX>currentDrawRectF.right-100){ 
+	        //文字显示
+	    	canvas.drawText(imageTag.getName(),circleCenterX-innerCircle-ringWidth-padding*2-titleSize[0]
+	     		,circleCenterY+sp2px(getContext(), 5), textPaint); 
+        }else{
+        	//文字显示
+        	canvas.drawText(imageTag.getName(),circleCenterX+innerCircle+ringWidth+padding*2
+         		,circleCenterY+sp2px(getContext(), 5), textPaint); 
+        }
 	}
 	
 	@Override
@@ -372,9 +382,9 @@ public class PhotoView extends ImageView implements IPhotoView {
 
 		if(imageTagList!=null&&onImageTagItemClickListener!=null){
 			for (ImageTagVO imageTag:imageTagList) {
-				Rect rect =imageTag.getRect();
-				if(rect!=null){
-					if(x>rect.left&&x<rect.right&&y>rect.top&&y<rect.bottom){
+				RectF rectF =imageTag.getRectF();
+				if(rectF!=null){
+					if(x>rectF.left&&x<rectF.right&&y>rectF.top&&y<rectF.bottom){
 						onImageTagItemClickListener.onImageTagItemClicked(imageTag);
 						return true;
 					}
