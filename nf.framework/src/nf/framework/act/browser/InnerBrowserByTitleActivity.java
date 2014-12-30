@@ -150,6 +150,8 @@ public class InnerBrowserByTitleActivity extends AbsBaseActivity {
 	protected void onPause() {
 		super.onPause();
 		detailwebview.onPause();
+		detailwebview.pauseTimers();  
+		detailwebview.stopLoading();
 	}
 
 	@Override

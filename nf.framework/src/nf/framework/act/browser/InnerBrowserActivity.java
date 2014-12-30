@@ -190,6 +190,8 @@ public class InnerBrowserActivity extends AbsBaseActivity {
 	protected void onPause() {
 		super.onPause();
 		webview.onPause();
+		webview.pauseTimers();  
+		webview.stopLoading();
 	}
 
 	@Override
