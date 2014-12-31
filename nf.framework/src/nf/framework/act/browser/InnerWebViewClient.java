@@ -25,6 +25,9 @@ public class InnerWebViewClient extends WebViewClient {
 			} else if(url.startsWith("tel:")){
 				Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url)); 
 				context.startActivity(intent); 
+			}else if(url.startsWith("mailto:")){
+				new LoadSysSoft().sendInfoByEmail(context,"", "", 
+						new String[]{url.substring("mailto:".length())}, "text/");
 			}else{
 				view.loadUrl(url);
 			}
