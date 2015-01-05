@@ -27,6 +27,8 @@ public class ShareContentVO implements Serializable{
 	int logoResId;
 	
 	Bitmap thumbBmp;
+	
+	String appInfo;
 
 	public String getContent() {
 		return content;
@@ -92,5 +94,12 @@ public class ShareContentVO implements Serializable{
 		this.thumbBmp = thumbBmp;
 	}
 
+	public String getAppInfo() {
+		return appInfo;
+	}
+
+	public void setAppInfo(String appInfo) {
+		this.appInfo = appInfo;
+	}
 	
 }

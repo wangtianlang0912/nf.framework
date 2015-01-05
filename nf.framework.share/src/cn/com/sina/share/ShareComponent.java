@@ -437,12 +437,11 @@ public class ShareComponent {
     	
 	    	// 1. 初始化微博的分享消息
 		    WeiboMultiMessage weiboMessage = new WeiboMultiMessage();
-			if(shareContent.getThumbBmp()==null){
-				TextObject textObject = new TextObject();
-		        textObject.text =shareContent.getContent();
-		        weiboMessage.textObject = textObject;
-		        ShareUtils.log(ShareComponent.class,shareContent.getContent());
-			}else {
+			
+			TextObject textObject = new TextObject();
+	        textObject.text =shareContent.getTitle()+"\n"+shareContent.getContent()+"\n"+shareContent.getLink()+"\n"+shareContent.getAppInfo();
+	        weiboMessage.textObject = textObject;
+	        if(shareContent.getThumbBmp()==null){
 				ImageObject imageObject = new ImageObject();
 				Bitmap thumbBmp =shareContent.getThumbBmp();
 				if(thumbBmp!=null){
@@ -452,6 +451,7 @@ public class ShareComponent {
 		        imageObject.setThumbImage(thumbBmp);
 				weiboMessage.imageObject =imageObject;
 		    }
+			 ShareUtils.log(ShareComponent.class,shareContent.getContent());
 		    // 2. 初始化从第三方到微博的消息请求
 		    SendMultiMessageToWeiboRequest request = new SendMultiMessageToWeiboRequest();
 		    // 用transaction唯一标识一个请求
