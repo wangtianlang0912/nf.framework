@@ -85,10 +85,11 @@ public class ContactGenerator {
  *@Param niufei
  *@Param 2014-4-19
  */
-    public  List<ContactItemVO> getContacts() {
+    public  List<ContactItemVO> getContacts(int pageIndex,int pageSize) {
         List<ContactItemVO> contactList= new ArrayList<ContactItemVO>();
         ContentResolver cr = context.getContentResolver();
         Cursor cursor = cr.query(ContactsContract.Contacts.CONTENT_URI, null,null, null, null);
+        int index =0;
         if (cursor.moveToFirst()) {
             do {
                 String contactId = cursor.getString(cursor
@@ -97,33 +98,41 @@ public class ContactGenerator {
                                 .getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                 Cursor phones = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                         null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID+ " = " + contactId, null, null);
-                while (phones.moveToNext()) {
-                	ContactItemVO contactItemVO =new ContactItemVO();
-                    String phoneNumber = phones.getString(phones
-                                    .getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                    Long contactID = phones.getLong(phones
-                    		.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
-                    Uri uri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, contactID); 
-                    InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(cr,uri);  
-                    contactItemVO.setFullName(name);
-                    contactItemVO.setContactId(contactId);
-                    contactItemVO.setMobile(phoneNumber);
-                    contactItemVO.setHeaderBitmap(BitmapFactory.decodeStream(input));
-                    getPinYinFullNameChar(contactItemVO,name);
-                    contactList.add(contactItemVO);
-                    
-                    Log.e("", BitmapFactory.decodeStream(input)+"");  
-                    Log.e("name", name+"");  
-                    Log.e("phoneNumber", phoneNumber+"");  
-                    Log.e("headchar", contactItemVO.getHeadChar()+"");  
-                    Log.d("", "=============================================");  
+               if(pageIndex*pageSize>=phones.getCount()){
+            	   return contactList;
+               }
+               
+               while (phones.moveToNext()) {
+                	if(index>=pageIndex*pageSize&&index<(pageIndex+1)*pageSize){
+                	
+	                	ContactItemVO contactItemVO =new ContactItemVO();
+	                    String phoneNumber = phones.getString(phones
+	                                    .getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+	                    Long contactID = phones.getLong(phones
+	                    		.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
+	                    Uri uri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, contactID); 
+	                    InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(cr,uri);  
+	                    contactItemVO.setFullName(name);
+	                    contactItemVO.setContactId(contactId);
+	                    contactItemVO.setMobile(phoneNumber);
+	                    contactItemVO.setHeaderBitmap(BitmapFactory.decodeStream(input));
+	                    getPinYinFullNameChar(contactItemVO,name);
+	                    contactList.add(contactItemVO);
+	                    
+	                    Log.e("", BitmapFactory.decodeStream(input)+"");  
+	                    Log.e("name", name+"");  
+	                    Log.e("phoneNumber", phoneNumber+"");  
+	                    Log.e("headchar", contactItemVO.getHeadChar()+"");  
+	                    Log.d("",index+ "=============================================");  
+                	}
+                	index++;
                 }
                 phones.close();
                 
             } while (cursor.moveToNext());
         }
         cursor.close();
-        return contactList;
+        return sort(contactList);
     }
 	/**
 	 * 
@@ -202,7 +211,7 @@ public class ContactGenerator {
 			}
 		}
 		contactItemVO.setHeadChar(headCharBuffer.toString());
-		contactItemVO.setFullName(convert.toString());
+		contactItemVO.setFullNamePinYin(convert.toString());
 	 }
 	/**
 	 * 返回中文的首字母
@@ -256,7 +265,7 @@ public class ContactGenerator {
 					public int compare(ContactItemVO lhs,
 							ContactItemVO rhs) {
 						return String.CASE_INSENSITIVE_ORDER.compare(
-								lhs.getFullName(), rhs.getFullName());
+								lhs.getHeadChar(), rhs.getHeadChar());
 					}
 				});
 		return list;
@@ -272,7 +281,7 @@ public class ContactGenerator {
 	    int type;
 	    Bitmap headerBitmap;
 	    String headChar;
-
+	    String fullNamePinYin;
 	    public String getFullName() {
 	        return fullName;
 	    }
@@ -346,6 +355,13 @@ public class ContactGenerator {
 			this.type = type;
 		}
 
+		public String getFullNamePinYin() {
+			return fullNamePinYin;
+		}
+
+		public void setFullNamePinYin(String fullNamePinYin) {
+			this.fullNamePinYin = fullNamePinYin;
+		}
 
 		@Override
 		public int hashCode() {
