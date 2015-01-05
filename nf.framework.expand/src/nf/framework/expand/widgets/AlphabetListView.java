@@ -14,7 +14,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 /**
@@ -24,13 +23,11 @@ import android.widget.TextView;
 public class AlphabetListView extends FrameLayout {
     private Context mContext;
 
-    private ListView mListView;
+    private UpFreshListView mListView;
     private LinearLayout alphabetLayout;
     private TextView mTextView;
     private AlphabetPositionListener positionListener;
     private AlphabetOnItemClickListener onItemClickListener;
-    private OnHeaderRefreshListener refreshListener;
-	private OnFooterLoadMoreListener footerListener;
     private float screenDensity;
     
     private Handler mHandler;
@@ -70,17 +67,17 @@ public class AlphabetListView extends FrameLayout {
         
         mHandler = new Handler();
 
-        mListView = new ListView(mContext);
-        ListViewEventListener();
+        mListView = new UpFreshListView(mContext);
+        listViewEventListener();
         initAlphabetLayout(mContext);
 
         mTextView = new TextView(mContext);
-        mTextView.setTextSize(convertDIP2PX(50));
+        mTextView.setTextSize(convertDIP2PX(30));
         mTextView.setTextColor(Color.argb(150, 255, 255, 255));
-        mTextView.setBackgroundColor(Color.argb(200, 0, 0, 0));
-        mTextView.setMinWidth(convertDIP2PX(70));
-        mTextView.setMinHeight(convertDIP2PX(70));
-        int pixels = convertDIP2PX(10);
+        mTextView.setBackgroundColor(Color.argb(100, 0, 0, 0));
+        mTextView.setMinWidth(convertDIP2PX(40));
+        mTextView.setMinHeight(convertDIP2PX(40));
+        int pixels = convertDIP2PX(5);
         mTextView.setPadding(pixels, pixels, pixels, pixels);
         mTextView.setGravity(Gravity.CENTER);
         mTextView.setVisibility(View.INVISIBLE);
@@ -96,7 +93,7 @@ public class AlphabetListView extends FrameLayout {
     	this.onItemClickListener=onItemClickListener;
     }
     
-	public void ListViewEventListener(){
+	public void listViewEventListener(){
 		if(mListView!=null){
 			mListView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -111,7 +108,7 @@ public class AlphabetListView extends FrameLayout {
 		}
 	}
 	
-    public ListView getmListView() {
+    public UpFreshListView getmListView() {
     	return mListView;
 	}
 
@@ -137,7 +134,7 @@ public class AlphabetListView extends FrameLayout {
         FrameLayout.LayoutParams alphabetLayoutParams = new FrameLayout.LayoutParams(40,FrameLayout.LayoutParams.FILL_PARENT);
         alphabetLayoutParams.gravity = Gravity.RIGHT;
         alphabetLayout.setLayoutParams(alphabetLayoutParams);
-        final String[] alphabet = new String[]{"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
+        final String[] alphabet = new String[]{"#","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
         params.weight = 1;
         params.gravity = Gravity.CENTER_HORIZONTAL;
@@ -200,14 +197,4 @@ public class AlphabetListView extends FrameLayout {
     public int convertDIP2PX(float dip) {
         return (int)(dip*screenDensity + 0.5f*(dip>=0?1:-1));
     }
-	public void setonRefreshListener(OnHeaderRefreshListener refreshListener) {
-		this.refreshListener = refreshListener;
-	}
-	/**
-	 * 设置底部分页按钮点击事件
-	 */
-	public void setFooterOnClickListener(OnFooterLoadMoreListener listener) {
-		this.footerListener = listener;
-		
-	}
 }
