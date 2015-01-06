@@ -17,7 +17,7 @@ import android.util.Log;
  */
 public class LogUtil {
 
-	public static boolean OpenDug=false;
+	public static boolean OpenBug=false;
 	
 	private static Context mcontext;
 	/**
@@ -83,40 +83,40 @@ public class LogUtil {
 //	
 	
 	public static void e(Context mcontext,String errorMsg){
-		if(!OpenDug){
+		if(!OpenBug){
 			return;
 		}
 		e(getTag(mcontext),errorMsg);	
 	}
 	
 	public static void e(String tag,String errorMsg){
-		if(!OpenDug){
+		if(!OpenBug){
 			return;
 		}
 		Log.e(tag,errorMsg);	
 	}
 	
 	public static void d(Context mcontext,String errorMsg){
-		if(!OpenDug){
+		if(!OpenBug){
 			return;
 		}
 		d(getTag(mcontext),errorMsg);	
 	}
 	public static void d(String tag,String errorMsg){
-		if(!OpenDug){
+		if(!OpenBug){
 			return;
 		}
 		Log.d(tag,errorMsg);	
 	}
 	
 	public static void w(Context mcontext,String errorMsg){
-		if(!OpenDug){
+		if(!OpenBug){
 			return;
 		}
 		w(getTag(mcontext),errorMsg);	
 	}
 	public static void w(String tag,String errorMsg){
-		if(!OpenDug){
+		if(!OpenBug){
 			return;
 		}
 		Log.w(tag,errorMsg);	
@@ -124,32 +124,32 @@ public class LogUtil {
 	public static void w(String tag ,String errorMsg,Throwable throwable){
 		
 		writeExceptionLog(throwable);
-		if(!OpenDug){
+		if(!OpenBug){
 			return;
 		}
 		w(tag,errorMsg);
 	}
 	
 	public static void i(Context mcontext,String errorMsg){
-		if(!OpenDug){
+		if(!OpenBug){
 			return;
 		}
 		i(getTag(mcontext),errorMsg);	
 	}
 	public static void i(String tag,String errorMsg){
-		if(!OpenDug){
+		if(!OpenBug){
 			return;
 		}
 		Log.i(tag,errorMsg);	
 	}
 	public static void v(Context mcontext,String errorMsg){
-		if(!OpenDug){
+		if(!OpenBug){
 			return;
 		}
 		v(getTag(mcontext),errorMsg);	
 	}
 	public static void v(String tag,String errorMsg){
-		if(!OpenDug){
+		if(!OpenBug){
 			return;
 		}
 		Log.v(tag,errorMsg);	
