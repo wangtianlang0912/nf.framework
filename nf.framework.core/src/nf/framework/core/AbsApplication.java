@@ -17,7 +17,7 @@ public abstract class AbsApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		LogUtil.init(getApplicationContext());
-		if(LogUtil.OpenBug){
+		if(!LogUtil.OpenBug){
 			CrashHandler crashHandler = CrashHandler.getInstance();
 			//注册crashHandler
 			crashHandler.init(getApplicationContext());
