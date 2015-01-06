@@ -16,6 +16,7 @@
 package nf.framework.app;
 
 import nf.framework.core.AbsApplication;
+import nf.framework.core.exception.LogUtil;
 import android.content.Context;
 
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -44,6 +45,7 @@ public abstract class UILApplication extends AbsApplication {
 				.denyCacheImageMultipleSizesInMemory()
 				.diskCacheFileNameGenerator(new Md5FileNameGenerator())
 				.tasksProcessingOrder(QueueProcessingType.LIFO)
+				.writeDebugLogs(LogUtil.OpenBug)
 				.build();
 		// Initialize ImageLoader with configuration.
 		ImageLoader.getInstance().init(config);
