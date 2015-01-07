@@ -4,7 +4,7 @@ import nf.framework.R;
 import android.app.Activity;
 import android.content.Context;
 
-public class TransitionUtility {
+public class NFTransitionUtility {
 
 	
 	/***

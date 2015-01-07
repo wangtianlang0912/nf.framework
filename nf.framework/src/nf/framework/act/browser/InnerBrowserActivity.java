@@ -11,9 +11,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
-import android.webkit.JavascriptInterface;
-import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
@@ -58,64 +55,17 @@ public class InnerBrowserActivity extends AbsBaseActivity {
 		browserBtn = (ImageView) this
 				.findViewById(R.id.common_web_toolbar_browser_btn);
 		webview = (WebView) this.findViewById(R.id.common_web_main_web_context);
-		webview.setWebViewClient(new InnerWebViewClient(InnerBrowserActivity.this));
 		webview.getSettings().setLoadWithOverviewMode(true);
 		webview.getSettings().setUseWideViewPort(true);
-		webview.getSettings().setJavaScriptEnabled(true);
 		webview.setVerticalScrollBarEnabled(true);
 		webview.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);  //设置 缓存模式
 		webview.getSettings().setBuiltInZoomControls(true); 
+		webview.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 		webview.requestFocus();
-		webview.setWebChromeClient(new mWebChromeClient()); 
-
-		webview.addJavascriptInterface(new Object() {
-			@SuppressWarnings("unused")
-			// @JavascriptInterface
-			public void getVideoUrl(String videoUrl) {
-				if (videoUrl != null) {
-					new LoadSysSoft().OpenVideo(mcontext, videoUrl);
-				}
-			}
-
-			@SuppressWarnings("unused")
-			@JavascriptInterface
-			public void getPicUrl(String url) {
-				if (url != null) {
-					getShowPic(url);
-				}
-			}
-
-			@SuppressWarnings("unused")
-			@JavascriptInterface
-			public void getDownLoadUrl(String url) {
-				if (url != null) {
-					new LoadSysSoft().OpenBrowser(mcontext, url);
-				}
-			}
-
-			@SuppressWarnings("unused")
-			@JavascriptInterface
-			public void OpenMarketApp(String appPackageName) {
-				if (appPackageName != null) {
-					new LoadSysSoft().OpenMarketApp(mcontext, appPackageName);
-				}
-			}
-			@SuppressWarnings("unused")
-			@JavascriptInterface
-			public void onFinish(){
-				runOnUiThread(new Runnable() {
-					
-					@Override
-					public void run() {
-
-						onBackPressed();
-					}
-				});
-				
-			}
-		}, "JsCallBack");
+		webview.getSettings().setJavaScriptEnabled(true);
+		webview.setWebViewClient(new InnerWebViewClient(this));
+		webview.setWebChromeClient(new mWebChromeClient("JsCallBack",HostJsScope.class)); 
 		gobackBtn.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				if (webview.canGoBack()) {
@@ -124,7 +74,6 @@ public class InnerBrowserActivity extends AbsBaseActivity {
 			}
 		});
 		goforwardBtn.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				if (webview.canGoForward()) {
@@ -133,15 +82,13 @@ public class InnerBrowserActivity extends AbsBaseActivity {
 			}
 		});
 		super.leftButton.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				FinishActivity();
+				onBackPressed();
 			}
 		});
 		refreshBtn.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -164,13 +111,15 @@ public class InnerBrowserActivity extends AbsBaseActivity {
 	protected void onResume() {
 		super.onResume();
 		webview.onResume();
-		homeIntent = this.getIntent();
-		String titleName = homeIntent.getStringExtra(INTENT_TITLE);
-		if (!TextUtils.isEmpty(titleName)) {
-			super.top_textview.setText(titleName);
+		if(urlAddress==null){
+			homeIntent = this.getIntent();
+			String titleName = homeIntent.getStringExtra(INTENT_TITLE);
+			if (!TextUtils.isEmpty(titleName)) {
+				super.top_textview.setText(titleName);
+			}
+			urlAddress = homeIntent.getStringExtra(INTENT_URL);
+			webview.loadUrl(urlAddress);
 		}
-		urlAddress = homeIntent.getStringExtra(INTENT_URL);
-		webview.loadUrl(urlAddress);
 	}
 
 	public void setToolbarState(boolean clickable, ImageView imageView) {
@@ -190,8 +139,6 @@ public class InnerBrowserActivity extends AbsBaseActivity {
 	protected void onPause() {
 		super.onPause();
 		webview.onPause();
-		webview.pauseTimers();  
-		webview.stopLoading();
 	}
 
 	@Override
@@ -200,16 +147,10 @@ public class InnerBrowserActivity extends AbsBaseActivity {
 		super.onBackPressed();
 		webview.clearCache(true);
 		webview.clearHistory();
-		FinishActivity();
+		finishActivity();
 	}
 
-	private void getShowPic(String str) {
-		if (str != null) {
-			
-		} else {
-		}
-	}
-	private void FinishActivity() {
+	private void finishActivity() {
 
 		if (intentSource != null) {
 			new LoadSysSoft().openAPP(mcontext, mcontext.getPackageName());
@@ -224,11 +165,14 @@ public class InnerBrowserActivity extends AbsBaseActivity {
 	}
 	
 	
-	private class mWebChromeClient extends InnerWebChromeClient{
+	private class mWebChromeClient extends InjectedChromeClient{
 		
+		public mWebChromeClient(String injectedName, Class injectedCls) {
+			super(injectedName, injectedCls);
+			// TODO Auto-generated constructor stub
+		}
 		@Override
-		public void onProgressChanged(WebView view, int newProgress) {
-
+		public void onExpandProgressChanged(WebView view, int newProgress) {
 			if (newProgress == 100) {
 				refeshProgressbar.setVisibility(View.INVISIBLE);
 				setToolbarState(true, gobackBtn);
@@ -240,7 +184,6 @@ public class InnerBrowserActivity extends AbsBaseActivity {
 				setToolbarState(false, gobackBtn);
 				setToolbarState(false, goforwardBtn);
 			}
-
 		}
 	}
 }

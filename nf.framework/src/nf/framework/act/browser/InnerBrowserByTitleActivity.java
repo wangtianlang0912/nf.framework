@@ -2,24 +2,16 @@ package nf.framework.act.browser;
 
 import nf.framework.R;
 import nf.framework.act.AbsBaseActivity;
-import nf.framework.act.NFIntentUtils;
-import nf.framework.core.LoadSysSoft;
 import nf.framework.core.util.android.CloseActivityClass;
-import nf.framework.expand.dialog.AbsBaseDialog;
-import nf.framework.expand.dialog.AbsBaseDialog.DialogUpBtnOnClickListener;
-import nf.framework.expand.dialog.BaseDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup.LayoutParams;
-import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
@@ -58,68 +50,7 @@ public class InnerBrowserByTitleActivity extends AbsBaseActivity {
 		detailwebview.requestFocus();
 		detailwebview.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
 		detailwebview.setWebViewClient(new InnerWebViewClient(this));
-		detailwebview.setWebChromeClient(new InnerWebChromeClient()); 
-		detailwebview.addJavascriptInterface(new Object() {
-			@SuppressWarnings("unused")
-			@JavascriptInterface
-			public void getUrl(String param, String url) {
-				if (url != null) {
-					NFIntentUtils.intentToInnerBrowserAct(mcontext, "web","web", url);
-				}
-			}
-
-			@SuppressWarnings("unused")
-			@JavascriptInterface
-			public void getVideoUrl(String videoUrl) {
-				if (videoUrl != null) {
-					new LoadSysSoft().OpenVideo(mcontext, videoUrl);
-				}
-			}
-
-			@SuppressWarnings("unused")
-			@JavascriptInterface
-			public void getDownLoadUrl(String url) {
-				if (url != null) {
-					new LoadSysSoft().OpenBrowser(mcontext, url);
-				}
-			}
-
-			@SuppressWarnings("unused")
-			@JavascriptInterface
-			public void OpenMarketApp(String appPackageName) {
-				if (appPackageName != null) {
-					new LoadSysSoft().OpenMarketApp(mcontext, appPackageName);
-				}
-			}
-
-			@SuppressWarnings("unused")
-			@JavascriptInterface
-			public void getSuccessFeedBack(String message) {
-				BaseDialog baseDialog = new BaseDialog(mcontext,
-						AbsBaseDialog.DIALOG_BUTTON_STYLE_ONE);
-				baseDialog.show();
-				baseDialog.setTitle("提示");
-				baseDialog.setContent(message);
-				baseDialog
-						.setDialogUpBtnOnClickListener(new DialogUpBtnOnClickListener() {
-							@Override
-							public void onButtonClick(View upBtn) {
-								// TODO Auto-generated method stub
-								FinishActivity();
-							}
-						});
-			}
-
-			@SuppressWarnings("unused")
-			@JavascriptInterface
-			public void getFailureFeedBack(String message) {
-				BaseDialog baseDialog = new BaseDialog(mcontext,
-						AbsBaseDialog.DIALOG_BUTTON_STYLE_ONE);
-				baseDialog.show();
-				baseDialog.setTitle("提示");
-				baseDialog.setContent(message);
-			}
-		}, "JsCallBack");
+		detailwebview.setWebChromeClient(new InjectedChromeClient("JsCallBack",InnerHostJsScope.class)); 
 		detailwebview.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
@@ -133,7 +64,7 @@ public class InnerBrowserByTitleActivity extends AbsBaseActivity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				if (!detailwebview.canGoBack()) {
-					FinishActivity();
+					finishActivity();
 				} else {
 					detailwebview.goBack();
 				}
@@ -150,8 +81,6 @@ public class InnerBrowserByTitleActivity extends AbsBaseActivity {
 	protected void onPause() {
 		super.onPause();
 		detailwebview.onPause();
-		detailwebview.pauseTimers();  
-		detailwebview.stopLoading();
 	}
 
 	@Override
@@ -160,14 +89,14 @@ public class InnerBrowserByTitleActivity extends AbsBaseActivity {
 			if (!detailwebview.canGoBack()) {
 				// detailwebview.clearHistory();
 				// detailwebview.clearCache(true);
-				FinishActivity();
+				finishActivity();
 			} else {
 				detailwebview.goBack();  
 			}
 		}
 		return false;
 	}
-	private void FinishActivity() {
+	private void finishActivity() {
 		detailwebview.clearCache(true);
 		detailwebview.clearHistory();
 		setResult(RESULT_OK, homeIntent);
@@ -175,4 +104,14 @@ public class InnerBrowserByTitleActivity extends AbsBaseActivity {
 		overridePendingTransition(R.anim.common_push_right_in,
 				R.anim.common_push_right_out);
 	}
+	public static class InnerHostJsScope extends HostJsScope{
+		
+		public static void getSuccessFeedBack(final WebView webView, String message) {
+			alert(webView, message);
+		}
+
+		public static void getFailureFeedBack(WebView webView,String message) {
+			alert(webView, message);
+		}
+	} 
 }
