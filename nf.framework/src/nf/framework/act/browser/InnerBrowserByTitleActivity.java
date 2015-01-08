@@ -3,6 +3,7 @@ package nf.framework.act.browser;
 import nf.framework.R;
 import nf.framework.act.AbsBaseActivity;
 import nf.framework.core.util.android.CloseActivityClass;
+import nf.framework.expand.widgets.ProgressWebView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,7 +19,7 @@ import android.webkit.WebView;
 public class InnerBrowserByTitleActivity extends AbsBaseActivity {
 
 	private Context mcontext;
-	private WebView detailwebview;
+	private ProgressWebView detailwebview;
 	private Intent homeIntent;
 	public static final String INTENT_TITLE = "param_item";
 	public static final String INTENT_URL = "URL";
@@ -43,7 +44,7 @@ public class InnerBrowserByTitleActivity extends AbsBaseActivity {
 		super.leftButton.setImageResource(R.drawable.common_navigate_back_btn);
 		View webviewLayout = LayoutInflater.from(this).inflate(R.layout.common_web_layout,super.mainlayout,false);
 		super.mainlayout.addView(webviewLayout);
-		detailwebview=(WebView) findViewById(R.id.common_web_main_web_view);
+		detailwebview=(ProgressWebView) findViewById(R.id.common_web_main_web_view);
 		detailwebview.getSettings().setJavaScriptEnabled(true);
 		detailwebview.canGoBack();
 		detailwebview.setVerticalScrollBarEnabled(true);

@@ -4,6 +4,7 @@ import nf.framework.R;
 import nf.framework.act.AbsBaseActivity;
 import nf.framework.core.LoadSysSoft;
 import nf.framework.core.util.android.CloseActivityClass;
+import nf.framework.expand.widgets.ProgressWebView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,14 +19,13 @@ import android.widget.RelativeLayout;
 
 public class InnerBrowserActivity extends AbsBaseActivity {
 	private Context mcontext;
-	private WebView webview;
+	private ProgressWebView webview;
 	private Intent homeIntent;
 	private String urlAddress;
 	private ImageView gobackBtn;
 	private ImageView goforwardBtn;
 	private ImageView refreshBtn;
 	private ImageView browserBtn;
-	private RelativeLayout refeshProgressbar;
 	private String intentSource;
 	public static final String INTENT_TITLE = "param_title";
 	public static final String INTENT_URL = "url";
@@ -44,8 +44,6 @@ public class InnerBrowserActivity extends AbsBaseActivity {
 		super.mainlayout.addView(view);
 		super.leftButton.setVisibility(View.VISIBLE);
 		super.leftButton.setImageResource(R.drawable.common_navigate_back_btn);
-		refeshProgressbar = (RelativeLayout) this
-				.findViewById(R.id.common_web_main_refesh_progressbar_layout);
 		gobackBtn = (ImageView) this
 				.findViewById(R.id.common_web_toolbar_goback_btn);
 		goforwardBtn = (ImageView) this
@@ -54,7 +52,7 @@ public class InnerBrowserActivity extends AbsBaseActivity {
 				.findViewById(R.id.common_web_toolbar_refresh_btn);
 		browserBtn = (ImageView) this
 				.findViewById(R.id.common_web_toolbar_browser_btn);
-		webview = (WebView) this.findViewById(R.id.common_web_main_web_context);
+		webview = (ProgressWebView) this.findViewById(R.id.common_web_main_web_context);
 		webview.getSettings().setLoadWithOverviewMode(true);
 		webview.getSettings().setUseWideViewPort(true);
 		webview.setVerticalScrollBarEnabled(true);
@@ -173,14 +171,13 @@ public class InnerBrowserActivity extends AbsBaseActivity {
 		}
 		@Override
 		public void onExpandProgressChanged(WebView view, int newProgress) {
+			super.onExpandProgressChanged(view, newProgress);
 			if (newProgress == 100) {
-				refeshProgressbar.setVisibility(View.INVISIBLE);
 				setToolbarState(true, gobackBtn);
 				setToolbarState(view.canGoBack(), gobackBtn);
 				setToolbarState(view.canGoForward(), goforwardBtn);
 				webview.requestFocus();
 			} else {
-				refeshProgressbar.setVisibility(View.VISIBLE);
 				setToolbarState(false, gobackBtn);
 				setToolbarState(false, goforwardBtn);
 			}

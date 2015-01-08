@@ -10,10 +10,10 @@ package nf.framework.act.browser;
 
 import nf.framework.expand.dialog.AbsBaseDialog;
 import nf.framework.expand.dialog.BaseDialog;
-import nf.framework.expand.dialog.ProgressDialog;
 import nf.framework.expand.dialog.AbsBaseDialog.DialogLeftBtnOnClickListener;
 import nf.framework.expand.dialog.AbsBaseDialog.DialogRightBtnOnClickListener;
 import nf.framework.expand.dialog.AbsBaseDialog.DialogUpBtnOnClickListener;
+import nf.framework.expand.widgets.ProgressWebView;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnKeyListener;
@@ -24,13 +24,13 @@ import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.widget.ProgressBar;
 
 
 public class InjectedChromeClient extends WebChromeClient {
     private final String TAG = "InjectedChromeClient";
     private JsCallJava mJsCallJava;
     private boolean mIsInjectedJS;
-    private ProgressDialog progressBarDialog = null;
     public InjectedChromeClient (String injectedName, Class injectedCls) {
         mJsCallJava = new JsCallJava(injectedName, injectedCls);
     }
@@ -89,33 +89,23 @@ public class InjectedChromeClient extends WebChromeClient {
         
         onExpandProgressChanged(view, newProgress);
     }
-    /***
-     * 扩展onProgressChanged 
-     * @param view
-     * @param newProgress
-     */
-    public void onExpandProgressChanged (WebView view, int newProgress) {
-    	
-    	 try {
- 			if (newProgress == 100) {
- 				if (progressBarDialog != null && progressBarDialog.isShowing()) {
- 					progressBarDialog.dismiss();
- 					progressBarDialog = null;
- 					view.requestFocus();
- 				}
- 			} else {
- 				if (progressBarDialog == null) {
- 					progressBarDialog = new ProgressDialog(view.getContext());
- 				}
- 				if (progressBarDialog != null && !progressBarDialog.isShowing()) {
- 					progressBarDialog.show();
- 				}
- 			}
- 		} catch (Exception e) {
+    protected void onExpandProgressChanged(WebView view, int newProgress) {
+		// TODO Auto-generated method stub
+		if(view instanceof ProgressWebView){
+			ProgressWebView webView =(ProgressWebView)view;
+			ProgressBar progressbar =webView.getProgressbar();
+			
+		    if (newProgress == 100) {
+                progressbar.setVisibility(View.GONE);
+            } else {
+                if (progressbar.getVisibility() == View.GONE)
+                    progressbar.setVisibility(View.VISIBLE);
+                progressbar.setProgress(newProgress);
+            }
+		}
+	}
 
- 		}
-    }
-    /**
+	/**
 	 * 覆盖默认的window.confirm展示界面，避免title里显示为“：来自file:////”
 	 */
 	@Override

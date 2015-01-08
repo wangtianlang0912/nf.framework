@@ -51,29 +51,12 @@
         </RelativeLayout>
         <!-- 显示内容 -->
 
-        <WebView
+        <nf.framework.expand.widgets.ProgressWebView
             android:id="@+id/common_web_main_web_context"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_above="@id/common_web_main_top_bar_layout"
             android:background="@color/common_web_browser_main_bg" />
-    </RelativeLayout>
-    <!-- 加载数据显示progressBar -->
-
-    <RelativeLayout
-        android:id="@+id/common_web_main_refesh_progressbar_layout"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_gravity="center"
-        android:visibility="invisible" >
-
-        <ProgressBar
-            android:id="@+id/common_web_main_refesh_progressbar"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerInParent="true"
-            android:indeterminate="false"
-            android:indeterminateDrawable="@drawable/common_progressbar_bg" />
     </RelativeLayout>
 
 </FrameLayout>
