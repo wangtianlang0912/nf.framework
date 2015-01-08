@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
+import nf.framework.core.exception.LogUtil;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
@@ -119,11 +120,11 @@ public class ContactGenerator {
 	                    getPinYinFullNameChar(contactItemVO,name);
 	                    contactList.add(contactItemVO);
 	                    
-	                    Log.e("", BitmapFactory.decodeStream(input)+"");  
-	                    Log.e("name", name+"");  
-	                    Log.e("phoneNumber", phoneNumber+"");  
-	                    Log.e("headchar", contactItemVO.getHeadChar()+"");  
-	                    Log.d("",index+ "=============================================");  
+	                    LogUtil.e("", BitmapFactory.decodeStream(input)+"");  
+	                    LogUtil.e("name", name+"");  
+	                    LogUtil.e("phoneNumber", phoneNumber+"");  
+	                    LogUtil.e("headchar", contactItemVO.getHeadChar()+"");  
+	                    LogUtil.d("",index+ "=============================================");  
                 	}
                 	index++;
                 }
