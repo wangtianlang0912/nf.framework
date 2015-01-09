@@ -69,14 +69,17 @@ public abstract class AbsSlidingTabBarActivity extends AbsSlidingBaseActivity{
 	 */
 	private void InitTabBarView() {
 		tabBarList.clear();
-		tabBarList.addAll(makeTabBarList());
-		if (tabBarList.size() <= 1) {
-			indicator.setVisibility(View.GONE);
-			return;
+		List<TabBarVO> list =makeTabBarList();
+		if(list!=null){
+			tabBarList.addAll(list);
+			if (tabBarList.size() <= 1) {
+				indicator.setVisibility(View.GONE);
+				return;
+			}
+			indicator.setVisibility(View.VISIBLE);
+			indicator.notifyDataSetChanged();
+			indicator.setTabViewPadding(30,10,30,10);
 		}
-		indicator.setVisibility(View.VISIBLE);
-		indicator.notifyDataSetChanged();
-		indicator.setTabViewPadding(30,10,30,10);
 	}
 
 	protected abstract List<TabBarVO> makeTabBarList();
