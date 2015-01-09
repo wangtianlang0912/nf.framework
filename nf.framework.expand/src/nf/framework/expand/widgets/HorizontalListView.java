@@ -7,9 +7,9 @@ import android.content.Context;
 import android.database.DataSetObserver;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
-import android.view.View.MeasureSpec;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -46,7 +46,9 @@ public class HorizontalListView extends AdapterView<ListAdapter>
 	private OnItemClickListener mOnItemClicked;
 	private OnItemLongClickListener mOnItemLongClicked;
 	private boolean mDataChanged = false;
-
+	private int pageCount=0;
+	private int horizontalSpacing=0;
+	private int itemWidth=0;
 	public HorizontalListView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
@@ -147,20 +149,68 @@ public class HorizontalListView extends AdapterView<ListAdapter>
 		// TODO: implement
 	}
 
+	public void setPageCount(int pageCount) {
+		this.pageCount = pageCount;
+	}
+
+	public int getPageCount() {
+		return pageCount;
+	}
+
+	public int getHorizontalSpacing() {
+		return horizontalSpacing;
+	}
+
+	public void setHorizontalSpacing(int horizontalSpacing) {
+		this.horizontalSpacing = horizontalSpacing;
+	}
+
 	private void addAndMeasureChild(final View child, int viewPos)
 	{
 		LayoutParams params = child.getLayoutParams();
 		if (params == null)
 		{
 			params = new LayoutParams(LayoutParams.FILL_PARENT,
-					LayoutParams.FILL_PARENT);
+					LayoutParams.WRAP_CONTENT);
 		}
-
+		
+		if(pageCount>0){
+			params.width =itemWidth!=0?itemWidth:calculateItemViewWidth();
+			child.setPadding(0,child.getPaddingTop(),0,child.getPaddingBottom());
+			child.measure(
+					MeasureSpec.makeMeasureSpec(params.width, MeasureSpec.EXACTLY),
+					MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.AT_MOST));
+		}else{
+			child.measure(
+					MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.AT_MOST),
+					MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.AT_MOST));
+		}
 		addViewInLayout(child, viewPos, params, true);
-		child.measure(
-				MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.AT_MOST),
-				MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.AT_MOST));
 	}
+
+	private int calculateItemViewWidth(){
+		int	width =View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);
+		int	height =View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);
+		measure(width,height);
+		Log.e(VIEW_LOG_TAG, "/////////////////////////"+getWidth());
+		int	viewWidth=getWidth();
+		return viewWidth/pageCount;
+	}
+	
+	public int getItemWidth() {
+		if(itemWidth ==0){
+			itemWidth=	calculateItemViewWidth();
+			
+		}
+		return itemWidth-this.horizontalSpacing;
+	}
+
+	@Override
+	protected void measureChildren(int widthMeasureSpec, int heightMeasureSpec) {
+		// TODO Auto-generated method stub
+		super.measureChildren(widthMeasureSpec, heightMeasureSpec);
+	}
+
 
 	@Override
 	protected synchronized void onLayout(boolean changed, int left, int top,
@@ -246,7 +296,7 @@ public class HorizontalListView extends AdapterView<ListAdapter>
 		while (rightEdge + dx < getWidth()
 				&& mRightViewIndex < mAdapter.getCount())
 		{
-
+			
 			View child = mAdapter.getView(mRightViewIndex,
 					mRemovedViewQueue.poll(), this);
 			addAndMeasureChild(child, -1);
