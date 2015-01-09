@@ -5,8 +5,8 @@ import java.util.List;
 
 import nf.framework.expand.viewpagerindicator.IconPagerAdapter;
 import nf.framework.expand.viewpagerindicator.TabPageIndicator;
-import nf.framework.expand.viewpagerindicator.TabPageIndicator.TabImgPosition;
 import nf.framework.statistic.MobStatisticUtils;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -38,13 +38,12 @@ public abstract class AbsSlidingTabBarActivity extends AbsSlidingBaseActivity{
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	private ViewGroup mainLanderView;
 	private MobStatisticUtils mobStatisticUtils;
+	private boolean isAutoLoadTab =true;
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		mobStatisticUtils=new MobStatisticUtils(this);
 		initView();
-		InitTabBarView();
-		InitViewPager();
 	}
 
 	private void initView() {
@@ -52,60 +51,39 @@ public abstract class AbsSlidingTabBarActivity extends AbsSlidingBaseActivity{
 		mainLanderView = (ViewGroup) LayoutInflater.from(this).inflate(getMainLayout(), null);
 		super.mainlayout.addView(mainLanderView);
 		indicator = (TabPageIndicator) findViewById(getTabBarLinearLayoutId());
+		indicator.setVisibility(View.GONE);
 		mPager = (ViewPager) findViewById(getViewPagerId());
 		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),fragmentList);
 		mPager.setAdapter(mSectionsPagerAdapter);
 		mSectionsPagerAdapter.notifyDataSetChanged();
 		indicator.setViewPager(mPager);
 		indicator.setOnPageChangeListener(new TabBarOnPageChangeListener());
+		indicator.setTabViewPadding(30,10,30,10);
 	}
 
 	protected abstract int getMainLayout();
 
 	protected abstract int getTabBarLinearLayoutId();
 
-	/**
-	 * 初始化头标
-	 */
-	private void InitTabBarView() {
-		tabBarList.clear();
-		List<TabBarVO> list =makeTabBarList();
-		if(list!=null){
-			tabBarList.addAll(list);
-			if (tabBarList.size() <= 1) {
-				indicator.setVisibility(View.GONE);
-				return;
-			}
-			indicator.setVisibility(View.VISIBLE);
-			indicator.notifyDataSetChanged();
-			indicator.setTabViewPadding(30,10,30,10);
-		}
-	}
-
 	protected abstract List<TabBarVO> makeTabBarList();
 
 	protected abstract int getViewPagerId();
 
+	protected abstract List<Fragment> getFragmentList(List<TabBarVO> tabBarList);
+	
 	public List<TabBarVO> getTabBarList() {
 		return tabBarList;
 	}
 
-	/**
-	 * 初始化ViewPager
-	 */
-	private void InitViewPager() {
-		mSectionsPagerAdapter.setFragments(getFragmentList(tabBarList));
-		mPager.setOffscreenPageLimit(tabBarList.size());// 设置缓存页面，当前页面的相邻N各页面都会被缓存
-		setCurrentTabItem(0);
-	}
-
-	protected void onRebuildTabView(){
+	public void afterFragmentFinished() {
+		// TODO Auto-generated method stub
 		
-		InitTabBarView();
-		InitViewPager();
 	}
-	protected abstract List<Fragment> getFragmentList(List<TabBarVO> tabBarList);
-
+	public void	onRebuildTabView(){
+		
+		new TabBarAsync().execute();
+	}
+	
 	/***
 	 * 
 	 * @param tabBar
@@ -131,18 +109,36 @@ public abstract class AbsSlidingTabBarActivity extends AbsSlidingBaseActivity{
 		return mSectionsPagerAdapter.getItem(mPager.getCurrentItem());
 	
 	}
-	 @Override
-	    protected void onResume() {
-	    	// TODO Auto-generated method stub
-	    	super.onResume();
-	    	mobStatisticUtils.onStatisticResume();
-	    }
-	    @Override
-	    protected void onPause() {
-	    	// TODO Auto-generated method stub
-	    	super.onPause();
-	    	mobStatisticUtils.onStatisticPause();
-	    }
+	
+	/***
+	 * 默认为true
+	 * @return
+	 */
+	public boolean isAutoLoadTab() {
+		return isAutoLoadTab;
+	}
+
+	public void setAutoLoadTab(boolean isAutoLoadTab) {
+		this.isAutoLoadTab = isAutoLoadTab;
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		mobStatisticUtils.onStatisticResume();
+		if(tabBarList.isEmpty()&&isAutoLoadTab()){
+			new TabBarAsync().execute();
+		}
+		
+	}
+ 
+    @Override
+    protected void onPause() {
+    	// TODO Auto-generated method stub
+    	super.onPause();
+    	mobStatisticUtils.onStatisticPause();
+    }
 	/**
 	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
 	 * one of the sections/tabs/pages.
@@ -200,7 +196,6 @@ public abstract class AbsSlidingTabBarActivity extends AbsSlidingBaseActivity{
 
 		@Override
 		public void fragmentCallBack(Fragment fragment, TabBarVO mTabBarVO) {
-			// TODO Auto-generated method stub
 			// current fragment view init data
 			if (mSectionsPagerAdapter.getItem(mPager.getCurrentItem()).equals(fragment)) {
 				buildCurrentFragmentListData(fragment);
@@ -228,7 +223,9 @@ public abstract class AbsSlidingTabBarActivity extends AbsSlidingBaseActivity{
 
 	protected abstract void buildCurrentFragmentListData(Fragment currentFragment);
 
-	protected abstract void currentFragmentListOnItemClick(Fragment tabBarListFragment, AdapterView<?> arg0, View arg01, int arg2, long arg3);
+	protected void currentFragmentListOnItemClick(Fragment tabBarListFragment, AdapterView<?> arg0, View arg01, int arg2, long arg3){
+		
+	}
 
 	protected void listLoadMoreListener(Fragment fragment, TabBarVO mTabBarVO, int pageIndex) {
 
@@ -297,6 +294,31 @@ public abstract class AbsSlidingTabBarActivity extends AbsSlidingBaseActivity{
 
 		@Override
 		public void onPageScrollStateChanged(int arg0) {
+		}
+	}
+	private class TabBarAsync extends AsyncTask<String, Integer,List<TabBarVO>>{
+
+		@Override
+		protected List<TabBarVO> doInBackground(String... params) {
+			// TODO Auto-generated method stub
+			return makeTabBarList();
+		}
+		@Override
+		protected void onPostExecute(List<TabBarVO> list) {
+			// TODO Auto-generated method stub
+			if(list!=null){
+				tabBarList.clear();
+				tabBarList.addAll(list);
+				
+				indicator.setVisibility(tabBarList.size()>1?View.VISIBLE:View.GONE);
+				if(!tabBarList.isEmpty()){
+					mSectionsPagerAdapter.setFragments(getFragmentList(tabBarList));
+					mPager.setOffscreenPageLimit(tabBarList.size());// 设置缓存页面，当前页面的相邻N各页面都会被缓存
+					setCurrentTabItem(0);
+				}
+				indicator.notifyDataSetChanged();
+				afterFragmentFinished();
+			}
 		}
 	}
 }
