@@ -3,13 +3,9 @@ package nf.framework.act;
 import java.util.ArrayList;
 import java.util.List;
 
-import nf.framework.act.AbsSlidingTabBarActivity.SectionsPagerAdapter;
-import nf.framework.act.AbsSlidingTabBarActivity.TabBarOnPageChangeListener;
-import nf.framework.act.AbsSlidingTabBarActivity.TabBarTitleViewOnClickListener;
 import nf.framework.expand.viewpagerindicator.IconPagerAdapter;
 import nf.framework.expand.viewpagerindicator.TabPageIndicator;
-import nf.framework.expand.viewpagerindicator.TabPageIndicator.TabImgPosition;
-
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,12 +16,10 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.OvershootInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 
 /**
  * Tab页面手势滑动切换以及动画效果
@@ -42,13 +36,11 @@ public abstract class AbsTabBarActivity extends AbsBaseActivity{
 	protected TabPageIndicator indicator = null;
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	private ViewGroup mainLanderView;
-
+	private boolean isAutoLoadTab =true;
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		initView();
-		InitTabBarView();
-		// InitImageView();
-		InitViewPager();
+		
 	}
 
 	private void initView() {
@@ -56,35 +48,19 @@ public abstract class AbsTabBarActivity extends AbsBaseActivity{
 		mainLanderView = (ViewGroup) LayoutInflater.from(this).inflate(getMainLayout(), null);
 		super.mainlayout.addView(mainLanderView);
 		indicator = (TabPageIndicator) findViewById(getTabBarLinearLayoutId());
+		indicator.setVisibility(View.GONE);
 		mPager = (ViewPager) findViewById(getViewPagerId());
 		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),fragmentList);
 		mPager.setAdapter(mSectionsPagerAdapter);
 		mSectionsPagerAdapter.notifyDataSetChanged();
 		indicator.setViewPager(mPager);
 		indicator.setOnPageChangeListener(new TabBarOnPageChangeListener());
+		indicator.setTabViewPadding(30,10,30,10);
 	}
 
 	protected abstract int getMainLayout();
 
 	protected abstract int getTabBarLinearLayoutId();
-
-	/**
-	 * 初始化头标
-	 */
-	private void InitTabBarView() {
-		tabBarList.clear();
-		List<TabBarVO> list =makeTabBarList();
-		if(list!=null){
-			tabBarList.addAll(list);
-			if (tabBarList.size() <= 1) {
-				indicator.setVisibility(View.GONE);
-				return;
-			}
-			indicator.setVisibility(View.VISIBLE);
-			indicator.notifyDataSetChanged();
-			indicator.setTabViewPadding(30,10,30,10);
-		}
-	}
 
 	protected abstract List<TabBarVO> makeTabBarList();
 
@@ -98,19 +74,36 @@ public abstract class AbsTabBarActivity extends AbsBaseActivity{
 		return indicator;
 	}
 
-	/**
-	 * 初始化ViewPager
-	 */
-	private void InitViewPager() {
-		mSectionsPagerAdapter.setFragments(getFragmentList(tabBarList));
-		mPager.setOffscreenPageLimit(tabBarList.size());// 设置缓存页面，当前页面的相邻N各页面都会被缓存
-		setCurrentTabItem(0);
+	public void afterFragmentFinished() {
+		// TODO Auto-generated method stub
+		
 	}
 
-	protected void onRebuildTabView(){
+	public void	onRebuildTabView(){
 		
-		InitTabBarView();
-		InitViewPager();
+		new TabBarAsync().execute();
+	}
+	/***
+	 * 默认为true
+	 * @return
+	 */
+	public boolean isAutoLoadTab() {
+		return isAutoLoadTab;
+	}
+
+	public void setAutoLoadTab(boolean isAutoLoadTab) {
+		this.isAutoLoadTab = isAutoLoadTab;
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+	
+		if(tabBarList.isEmpty()&&isAutoLoadTab()){
+			new TabBarAsync().execute();
+		}
+		
 	}
 	protected abstract List<Fragment> getFragmentList(List<TabBarVO> tabBarList);
 
@@ -223,7 +216,10 @@ public abstract class AbsTabBarActivity extends AbsBaseActivity{
 
 	protected abstract void buildCurrentFragmentListData(Fragment currentFragment);
 
-	protected abstract void currentFragmentListOnItemClick(Fragment tabBarListFragment, AdapterView<?> arg0, View arg01, int arg2, long arg3);
+	protected void currentFragmentListOnItemClick(Fragment tabBarListFragment, AdapterView<?> arg0, View arg01, int arg2, long arg3){
+	
+		
+	}
 
 	protected void listLoadMoreListener(Fragment fragment, TabBarVO mTabBarVO, int pageIndex) {
 
@@ -293,6 +289,32 @@ public abstract class AbsTabBarActivity extends AbsBaseActivity{
 
 		@Override
 		public void onPageScrollStateChanged(int arg0) {
+		}
+	}
+	
+	private class TabBarAsync extends AsyncTask<String, Integer,List<TabBarVO>>{
+
+		@Override
+		protected List<TabBarVO> doInBackground(String... params) {
+			// TODO Auto-generated method stub
+			return makeTabBarList();
+		}
+		@Override
+		protected void onPostExecute(List<TabBarVO> list) {
+			// TODO Auto-generated method stub
+			if(list!=null){
+				tabBarList.clear();
+				tabBarList.addAll(list);
+				
+				indicator.setVisibility(tabBarList.size()>1?View.VISIBLE:View.GONE);
+				if(!tabBarList.isEmpty()){
+					mSectionsPagerAdapter.setFragments(getFragmentList(tabBarList));
+					mPager.setOffscreenPageLimit(tabBarList.size());// 设置缓存页面，当前页面的相邻N各页面都会被缓存
+					setCurrentTabItem(0);
+				}
+				indicator.notifyDataSetChanged();
+				afterFragmentFinished();
+			}
 		}
 	}
 }
