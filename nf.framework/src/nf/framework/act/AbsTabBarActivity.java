@@ -169,7 +169,7 @@ public abstract class AbsTabBarActivity extends AbsBaseActivity{
 			      for(Fragment f:this.dataFragmentList){
 			        ft.remove(f);
 			      }
-			      ft.commit();
+			      ft.commitAllowingStateLoss();
 			      ft=null;
 			      mFragmentManager.executePendingTransactions();
 			   }

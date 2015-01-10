@@ -177,7 +177,7 @@ public abstract class AbsSlidingTabBarActivity extends AbsSlidingBaseActivity{
 			      for(Fragment f:this.dataFragmentList){
 			        ft.remove(f);
 			      }
-			      ft.commit();
+			      ft.commitAllowingStateLoss();
 			      ft=null;
 			      mFragmentManager.executePendingTransactions();
 			   }
