@@ -204,11 +204,15 @@ public class ContactGenerator {
 		StringBuffer headCharBuffer=new StringBuffer();
 		for (int j = 0; j < str.length(); j++) {
 
-			char word = str.charAt(j); 
-			String[] pinyinArray =PinyinHelper.toHanyuPinyinStringArray(word);
-			if (pinyinArray != null) {
-				convert.append(pinyinArray[0].toString());
-				headCharBuffer.append(pinyinArray[0].charAt(0));
+			char word = str.charAt(j);
+			try{
+				String[] pinyinArray =PinyinHelper.toHanyuPinyinStringArray(word);
+				if (pinyinArray != null) {
+					convert.append(pinyinArray[0].toString());
+					headCharBuffer.append(pinyinArray[0].charAt(0));
+				}
+			}catch(Exception e){
+				
 			}
 		}
 		contactItemVO.setHeadChar(headCharBuffer.toString());
