@@ -42,17 +42,11 @@ public class BannerGalleryView extends RelativeLayout {
 	}
 
 	public BannerGalleryView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		// TODO Auto-generated constructor stub
-		mcontext = context;
-		initView();
+		this(context, attrs,0);
 	}
 
 	public BannerGalleryView(Context context) {
-		super(context);
-		// TODO Auto-generated constructor stub
-		mcontext = context;
-		initView();
+		this(context,null);
 	}
 
 	private void initView() {
@@ -103,7 +97,19 @@ public class BannerGalleryView extends RelativeLayout {
 		});
 		addView(layout);
 	}
-
+	
+	@Override
+	public void setVisibility(int visibility) {
+		// TODO Auto-generated method stub
+		super.setVisibility(visibility);
+	
+		int childCount =getChildCount();
+	
+		for(int i=0;i<childCount;i++){
+			getChildAt(i).setVisibility(visibility);
+		}
+	}
+	
 	/**
 	 * 
 	 * @param adapter
