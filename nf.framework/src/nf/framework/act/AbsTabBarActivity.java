@@ -307,7 +307,7 @@ public abstract class AbsTabBarActivity extends AbsBaseActivity{
 				tabBarList.addAll(list);
 				
 				indicator.setVisibility(tabBarList.size()>1?View.VISIBLE:View.GONE);
-				if(!tabBarList.isEmpty()){
+				if(!tabBarList.isEmpty()&&!isFinishing()){
 					mSectionsPagerAdapter.setFragments(getFragmentList(tabBarList));
 					mPager.setOffscreenPageLimit(tabBarList.size());// 设置缓存页面，当前页面的相邻N各页面都会被缓存
 					setCurrentTabItem(0);
