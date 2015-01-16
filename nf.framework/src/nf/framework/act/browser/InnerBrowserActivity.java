@@ -3,6 +3,7 @@ package nf.framework.act.browser;
 import nf.framework.R;
 import nf.framework.act.AbsBaseActivity;
 import nf.framework.core.LoadSysSoft;
+import nf.framework.core.util.android.AndroidVersionCheckUtils;
 import nf.framework.core.util.android.CloseActivityClass;
 import nf.framework.expand.widgets.ProgressWebView;
 import android.content.Context;
@@ -58,6 +59,7 @@ public class InnerBrowserActivity extends AbsBaseActivity {
 		webview.setVerticalScrollBarEnabled(true);
 		webview.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);  //设置 缓存模式
 		webview.getSettings().setBuiltInZoomControls(true); 
+		if(AndroidVersionCheckUtils.hasHoneycomb())
 		webview.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 		webview.requestFocus();
 		webview.getSettings().setJavaScriptEnabled(true);
