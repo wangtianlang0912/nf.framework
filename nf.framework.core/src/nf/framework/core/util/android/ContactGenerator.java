@@ -97,9 +97,12 @@ public class ContactGenerator {
                         .getColumnIndex(ContactsContract.Contacts._ID));
                 String name = cursor.getString(cursor
                                 .getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                String headChar = cursor.getString(cursor.getColumnIndex("phonebook_label"));
                 Cursor phones = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                         null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID+ " = " + contactId, null, null);
-               if(pageIndex*pageSize>=phones.getCount()){
+               
+                
+                if(pageIndex*pageSize>=phones.getCount()){
             	   return contactList;
                }
                
@@ -117,7 +120,7 @@ public class ContactGenerator {
 	                    contactItemVO.setContactId(contactId);
 	                    contactItemVO.setMobile(phoneNumber);
 	                    contactItemVO.setHeaderBitmap(BitmapFactory.decodeStream(input));
-	                    getPinYinFullNameChar(contactItemVO,name);
+	                    contactItemVO.setHeadChar(headChar);
 	                    contactList.add(contactItemVO);
 	                    
 	                    LogUtil.e("", BitmapFactory.decodeStream(input)+"");  
