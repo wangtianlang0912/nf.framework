@@ -122,12 +122,6 @@ public class ContactGenerator {
 	                    contactItemVO.setHeaderBitmap(BitmapFactory.decodeStream(input));
 	                    contactItemVO.setHeadChar(headChar);
 	                    contactList.add(contactItemVO);
-	                    
-	                    LogUtil.e("", BitmapFactory.decodeStream(input)+"");  
-	                    LogUtil.e("name", name+"");  
-	                    LogUtil.e("phoneNumber", phoneNumber+"");  
-	                    LogUtil.e("headchar", contactItemVO.getHeadChar()+"");  
-	                    LogUtil.d("",index+ "=============================================");  
                 	}
                 	index++;
                 }
