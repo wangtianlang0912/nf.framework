@@ -403,7 +403,7 @@ public static final String CHARSET = "UTF-8";
 		String firstCookie=null;
 		if(map!=null){
 			Set<String> set=map.keySet();
-			for (Iterator iterator = set.iterator(); iterator.hasNext();) {
+			for (Iterator<String> iterator = set.iterator(); iterator.hasNext();) {
 				String key = (String) iterator.next();
 				if (key!=null&&key.equals("Set-Cookie")) {
 					LogUtil.d(mcontext,"key=" + key+",开始获取cookie");
@@ -730,7 +730,7 @@ public static final String CHARSET = "UTF-8";
 	@Override
 	public void cancel() {
 		// TODO Auto-generated method stub
-
+		mStop=true;
 	}
 	@Override
 	public int getResponseCode() {
