@@ -12,7 +12,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import nf.framework.R;
 import nf.framework.expand.widgets.UpFreshListView;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -27,8 +26,8 @@ import android.widget.ListView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.CircleBitmapDisplayer;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListener;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
@@ -39,16 +38,22 @@ public abstract class AbsListAdapter<T,ViewHolder> extends BaseAdapter {
 	protected List<T> mList;
 	protected LayoutInflater mLayoutInflater;
 	protected static DisplayImageOptions options= new DisplayImageOptions.Builder()
-	.showImageForEmptyUri(R.drawable.empty_photo)
-	.showImageOnFail(R.drawable.empty_photo)
-	.showImageOnLoading(R.drawable.empty_photo)
 	.cacheInMemory(true)
 	.cacheOnDisk(true)
 	.considerExifParams(true)
 	.build();
+	/***
+	 * circle DisplayImageOptions
+	 */
+	public static DisplayImageOptions circleOptions= new DisplayImageOptions.Builder()
+	.cacheInMemory(true)
+	.cacheOnDisk(true)
+	.considerExifParams(true)
+	.displayer(new CircleBitmapDisplayer())
+	.build();
+	
 	protected ImageLoader imageLoader =ImageLoader.getInstance();
 	protected int currentPos=0;
-	
 	protected AnimateFirstDisplayListener animateFirstListener = new AnimateFirstDisplayListener();
 	/**
 	 * @param mcontext
@@ -78,6 +83,38 @@ public abstract class AbsListAdapter<T,ViewHolder> extends BaseAdapter {
 		}
 		
 	}
+	
+	protected  void setImageLoader(ImageView imageView,String url){
+		
+		setImageLoader(imageView, url,options);
+	}
+	/**
+	 * 圆形图片
+	 * @param imageView
+	 * @param url
+	 */
+	protected  void setCircleImageLoader(ImageView imageView,String url){
+		
+		setImageLoader(imageView, url,circleOptions);
+	}
+	
+	protected  void setImageLoader(ImageView imageView,String url,DisplayImageOptions options){
+		
+		setImageLoader(imageView, url,options, animateFirstListener);
+	}
+	
+	protected  void setImageLoader(ImageView imageView,String url,DisplayImageOptions options,SimpleImageLoadingListener imageLoadingListener){
+		
+		setImageLoader(imageView, url,options,imageLoadingListener,null);
+	}
+	
+	protected  void setImageLoader(ImageView imageView,String url,DisplayImageOptions options,SimpleImageLoadingListener simpleImageLoadingListener,ImageLoadingProgressListener progressListener){
+		if(imageView==null||TextUtils.isEmpty(url)){
+			return;
+		}
+		ImageLoader.getInstance().displayImage(url,imageView, options, simpleImageLoadingListener,progressListener);
+	}
+	
 	/* (non-Javadoc)
 	 * @see android.widget.Adapter#getCount()
 	 */
