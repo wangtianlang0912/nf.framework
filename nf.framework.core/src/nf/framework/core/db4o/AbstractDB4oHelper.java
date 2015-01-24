@@ -89,7 +89,7 @@ public abstract class AbstractDB4oHelper<T> {
 		new File(db4oDBFullPath(context)).delete();
 	}
 
-	public void backup(String path) {
+	public void backup(String path) throws Exception{
 		db().ext().backup(path);
 	}
 
@@ -122,7 +122,7 @@ public abstract class AbstractDB4oHelper<T> {
 	 * @return List<?>
 	 * @throws
 	 */
-	public List<T> fetchAllRows() {
+	public List<T> fetchAllRows()  throws Exception{
 		return db().query(getClassT());
 	}
 	/**
@@ -133,7 +133,7 @@ public abstract class AbstractDB4oHelper<T> {
 	 * @return ObjectSet<T>
 	 * @throws
 	 */
-	protected List<T> fetchAllRowsOrderDescending(String fieldParam) {
+	protected List<T> fetchAllRowsOrderDescending(String fieldParam)  throws Exception{
 		Query query = db().query();
 		query.constrain(getClassT());
 		query.descend(fieldParam).orderDescending();
@@ -148,7 +148,7 @@ public abstract class AbstractDB4oHelper<T> {
 	 * @return int
 	 * @throws
 	 */
-	public int getObjectCount() {
+	public int getObjectCount()  throws Exception{
 		List<T> list = fetchAllRows();
 		return list == null ? 0 : list.size();
 	}
@@ -162,7 +162,7 @@ public abstract class AbstractDB4oHelper<T> {
 	 * @return boolean
 	 * @throws
 	 */
-	public boolean isContainObject(Object fieldParam) {
+	public boolean isContainObject(Object fieldParam)  throws Exception{
 		T currObj = fetchObjectById(fieldParam);
 		if (currObj != null) {
 			return true;
@@ -170,7 +170,7 @@ public abstract class AbstractDB4oHelper<T> {
 		return false;
 	}
 
-	protected ObjectSet<T> fetchListById(Object fieldParam) {
+	protected ObjectSet<T> fetchListById(Object fieldParam) throws Exception{
 		Query query = db().query();
 		query.constrain(getClassT());
 		query.descend(setObjectIndexedField()).constrain(fieldParam);
@@ -178,7 +178,7 @@ public abstract class AbstractDB4oHelper<T> {
 		return list;
 	}
 
-	protected ObjectSet<T> fetchListByColumnField(String columnField,Object fieldParam) {
+	protected ObjectSet<T> fetchListByColumnField(String columnField,Object fieldParam)throws Exception{
 		Query query = db().query();
 		query.constrain(getClassT());
 		query.descend(columnField).constrain(fieldParam);
@@ -186,7 +186,7 @@ public abstract class AbstractDB4oHelper<T> {
 		return list;
 	}
 
-	public T fetchObjectById(Object fieldParam) {
+	public T fetchObjectById(Object fieldParam)throws Exception{
 		ObjectSet<T> result = fetchListById(fieldParam);
 		if (result.hasNext())
 			return result.next();
@@ -203,7 +203,7 @@ public abstract class AbstractDB4oHelper<T> {
 	 * @return void
 	 * @throws
 	 */
-	public void saveObject(T object) {
+	public void saveObject(T object)throws Exception{
 		db().store(object);
 		this.commit();
 		LogUtil.d(context, "******saveObject success *****");
@@ -217,7 +217,7 @@ public abstract class AbstractDB4oHelper<T> {
 	 * @return void
 	 * @throws
 	 */
-	public void updateObject(T object) {
+	public void updateObject(T object) throws Exception{
 		db().ext().set(object);
 		this.commit();
 		LogUtil.d(context, "******update Object success *****");
@@ -230,7 +230,7 @@ public abstract class AbstractDB4oHelper<T> {
 	 * @return void
 	 * @throws
 	 */
-	public void saveObjectList(List<T> list) {
+	public void saveObjectList(List<T> list)throws Exception{
 		ObjectContainer onjContainer=db();
 		if(onjContainer==null){
 			throw new NFRuntimeException("onjContainer is empty");
@@ -251,7 +251,7 @@ public abstract class AbstractDB4oHelper<T> {
 	 * @return void
 	 * @throws
 	 */
-	public void deleteObject(T object) {
+	public void deleteObject(T object) throws Exception{
 		db().delete(object);
 		this.commit();
 		LogUtil.w(context, "******deleteObject success******");
