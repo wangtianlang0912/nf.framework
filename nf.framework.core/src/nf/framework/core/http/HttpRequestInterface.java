@@ -9,5 +9,5 @@ public interface HttpRequestInterface{
 	public void onRequestCompleted(String responseData);
 	
 	
-	public void onRequestFailured(String requestErrorMsg);
+	public void onRequestFailured(int errorCode ,String requestErrorMsg);
 }

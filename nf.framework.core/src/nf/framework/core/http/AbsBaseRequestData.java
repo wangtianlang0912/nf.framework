@@ -145,10 +145,11 @@ public abstract class AbsBaseRequestData<T> {
 	private void onNetWorkRequested(NetworkRequest mNetworkRequest,String responseData){
 		
 		//while request cancel or other request error
-		if( mNetworkRequest.getRequestErrorCode()!=0){
+		int errorCode =mNetworkRequest.getRequestErrorCode();
+		if(errorCode!=0){
 			
 			if (mHttpRequestInterface != null) {
-				mHttpRequestInterface.onRequestFailured(HttpReponseConfig.getReponseDataByCode(mNetworkRequest.getRequestErrorCode()));
+				mHttpRequestInterface.onRequestFailured(errorCode,HttpReponseConfig.getReponseDataByCode(errorCode));
 			}
 			return;
 		}
@@ -160,7 +161,7 @@ public abstract class AbsBaseRequestData<T> {
 			
 			String responseMessage=mNetworkRequest.getResponseMessage();
 			if (mHttpRequestInterface != null) {
-				mHttpRequestInterface.onRequestFailured(String.valueOf(responseCode)+"___"+responseMessage);
+				mHttpRequestInterface.onRequestFailured(responseCode,String.valueOf(responseCode)+"___"+responseMessage);
 			}
 			return;
 		}
@@ -226,7 +227,8 @@ public abstract class AbsBaseRequestData<T> {
 		if(CheckInternet.checkInternet(mcontext)){
 			ServerEngine.getInstance().request(this);
 		}else{
-			this.mHttpRequestInterface.onRequestFailured(HttpReponseConfig.getReponseDataByCode(HttpRequest.HTTP_REQUEST_NETWORK_ERROR));
+			this.mHttpRequestInterface.onRequestFailured(HttpRequest.HTTP_REQUEST_NETWORK_ERROR
+					,HttpReponseConfig.getReponseDataByCode(HttpRequest.HTTP_REQUEST_NETWORK_ERROR));
 		}
 	}
 	
@@ -238,7 +240,8 @@ public abstract class AbsBaseRequestData<T> {
 			mNetworkRequest.setSessionToHeader(session);
 			ServerEngine.getInstance().request(this);
 		}else{
-			this.mHttpRequestInterface.onRequestFailured(HttpReponseConfig.getReponseDataByCode(HttpRequest.HTTP_REQUEST_NETWORK_ERROR));
+			this.mHttpRequestInterface.onRequestFailured(HttpRequest.HTTP_REQUEST_NETWORK_ERROR
+					,HttpReponseConfig.getReponseDataByCode(HttpRequest.HTTP_REQUEST_NETWORK_ERROR));
 		}	
 	}
 	
