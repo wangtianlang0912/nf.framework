@@ -154,7 +154,7 @@ public class DateUtils {
 		@Override
 		protected SimpleDateFormat initialValue()
 		{
-			return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			return new SimpleDateFormat(DATE_FULL_STR);
 		}
 	};
 	/**
@@ -185,7 +185,7 @@ public class DateUtils {
 		@Override
 		protected SimpleDateFormat initialValue()
 		{
-			return new SimpleDateFormat("yyyy-MM-dd");
+			return new SimpleDateFormat(DATE_SMALL_STR);
 		}
 	};
 
@@ -206,6 +206,10 @@ public class DateUtils {
 		}
 	}
 
+	public static String friendly_time(long timestamp){
+		
+		return friendly_time(unixTimestampToDate(timestamp));
+	}
 	/**
 	 * 以友好的方式显示时间
 	 * 
