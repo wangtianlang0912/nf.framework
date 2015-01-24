@@ -149,7 +149,8 @@ public abstract class AbsBaseRequestData<T> {
 		if(errorCode!=0){
 			
 			if (mHttpRequestInterface != null) {
-				mHttpRequestInterface.onRequestFailured(errorCode,HttpReponseConfig.getReponseDataByCode(errorCode));
+				mHttpRequestInterface.onRequestFailured(errorCode
+						,HttpReponseConfig.getReponseDataByCode(errorCode));
 			}
 			return;
 		}
@@ -161,7 +162,8 @@ public abstract class AbsBaseRequestData<T> {
 			
 			String responseMessage=mNetworkRequest.getResponseMessage();
 			if (mHttpRequestInterface != null) {
-				mHttpRequestInterface.onRequestFailured(responseCode,String.valueOf(responseCode)+"___"+responseMessage);
+				mHttpRequestInterface.onRequestFailured(responseCode
+						,HttpReponseConfig.getReponseDataByCode(HttpRequest.HTTP_REQUEST_NETWORK_ERROR));
 			}
 			return;
 		}
