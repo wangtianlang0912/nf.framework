@@ -325,4 +325,127 @@ public class LoadSysSoft {
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
 			return dateFormat.format(date) + ".jpg";
 		}
+		
+	 /**
+	  * android获取一个用于打开Word文件的intent
+	  * @param param
+	  * @return
+	  */
+	  public static Intent getWordFileIntent( String param ){
+
+	    Intent intent = new Intent("android.intent.action.VIEW");
+
+	    intent.addCategory("android.intent.category.DEFAULT");
+
+	    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+	    Uri uri = Uri.fromFile(new File(param ));
+
+	    intent.setDataAndType(uri, "application/msword");
+
+	    return intent;
+
+	  }
+
+	 
+
+	 /***
+	  * android获取一个用于打开Excel文件的intent
+	  * @param param
+	  * @return
+	  */
+
+	  public static Intent getExcelFileIntent( String param ){
+
+	    Intent intent = new Intent("android.intent.action.VIEW");
+
+	    intent.addCategory("android.intent.category.DEFAULT");
+
+	    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+	    Uri uri = Uri.fromFile(new File(param ));
+
+	    intent.setDataAndType(uri, "application/vnd.ms-excel");
+
+	    return intent;
+	  }
+
+	 /***
+	  * android获取一个用于打开PPT文件的intent
+	  * @param param
+	  * @return
+	  */
+
+	  public static Intent getPptFileIntent( String param ){
+
+	    Intent intent = new Intent("android.intent.action.VIEW");
+
+	    intent.addCategory("android.intent.category.DEFAULT");
+
+	    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+	    Uri uri = Uri.fromFile(new File(param ));
+
+	    intent.setDataAndType(uri, "application/vnd.ms-powerpoint");
+
+	    return intent;
+
+	  }
+	/***
+	 * android获取一个用于打开CHM文件的intent
+	 * @param param
+	 * @return
+	 */
+
+	  public static Intent getChmFileIntent( String param ){
+
+	    Intent intent = new Intent("android.intent.action.VIEW");
+
+	    intent.addCategory("android.intent.category.DEFAULT");
+
+	    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+	    Uri uri = Uri.fromFile(new File(param ));
+
+	    intent.setDataAndType(uri, "application/x-chm");
+
+	    return intent;
+
+	  }
+	  
+	  /***
+	   * android获取一个用于打开PDF文件的intent
+	   * @param param
+	   * @return
+	   */
+
+	  public static Intent getPdfFileIntent( String param ){
+	    Intent intent = new Intent("android.intent.action.VIEW");
+	    intent.addCategory("android.intent.category.DEFAULT");
+	    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	    Uri uri = Uri.fromFile(new File(param ));
+	    intent.setDataAndType(uri, "application/pdf");
+
+	    return intent;
+
+	  }
+
+	 
+
+	 /***
+	  * android获取一个用于打开文本文件的intent
+	  * @param paramString
+	  * @param paramBoolean
+	  * @return
+	  */
+
+	  public static Intent getTextFileIntent( String param){
+
+	    Intent intent = new Intent("android.intent.action.VIEW");
+	    intent.addCategory("android.intent.category.DEFAULT");
+	    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	    Uri uri1 = Uri.parse(param );
+        intent.setDataAndType(uri1, "text/plain");
+	    return intent;
+	  }
 }
