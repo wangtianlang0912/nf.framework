@@ -369,8 +369,6 @@ public class ContactGenerator {
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = prime * result
-					+ ((fullName == null) ? 0 : fullName.hashCode());
 			result = prime * result + ((mobile == null) ? 0 : mobile.hashCode());
 			return result;
 		}
@@ -385,11 +383,6 @@ public class ContactGenerator {
 			if (getClass() != obj.getClass())
 				return false;
 			ContactItemVO other = (ContactItemVO) obj;
-			if (fullName == null) {
-				if (other.fullName != null)
-					return false;
-			} else if (!fullName.equals(other.fullName))
-				return false;
 			if (mobile == null) {
 				if (other.mobile != null)
 					return false;
