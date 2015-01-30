@@ -18,33 +18,58 @@ public class MobStatisticUtils {
 	}
 	
 	public void onStatisticResume(){
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				MobclickAgent.onResume(activity);
+			}
+		}).start();
 		
-		MobclickAgent.onResume(activity);
 	}
 	
 	public void onStatisticPause(){
-		
-		MobclickAgent.onPause(activity);
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				MobclickAgent.onPause(activity);
+			}
+		}).start();
 		
 	}
 	
-	public void onStaFragmentResume(String pageName){
-		
-		MobclickAgent.onPageStart(pageName);
+	public void onStaFragmentResume(final String pageName){
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				MobclickAgent.onPageStart(pageName);
+			}
+		}).start();
 	}
 	
-	public void onStaFragmentPause(String pageName){
-		
-		MobclickAgent.onPageEnd(pageName);
+	public void onStaFragmentPause(final String pageName){
+		new Thread(new Runnable() {
+			@Override
+			public void run() {	
+				MobclickAgent.onPageEnd(pageName);
+			}
+		}).start();
 	}
 	
-	public static void onEvent(Context context,String value){
-		
-		MobclickAgent.onEvent(context, value);
+	public static void onEvent(final Context context,final String value){
+		new Thread(new Runnable() {
+			@Override
+			public void run() {	
+				MobclickAgent.onEvent(context, value);
+			}
+		}).start();
 	}
 	
-	public static void onEvent(Context context,String value,String param){
-		
-		MobclickAgent.onEvent(context, value, param);
+	public static void onEvent(final Context context,final String value,final String param){
+		new Thread(new Runnable() {
+			@Override
+			public void run() {	
+				MobclickAgent.onEvent(context, value, param);
+			}
+		}).start();
 	}
 }
