@@ -65,8 +65,10 @@ public static final String CHARSET = "UTF-8";
 	 */
 	public static final int HTTP_REQUEST_EXCEPTION = 1006;
 
-	public static final int TIMEOUT = 30000;
+	public static final int TIMEOUT = 15000;
 	private static final int BUF_SIZE = 1024;
+	
+	private int connectOutTime =TIMEOUT;
 	
 	private HttpURLConnection mConnection = null;
 	private boolean mStop = false;
@@ -253,8 +255,8 @@ public static final String CHARSET = "UTF-8";
 			}
 			mConnection = conn;
 			conn.setRequestMethod("GET");
-			conn.setConnectTimeout(TIMEOUT*2);
-			conn.setReadTimeout(TIMEOUT*2);
+			conn.setConnectTimeout(getConnectTimeOut());
+			conn.setReadTimeout(getConnectTimeOut());
 			conn.setDoInput(true);
 	        
 			if (checkStop()) {
@@ -328,6 +330,8 @@ public static final String CHARSET = "UTF-8";
 	        conn.setDoInput(true);
 	        conn.setDoOutput(true);
 	        conn.setUseCaches(false);
+	        conn.setConnectTimeout(getConnectTimeOut());
+			conn.setReadTimeout(getConnectTimeOut());
 	        conn.setRequestProperty("Connection", "Keep-Alive");
 	        conn.setRequestProperty("Charset", CHARSET);
 	        conn.setInstanceFollowRedirects(true);
@@ -606,8 +610,8 @@ public static final String CHARSET = "UTF-8";
 		try{
 			URL uri = new URL(actionUrl);
 			conn = (HttpURLConnection) uri.openConnection();
-			conn.setReadTimeout(TIMEOUT); // cache max time
-			conn.setConnectTimeout(TIMEOUT);
+			conn.setReadTimeout(getConnectTimeOut()); // cache max time
+			conn.setConnectTimeout(getConnectTimeOut());
 
 			conn.setDoInput(true);// allow input
 			conn.setDoOutput(true);// allow output
@@ -781,8 +785,8 @@ public static final String CHARSET = "UTF-8";
 				return false;
 			}
 			mConnection = conn;
-			conn.setConnectTimeout(TIMEOUT);
-			conn.setReadTimeout(TIMEOUT);
+			conn.setConnectTimeout(getConnectTimeOut());
+			conn.setReadTimeout(getConnectTimeOut());
 			conn.setDoInput(true);
 	        
 			if (checkStop()) {
@@ -992,5 +996,18 @@ public static final String CHARSET = "UTF-8";
 		return null;
 	}
 
+	private int getConnectTimeOut(){
+		return connectOutTime;
+	}
+	/**
+	 * 设置请求超时时间
+	 * @param millisecond
+	 */
+	@Override
+	public void setConnectOutTime(int millisecond) {
+		// TODO Auto-generated method stub
+		this.connectOutTime=millisecond;
+	}
+	
 	
 }

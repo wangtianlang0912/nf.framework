@@ -31,5 +31,5 @@ public interface NetworkRequest {
 	
 	public void setSessionToHeader(String session);
 
-	
+	public void setConnectOutTime(int millisecond);
 }
