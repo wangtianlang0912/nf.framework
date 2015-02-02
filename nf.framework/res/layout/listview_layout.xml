@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 列表展示数据 -->
-<nf.framework.expand.widgets.UpFreshListView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/common_listview"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:cacheColorHint="#00000000"
-    android:divider="@color/_EEEEEE"
-    android:dividerHeight="0dp"
-    android:fadeScrollbars="true"
-    android:fadingEdge="none"
-    android:headerDividersEnabled="false"
-    android:scrollingCache="false" />
+    android:layout_height="fill_parent">
+    <!-- 列表请求为空时 显示view -->
+    <LinearLayout android:id="@+id/common_listview_empty_layout"
+        android:layout_width="fill_parent"
+    	android:layout_height="fill_parent"
+    	android:orientation="vertical"
+    	android:gravity="center"
+        />
+	<!-- 列表展示数据 -->
+	<nf.framework.expand.widgets.UpFreshListView 
+	    android:id="@+id/common_listview"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:cacheColorHint="#00000000"
+	    android:divider="@color/_EEEEEE"
+	    android:dividerHeight="0dp"
+	    android:fadeScrollbars="true"
+	    android:fadingEdge="none"
+	    android:headerDividersEnabled="false"
+	    android:scrollingCache="false" />
+	
+</FrameLayout>
