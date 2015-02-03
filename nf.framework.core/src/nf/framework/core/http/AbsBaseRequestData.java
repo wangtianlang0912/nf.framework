@@ -160,10 +160,11 @@ public abstract class AbsBaseRequestData<T> {
 		setSession(session);
 		if (responseCode != HttpRequest.HTTP_OK) {
 			
-			String responseMessage=mNetworkRequest.getResponseMessage();
+			String responseMsg=mNetworkRequest.getResponseMessage();
+			String reponseErrorData =HttpReponseConfig.getReponseDataByCode(responseCode);
 			if (mHttpRequestInterface != null) {
 				mHttpRequestInterface.onRequestFailured(responseCode
-						,HttpReponseConfig.getReponseDataByCode(HttpRequest.HTTP_REQUEST_NETWORK_ERROR));
+						,reponseErrorData==null?responseMsg:reponseErrorData);
 			}
 			return;
 		}

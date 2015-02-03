@@ -7,6 +7,7 @@ public class HttpReponseConfig {
 		
 		String reponseDdata=null;
 		switch (code) {
+	
 		case HttpRequest.HTTP_OK:
 			reponseDdata ="请求成功";
 			break;
@@ -30,8 +31,11 @@ public class HttpReponseConfig {
 			reponseDdata ="请求网络地址错误";
 			break;
 		case HttpRequest.HTTP_REQUEST_EXCEPTION:
-			
-			reponseDdata ="请求异常";
+		case 500:
+		case 504:
+		case 502:
+		case 400:
+			reponseDdata ="请求服务异常";
 			
 			break;
 		case HttpRequest.HTTP_REQUEST_NETWORK_ERROR:

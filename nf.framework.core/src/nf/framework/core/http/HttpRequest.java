@@ -476,10 +476,12 @@ public static final String CHARSET = "UTF-8";
 	        conn.setDoInput(true);
 	        conn.setDoOutput(true);
 	        conn.setUseCaches(false);
+	        conn.setConnectTimeout(getConnectTimeOut());
+			conn.setReadTimeout(getConnectTimeOut());
 	        conn.setRequestProperty("Connection", "Keep-Alive");
 	        conn.setRequestProperty("Charset", CHARSET);
 	        conn.setRequestProperty("Content-Type", MULTIPART_FORM_DATA + "; boundary=" + BOUNDARY);  
-			//conn.setRequestProperty("Content-Length", String.valueOf(contentLength));
+			conn.setRequestProperty("Content-Length",""+contentLength);
 
 			try {
 				conn.connect();
@@ -621,6 +623,15 @@ public static final String CHARSET = "UTF-8";
 			conn.setRequestProperty("connection", "keep-alive");
 			conn.setRequestProperty("Charsert", "UTF-8");
 			conn.setRequestProperty("Content-Type", MULTIPART_FROM_DATA + ";boundary=" + BOUNDARY);
+			
+			if (files != null) {
+				long length =0;
+				for (Map.Entry<String, File> file : files.entrySet()) {
+					length+=file.getValue().length();
+				}
+				conn.setRequestProperty("Content-length", String.valueOf(length));
+				
+			}
 			/*if(headers != null){
 				for (String key : headers.keySet()) {
 					conn.setRequestProperty(key, headers.get(key));
@@ -634,8 +645,8 @@ public static final String CHARSET = "UTF-8";
 					sb.append(PREFIX);
 					sb.append(BOUNDARY);
 					sb.append(LINEND);
-					sb.append("Content-Disposition: form-data; name=\"" + entry.getKey() + "\"" + LINEND);
-					sb.append("Content-Type: text/plain; charset=" + CHARSET + LINEND);
+					sb.append("Content-disposition: form-data; name=\"" + entry.getKey() + "\"" + LINEND);
+					sb.append("Content-type: text/plain; charset=" + CHARSET + LINEND);
 					sb.append("Content-Transfer-Encoding: 8bit" + LINEND);
 					sb.append(LINEND);
 					sb.append(entry.getValue());
@@ -653,9 +664,10 @@ public static final String CHARSET = "UTF-8";
 					StringBuilder sb1 = new StringBuilder();
 					sb1.append(PREFIX);
 					sb1.append(BOUNDARY);
-					sb1.append(LINEND);
-					sb1.append("Content-Disposition: form-data; name=\"" + file.getKey() + "\"; filename=\"" + file.getValue() + "\"" + LINEND);
-					sb1.append("Content-Type: application/octet-stream; charset=" + CHARSET + LINEND);
+					sb1.append(LINEND);//" + file.getKey() + "
+					sb1.append("Content-disposition: form-data; name=\"\"; filename=\"" + file.getValue() + "\"" + LINEND);
+					sb1.append("Content-type: application/octet-stream; charset=" + CHARSET + LINEND);
+					sb1.append("Content-length: "+String.valueOf(file.getValue().length()));
 					sb1.append(LINEND);
 					outStream.write(sb1.toString().getBytes());
 
