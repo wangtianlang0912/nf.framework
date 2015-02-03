@@ -72,7 +72,7 @@ public abstract class AbsBaseRequestData<T> {
 		if(mHttpRequestInterface==null){
 			throw new NFRuntimeException("HTTP post byte request must implements HttpPostByteRequestInterface");
 		}
-		String url =mHttpRequestInterface.bulidUrl();
+		String url =mHttpRequestInterface.buildUrl();
 		String responseData = null;
 
 		Log.d(TAG, "HTTP post BEGIN: " + url);
@@ -86,7 +86,7 @@ public abstract class AbsBaseRequestData<T> {
 		if(mHttpRequestInterface==null){
 			throw new NFRuntimeException("HTTP post byte request must implements HttpPostByteRequestInterface");
 		}
-		String url =mHttpRequestInterface.bulidUrl();
+		String url =mHttpRequestInterface.buildUrl();
 		String responseData = null;
 
 		Log.d(TAG, "HTTP post BEGIN: " + url);
@@ -99,7 +99,7 @@ public abstract class AbsBaseRequestData<T> {
 		if(mHttpRequestInterface==null){
 			throw new NFRuntimeException("HTTP post request must implements HttpPostRequestInterface");
 		}
-		String url =mHttpRequestInterface.bulidUrl();
+		String url =mHttpRequestInterface.buildUrl();
 		String responseData = null;
 
 		Log.d(TAG, "HTTP post BEGIN: " + url);
@@ -125,7 +125,7 @@ public abstract class AbsBaseRequestData<T> {
 		if(mHttpRequestInterface==null){
 			throw new NFRuntimeException("http get Request method must implements HttpGetRequestInterface");
 		}
-		String url =mHttpRequestInterface.bulidUrl();
+		String url =mHttpRequestInterface.buildUrl();
 		String responseData = null;
 
 		Log.d(TAG, "HTTP GET BEGIN: " + url);

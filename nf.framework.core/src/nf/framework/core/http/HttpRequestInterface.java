@@ -3,7 +3,7 @@ package nf.framework.core.http;
 public interface HttpRequestInterface{
 
 	
-	public String bulidUrl();
+	public String buildUrl();
 	
 
 	public void onRequestCompleted(String responseData);
