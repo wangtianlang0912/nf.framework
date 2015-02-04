@@ -15,7 +15,7 @@ import java.net.MalformedURLException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
-import java.util.HashMap;
+import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +24,6 @@ import java.util.Set;
 import nf.framework.core.exception.LogUtil;
 import nf.framework.core.exception.NFRuntimeException;
 
-import org.apache.http.HttpClientConnection;
 import org.apache.http.protocol.HTTP;
 
 import android.content.Context;
@@ -607,92 +606,32 @@ public static final String CHARSET = "UTF-8";
 		String MULTIPART_FROM_DATA = "multipart/form-data";
 		String CHARSET = "UTF-8";
 		InputStream inStream = null;
-		OutputStream outStream=null;
+		DataOutputStream outStream=null;
 		HttpURLConnection conn =null;
 		try{
 			URL uri = new URL(actionUrl);
 			conn = (HttpURLConnection) uri.openConnection();
 			conn.setReadTimeout(getConnectTimeOut()); // cache max time
 			conn.setConnectTimeout(getConnectTimeOut());
-
-			conn.setDoInput(true);// allow input
+//			conn.setDoInput(true);// allow input
 			conn.setDoOutput(true);// allow output
-			conn.setChunkedStreamingMode(0);
+//			conn.setChunkedStreamingMode(0);
 			conn.setUseCaches(false); // cache is disable
 			conn.setRequestMethod("POST");
-			conn.setRequestProperty("connection", "keep-alive");
+			conn.setRequestProperty("Connection", "keep-alive");
 			conn.setRequestProperty("Charsert", "UTF-8");
 			conn.setRequestProperty("Content-Type", MULTIPART_FROM_DATA + ";boundary=" + BOUNDARY);
-			
-			if (files != null) {
-				long length =0;
-				for (Map.Entry<String, File> file : files.entrySet()) {
-					length+=file.getValue().length();
-				}
-				conn.setRequestProperty("Content-length", String.valueOf(length));
-				
-			}
-			/*if(headers != null){
-				for (String key : headers.keySet()) {
-					conn.setRequestProperty(key, headers.get(key));
-				}
-			}*/
-			outStream = new BufferedOutputStream(conn.getOutputStream());
-			// construct params for Text
-			if(params!=null){
-				StringBuilder sb = new StringBuilder();
-				for (Map.Entry<String, String> entry : params.entrySet()) {
-					sb.append(PREFIX);
-					sb.append(BOUNDARY);
-					sb.append(LINEND);
-					sb.append("Content-disposition: form-data; name=\"" + entry.getKey() + "\"" + LINEND);
-					sb.append("Content-type: text/plain; charset=" + CHARSET + LINEND);
-					sb.append("Content-Transfer-Encoding: 8bit" + LINEND);
-					sb.append(LINEND);
-					sb.append(entry.getValue());
-					sb.append(LINEND);
-				}
-				outStream.write(sb.toString().getBytes("utf-8"));
-			}
+//			conn.setRequestProperty("Accept-Encoding", "identity"); 
+			conn.connect();
+			outStream = new DataOutputStream(conn.getOutputStream());
 			// send data
 			if (files != null) {
-				for (Map.Entry<String, File> file : files.entrySet()) {
-					// if (!files.get(file).exists())
-					// continue;
-					if (!file.getValue().exists())
-						continue;
-					StringBuilder sb1 = new StringBuilder();
-					sb1.append(PREFIX);
-					sb1.append(BOUNDARY);
-					sb1.append(LINEND);//" + file.getKey() + "
-					sb1.append("Content-disposition: form-data; name=\"\"; filename=\"" + file.getValue() + "\"" + LINEND);
-					sb1.append("Content-type: application/octet-stream; charset=" + CHARSET + LINEND);
-					sb1.append("Content-length: "+String.valueOf(file.getValue().length()));
-					sb1.append(LINEND);
-					outStream.write(sb1.toString().getBytes());
-
-					InputStream is = new FileInputStream(file.getValue());
-					try {
-						if (file.getValue().length() > 0) {
-							byte[] buffer = new byte[10240];
-							int len = 0;
-							while ((len = is.read(buffer)) != -1) {
-								if (Thread.interrupted()) { // add by wlk
-									throw new Exception("thread has  been interrupted!");
-								}
-								outStream.write(buffer, 0, len);
-							}
-						}
-					} catch (Exception e) {
-						throw e;
-					} finally {
-						is.close();
-						outStream.write(LINEND.getBytes("utf-8"));
-					}
-
-				}
+				writeFileParams(outStream, BOUNDARY, files);
 			}
-
+			// construct params for Text
+			if(params!=null){
+				writeStringParams(outStream, BOUNDARY, params);
+			}
 			// the finsh flag
 			byte[] end_data = (PREFIX + BOUNDARY + PREFIX + LINEND).getBytes();
 			outStream.write(end_data);
@@ -742,7 +681,52 @@ public static final String CHARSET = "UTF-8";
 		}
 		return null;
 	}
-
+ //普通字符串数据
+	private void writeStringParams(DataOutputStream outputStream,String boundary,Map<String, String> textParams) throws Exception {
+		Set<String> keySet = textParams.keySet();
+		for (Iterator<String> it = keySet.iterator(); it.hasNext();) {
+			String name = it.next();
+			String value = textParams.get(name);
+			outputStream.writeBytes("--" + boundary + "\r\n");
+			outputStream.writeBytes("Content-Disposition: form-data; name=\"" + name
+					+ "\"\r\n");
+			outputStream.writeBytes("\r\n");
+			outputStream.writeBytes(URLEncoder.encode(value, "UTF-8") + "\r\n");
+		}
+	}
+   /**
+    * 文件数据
+    * @param outputStream
+    * @param boundary
+    * @param fileparams
+    * @throws Exception
+    */
+	private void writeFileParams(DataOutputStream outputStream,String boundary,Map<String, File> fileparams) throws Exception {
+		Set<String> keySet = fileparams.keySet();
+		for (Iterator<String> it = keySet.iterator(); it.hasNext();) {
+			String name = it.next();
+			File value = fileparams.get(name);
+			outputStream.writeBytes("--" + boundary + "\r\n");
+			outputStream.writeBytes("Content-Disposition: form-data; name=\"" + name
+					+ "\"; filename=\"" +URLEncoder.encode(value.getName(), "UTF-8") + "\"\r\n");
+			outputStream.writeBytes("Content-Type: " + "image/jpg" + "\r\n");
+			outputStream.writeBytes("\r\n");
+			outputStream.write(getBytes(value));
+			outputStream.writeBytes("\r\n");
+		}
+	}
+  //把文件转换成字节数组
+	private byte[] getBytes(File f) throws Exception {
+		FileInputStream in = new FileInputStream(f);
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		byte[] b = new byte[1024];
+		int n;
+		while ((n = in.read(b)) != -1) {
+			out.write(b, 0, n);
+		}
+		in.close();
+		return out.toByteArray();
+	}
 	@Override
 	public void cancel() {
 		// TODO Auto-generated method stub

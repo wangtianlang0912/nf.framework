@@ -86,40 +86,40 @@ public class LogUtil {
 		if(!OpenBug){
 			return;
 		}
-		e(getTag(mcontext),errorMsg);	
+		e(getTag(mcontext),""+errorMsg);	
 	}
 	
 	public static void e(String tag,String errorMsg){
 		if(!OpenBug){
 			return;
 		}
-		Log.e(tag,errorMsg);	
+		Log.e(""+tag,""+errorMsg);	
 	}
 	
 	public static void d(Context mcontext,String errorMsg){
 		if(!OpenBug){
 			return;
 		}
-		d(getTag(mcontext),errorMsg);	
+		d(getTag(mcontext),""+errorMsg);	
 	}
 	public static void d(String tag,String errorMsg){
 		if(!OpenBug){
 			return;
 		}
-		Log.d(tag,errorMsg);	
+		Log.d(""+tag,""+errorMsg);	
 	}
 	
 	public static void w(Context mcontext,String errorMsg){
 		if(!OpenBug){
 			return;
 		}
-		w(getTag(mcontext),errorMsg);	
+		w(getTag(mcontext),""+errorMsg);	
 	}
 	public static void w(String tag,String errorMsg){
 		if(!OpenBug){
 			return;
 		}
-		Log.w(tag,errorMsg);	
+		Log.w(""+tag,""+errorMsg);	
 	}
 	public static void w(String tag ,String errorMsg,Throwable throwable){
 		
@@ -127,7 +127,7 @@ public class LogUtil {
 		if(!OpenBug){
 			return;
 		}
-		w(tag,errorMsg);
+		w(""+tag,""+errorMsg);
 	}
 	
 	public static void i(Context mcontext,String errorMsg){
@@ -140,19 +140,19 @@ public class LogUtil {
 		if(!OpenBug){
 			return;
 		}
-		Log.i(tag,errorMsg);	
+		Log.i(""+tag,""+errorMsg);	
 	}
 	public static void v(Context mcontext,String errorMsg){
 		if(!OpenBug){
 			return;
 		}
-		v(getTag(mcontext),errorMsg);	
+		v(getTag(mcontext),""+errorMsg);	
 	}
 	public static void v(String tag,String errorMsg){
 		if(!OpenBug){
 			return;
 		}
-		Log.v(tag,errorMsg);	
+		Log.v(""+tag,""+errorMsg);	
 	}
 	private static String getTag(Context mcontext){
 		
