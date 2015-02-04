@@ -49,7 +49,8 @@ public class CameraUtil {
 	public static final int PIC_REQUEST_CODE_SELECT_CAMERA2 = 10003; // 标识请求照相功能的activity 直接返回图片bitmap
 	private Context mContext;
 	private Activity mActivity;
-
+	private int maxPicWidth=300;
+	private int maxPicHeight=300;
 	private static final File PHOTO_DIR = new File(
 			Environment.getExternalStorageDirectory() + "/DCIM/Camera");
 	
@@ -67,18 +68,15 @@ public class CameraUtil {
 	
 	/**
 	 * 调用照相机进行拍照  默认保存到sd卡中
+	 * @param isScan 是否调用剪切程序
 	 */
-	public void takePhoto(){
+	public void takePhoto(boolean isScan){
 		String status = Environment.getExternalStorageState();
 		if (status.equals(Environment.MEDIA_MOUNTED)) {// 判断是否有SD卡
 			PHOTO_DIR.mkdirs();// 创建照片的存储目录
 			fileName = getPhotoFileName();
 			mCurrentPhotoFile = new File(PHOTO_DIR, fileName);// 给新照的照片文件命名
-			
-			Intent cIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
-			cIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mCurrentPhotoFile));
-			mActivity.startActivityForResult(cIntent,
-					PIC_REQUEST_CODE_SELECT_CAMERA);
+			takePhoto(true, mCurrentPhotoFile.getPath());
 		} else {
 			Toast.makeText(mContext, "抱歉，没有检测到SD卡",	Toast.LENGTH_LONG).show();
 		}
@@ -87,20 +85,15 @@ public class CameraUtil {
 	/**
 	 * 调用照相机进行拍照 保存到指定路径
 	 */
-	public void takePhoto(String fileSavePath){
-		String status = Environment.getExternalStorageState();
-		if (status.equals(Environment.MEDIA_MOUNTED)) {// 判断是否有SD卡
-			if(fileSavePath==null){
-				return;
-			}
-			mCurrentPhotoFile = new File(fileSavePath);// 给新照的照片文件命名
-			Intent cIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
-			cIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mCurrentPhotoFile));
-			mActivity.startActivityForResult(cIntent,PIC_REQUEST_CODE_SELECT_CAMERA2);
-		} else {
-			Toast.makeText(mContext, "抱歉，没有检测到SD卡",	Toast.LENGTH_LONG).show();
+	public void takePhoto(boolean isScan,String fileSavePath){
+		if(fileSavePath==null){
+			return;
 		}
-		
+		mCurrentPhotoFile = new File(fileSavePath);// 给新照的照片文件命名
+		Intent cIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
+		cIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mCurrentPhotoFile));
+		mActivity.startActivityForResult(cIntent
+				,isScan?PIC_REQUEST_CODE_SELECT_CAMERA:PIC_REQUEST_CODE_SELECT_CAMERA2);
 	}
 	/**
 	 * 从图库选取图片
@@ -227,7 +220,7 @@ public class CameraUtil {
 				if(data!=null){
 					photo = data.getParcelableExtra("data");
 				}else{
-					photo = ImageUtil.decodeBitmapFromFile(mCurrentPhotoFile.getPath(),300,300);
+					photo = ImageUtil.decodeBitmapFromFile(mCurrentPhotoFile.getPath(),maxPicWidth,maxPicHeight);
 				}
 				break;
 			}
@@ -295,7 +288,7 @@ public class CameraUtil {
 					if(data!=null){
 						photo = data.getParcelableExtra("data");
 					}else{
-						photo = ImageUtil.decodeBitmapFromFile(mCurrentPhotoFile.getPath(),300,300);
+						photo = ImageUtil.decodeBitmapFromFile(mCurrentPhotoFile.getPath(),maxPicWidth,maxPicHeight);
 					}
 				break;
 			}
@@ -401,6 +394,14 @@ public class CameraUtil {
 		} catch (Exception e) {
 			Log.e(TAG, "actionReceiver not registed");
 		}
+	}
+
+	public void setMaxPicWidth(int maxPicWidth) {
+		this.maxPicWidth = maxPicWidth;
+	}
+
+	public void setMaxPicHeight(int maxPicHeight) {
+		this.maxPicHeight = maxPicHeight;
 	}
 	
 }
