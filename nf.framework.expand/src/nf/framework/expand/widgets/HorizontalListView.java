@@ -49,6 +49,7 @@ public class HorizontalListView extends AdapterView<ListAdapter>
 	private int pageCount=0;
 	private int horizontalSpacing=0;
 	private int itemWidth=0;
+	private boolean isOpenPressState=true;
 	public HorizontalListView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
@@ -203,6 +204,10 @@ public class HorizontalListView extends AdapterView<ListAdapter>
 			
 		}
 		return itemWidth-this.horizontalSpacing;
+	}
+
+	public void setOpenPressState(boolean isOpenPressState) {
+		this.isOpenPressState = isOpenPressState;
 	}
 
 	@Override
@@ -441,7 +446,7 @@ public class HorizontalListView extends AdapterView<ListAdapter>
 				
 				if (isEventWithinView(e, child))
 				{
-					child.setPressed(true);
+					child.setPressed(isOpenPressState);
 					if (mOnItemClicked != null)
 					{
 						mOnItemClicked.onItemClick(HorizontalListView.this,
