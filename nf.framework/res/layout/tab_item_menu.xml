@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+    
+    <View 
+        android:layout_width="fill_parent"
+   		android:layout_height="1px"
+   		android:background="#dddddd"
+        />
+<RelativeLayout 
     android:id="@+id/tab_item_layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -21,7 +31,6 @@
         android:layout_below="@id/tab_item_image"
         android:gravity="center_horizontal"
         android:textSize="13sp"
-        android:text="是的"
         android:layout_centerHorizontal="true"
        
          />
@@ -38,3 +47,4 @@
        android:background="@drawable/common_tab_refer_bg"
         android:visibility="gone" />
 </RelativeLayout>
+</LinearLayout>
