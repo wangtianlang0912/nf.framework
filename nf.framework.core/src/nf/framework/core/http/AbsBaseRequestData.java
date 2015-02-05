@@ -221,6 +221,14 @@ public abstract class AbsBaseRequestData<T> {
 		return cacheDataMaster.readCacheFile(cacheName);
 	}
 	
+	protected void clearCacheData(){
+		String cacheName=getCacheFileName();
+		if(TextUtils.isEmpty(cacheName)){
+			throw new NFRuntimeException(" cacheFileName is null");
+		}
+		cacheDataMaster.deleteCacheFileByName(cacheName);
+	}
+	
 	public abstract void requestDataFromNet(Map<String,String> map,AbsUIResquestHandler<T> absUIResquestHandler);
 
 	public void excute(){
