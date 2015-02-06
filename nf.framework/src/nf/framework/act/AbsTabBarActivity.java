@@ -32,7 +32,6 @@ public abstract class AbsTabBarActivity extends AbsBaseActivity{
 	private ViewPager mPager;// 页卡内容
 	private List<TabBarVO> tabBarList = new ArrayList<TabBarVO>();// 页卡头标
 	
-	private List<Fragment> fragmentList = new ArrayList<Fragment>();
 	protected TabPageIndicator indicator = null;
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	private ViewGroup mainLanderView;
@@ -50,7 +49,7 @@ public abstract class AbsTabBarActivity extends AbsBaseActivity{
 		indicator = (TabPageIndicator) findViewById(getTabBarLinearLayoutId());
 		indicator.setVisibility(View.GONE);
 		mPager = (ViewPager) findViewById(getViewPagerId());
-		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),fragmentList);
+		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 		mPager.setAdapter(mSectionsPagerAdapter);
 		mSectionsPagerAdapter.notifyDataSetChanged();
 		indicator.setViewPager(mPager);
@@ -137,12 +136,11 @@ public abstract class AbsTabBarActivity extends AbsBaseActivity{
 	 * one of the sections/tabs/pages.
 	 */
 	public class SectionsPagerAdapter extends FragmentPagerAdapter implements IconPagerAdapter {
-		List<Fragment> dataFragmentList = null;
+		List<Fragment> dataFragmentList = new ArrayList<Fragment>();
 		FragmentManager mFragmentManager;
-		public SectionsPagerAdapter(FragmentManager fm, List<Fragment> dataFragmentList) {
+		public SectionsPagerAdapter(FragmentManager fm) {
 			super(fm);
 			this.mFragmentManager=fm;
-			this.dataFragmentList = dataFragmentList;
 		}
 
 		@Override
@@ -164,7 +162,7 @@ public abstract class AbsTabBarActivity extends AbsBaseActivity{
 			return tabBarList.size();
 		}
 		public void setFragments( List<Fragment> fragmentList) {
-			   if(this.dataFragmentList != null){
+			  if(this.dataFragmentList != null){
 			      FragmentTransaction ft = mFragmentManager.beginTransaction();
 			      for(Fragment f:this.dataFragmentList){
 			        ft.remove(f);
@@ -172,8 +170,9 @@ public abstract class AbsTabBarActivity extends AbsBaseActivity{
 			      ft.commitAllowingStateLoss();
 			      ft=null;
 			      mFragmentManager.executePendingTransactions();
-			   }
-			  this.dataFragmentList = fragmentList;
+			  }
+			  this.dataFragmentList.clear();
+			  this.dataFragmentList.addAll(fragmentList);
 			  notifyDataSetChanged();
 			}
 
