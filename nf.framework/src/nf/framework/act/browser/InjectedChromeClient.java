@@ -14,6 +14,7 @@ import nf.framework.expand.dialog.AbsBaseDialog.DialogLeftBtnOnClickListener;
 import nf.framework.expand.dialog.AbsBaseDialog.DialogRightBtnOnClickListener;
 import nf.framework.expand.dialog.AbsBaseDialog.DialogUpBtnOnClickListener;
 import nf.framework.expand.widgets.ProgressWebView;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnKeyListener;
@@ -45,6 +46,11 @@ public class InjectedChromeClient extends WebChromeClient {
 	@Override
 	public boolean onJsAlert(WebView view, String url, String message,
 			final JsResult result) {
+		if(view.getContext() instanceof Activity){
+			Activity activity =(Activity)view.getContext();
+			if(activity.isFinishing())
+			return true;
+		}
 		final BaseDialog baseDialog = new BaseDialog(view.getContext(),
 				AbsBaseDialog.DIALOG_BUTTON_STYLE_ONE);
 		baseDialog.show();
@@ -111,6 +117,11 @@ public class InjectedChromeClient extends WebChromeClient {
 	@Override
 	public boolean onJsConfirm(WebView view, String url, String message,
 			final JsResult result) {
+		if(view.getContext() instanceof Activity){
+			Activity activity =(Activity)view.getContext();
+			if(activity.isFinishing())
+			return true;
+		}
 		final BaseDialog baseDialog = new BaseDialog(view.getContext(),
 				AbsBaseDialog.DIALOG_BUTTON_STYLE_TWO);
 		baseDialog.show();
