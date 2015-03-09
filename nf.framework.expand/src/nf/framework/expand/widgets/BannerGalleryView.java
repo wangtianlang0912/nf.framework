@@ -56,7 +56,6 @@ public class BannerGalleryView extends RelativeLayout {
 		imggallery.setLayoutParams(layoutParams);
 		imggallery.setFadingEdgeLength(0);
 		pagercontrol =new  PagerControl(mcontext,null);
-		
 		DisplayMetrics metric = new DisplayMetrics();
 		( (Activity)mcontext).getWindowManager().getDefaultDisplay().getMetrics(metric);
 		float density=metric.density;
@@ -191,6 +190,18 @@ public class BannerGalleryView extends RelativeLayout {
 	public PagerControl getPagercontrol() {
 		return pagercontrol;
 	}
+	/****
+	 * default CENTER_HORIZONTAL
+	 * @param relativeParam   
+	 */
+	
+	public void setPagerControlRelativeParamRole(int relativeParam){
+		
+		RelativeLayout.LayoutParams param = (LayoutParams) pagercontrol.getLayoutParams();
+		param.addRule(relativeParam);
+		pagercontrol.setLayoutParams(param);
+	}
+	
 	public interface OnBannerItemClickListener {
 
 		public void onBannerItemClick(AdapterView<?> arg0, View arg1, int arg2,
