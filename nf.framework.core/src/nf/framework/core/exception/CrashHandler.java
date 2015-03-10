@@ -8,31 +8,14 @@ package nf.framework.core.exception;
  *
  */
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.lang.Thread.UncaughtExceptionHandler;
-import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.Properties;
 import java.util.TreeSet;
 
-import org.apache.http.protocol.HTTP;
-
-import nf.framework.core.R;
-import nf.framework.core.http.AbstractHttpService;
 import nf.framework.core.util.android.CheckInternet;
 import nf.framework.core.util.android.CloseActivityClass;
 import nf.framework.core.util.io.FileUtils;
 import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.os.Build;
-import android.os.Environment;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
@@ -114,7 +97,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
 			public void run() {
 				Looper.prepare();
 
-				Toast.makeText(mContext, R.string.crash_exception, Toast.LENGTH_LONG).show();
+				Toast.makeText(mContext,"应用异常，请重启应用", Toast.LENGTH_LONG).show();
 				Looper.loop();
 				// 关闭所有activity
 				CloseActivityClass.exitClient(mContext);
