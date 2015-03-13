@@ -12,14 +12,18 @@ package nf.framework.act;
 import nf.framework.R;
 import nf.framework.act.MyLeftRightGestureListener.LeftRightGestureListenerCallback;
 import nf.framework.act.lockscreen.LockScreen;
+import nf.framework.expand.dialog.AbsBaseDialog;
+import nf.framework.expand.dialog.BaseDialog;
 import nf.framework.expand.dialog.ProgressDialog;
 import nf.framework.statistic.MobStatisticUtils;
+import android.content.Context;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -29,6 +33,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /***
  * 
@@ -314,4 +319,19 @@ public abstract class AbsBaseActivity extends FragmentActivity{
 
 	}
 
+	
+	public static void showInfoDialog(Context context,String message){
+
+		BaseDialog dialog = new BaseDialog(context,AbsBaseDialog.DIALOG_BUTTON_STYLE_ONE);
+		dialog.show();
+		dialog.setTitle(R.drawable.expand_dialog_login_logo,"提示");
+		dialog.setContent(message);
+	}
+	
+	protected void showToast(String msg){
+		if(TextUtils.isEmpty(msg)){
+			return;
+		}
+		Toast.makeText(this,msg, 0).show();
+	}
 }
