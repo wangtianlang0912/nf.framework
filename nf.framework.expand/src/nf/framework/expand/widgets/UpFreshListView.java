@@ -7,6 +7,8 @@ import nf.framework.expand.R;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -74,13 +76,19 @@ public class UpFreshListView extends ListView implements OnScrollListener {
 	private boolean isRefreshable;
 	private OnScrollStopedListener onScrollStopedListener;
 	private OnScrollLoadMoreListener onScrollLoadMoreListener;
+	
+	private GestureDetector mGestureDetector;
+	
 	public UpFreshListView(Context context) {
-		super(context);
+		this(context,null);
 		init(context);
 	}
 
+	@SuppressWarnings("deprecation")
 	public UpFreshListView(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		
+		mGestureDetector = new GestureDetector(new YScrollDetector());
 		init(context);
 	}
 
@@ -311,7 +319,23 @@ public class UpFreshListView extends ListView implements OnScrollListener {
 	public int getTopArrowImage() {
 		return topArrowImage;
 	}
-
+	@Override
+	public boolean onInterceptTouchEvent(MotionEvent ev) {
+	  return super.onInterceptTouchEvent(ev) && mGestureDetector.onTouchEvent(ev);
+	}
+	class YScrollDetector extends SimpleOnGestureListener {
+	        @Override
+	        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+			   if(distanceY!=0&&distanceX!=0){
+			           
+			   }
+	            if(Math.abs(distanceY) >= Math.abs(distanceX)) {
+	                return true;
+	            }
+	            return false;
+	        }
+	}
+	
 	// 当状态改变时候，调用该方法，以更新界面
 	private void changeHeaderViewByState(int state) {
 		switch (state) {
