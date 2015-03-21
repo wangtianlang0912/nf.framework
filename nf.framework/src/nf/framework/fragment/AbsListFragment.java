@@ -75,7 +75,7 @@ public abstract class AbsListFragment<T> extends Fragment implements
 		
 	}
 	
-	protected UpFreshListView getFreshListView(){
+	public UpFreshListView getFreshListView(){
 		
 		return mlistview;
 	}
