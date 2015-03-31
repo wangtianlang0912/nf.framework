@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import nf.framework.core.cache.CacheDataMaster;
+import nf.framework.core.exception.LogUtil;
 import nf.framework.core.exception.NFRuntimeException;
 import nf.framework.core.util.android.CheckInternet;
 import android.content.Context;
@@ -75,7 +76,7 @@ public abstract class AbsBaseRequestData<T> {
 		String url =mHttpRequestInterface.buildUrl();
 		String responseData = null;
 
-		Log.d(TAG, "HTTP post BEGIN: " + url);
+		LogUtil.d(TAG, "HTTP post BEGIN: " + url);
 		HttpPostByteRequestInterface byteRequestInterface=(HttpPostByteRequestInterface)mHttpRequestInterface;
 		responseData = mNetworkRequest.postRequest(url, byteRequestInterface.getByteData());
 		mNetworkRequest.getSession();
@@ -89,7 +90,7 @@ public abstract class AbsBaseRequestData<T> {
 		String url =mHttpRequestInterface.buildUrl();
 		String responseData = null;
 
-		Log.d(TAG, "HTTP post BEGIN: " + url);
+		LogUtil.d(TAG, "HTTP post BEGIN: " + url);
 		HttpPostByteFileRequestInterface byteRequestInterface=(HttpPostByteFileRequestInterface)mHttpRequestInterface;
 		responseData = mNetworkRequest.postFileRequest(url, byteRequestInterface.getByteData(),byteRequestInterface.getFilePath());
 		onNetWorkRequested(mNetworkRequest, responseData);	
@@ -102,7 +103,7 @@ public abstract class AbsBaseRequestData<T> {
 		String url =mHttpRequestInterface.buildUrl();
 		String responseData = null;
 
-		Log.d(TAG, "HTTP post BEGIN: " + url);
+		LogUtil.d(TAG, "HTTP post BEGIN: " + url);
 		if(mHttpRequestInterface instanceof HttpPostFilesRequestInterface){
 			Map<String, String> mPostParams=((HttpPostFilesRequestInterface)mHttpRequestInterface).getPostParamMap();
 			Map<String, File> mPostFiles=((HttpPostFilesRequestInterface)mHttpRequestInterface).getPostFilesMap();
@@ -128,7 +129,7 @@ public abstract class AbsBaseRequestData<T> {
 		String url =mHttpRequestInterface.buildUrl();
 		String responseData = null;
 
-		Log.d(TAG, "HTTP GET BEGIN: " + url);
+		LogUtil.d(TAG, "HTTP GET BEGIN: " + url);
 		
 		responseData = mNetworkRequest.getRequest(url);
 		onNetWorkRequested(mNetworkRequest, responseData);
