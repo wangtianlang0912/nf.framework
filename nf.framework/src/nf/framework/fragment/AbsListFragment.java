@@ -19,7 +19,6 @@ public abstract class AbsListFragment<T> extends Fragment implements
 	private UpFreshListView mlistview;
 	private AbsListAdapter<?, ?> listItemAdapter;
 	private View viewLayout = null;
-	
 	private MobStatisticUtils mobStatisticUtils;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -31,7 +30,7 @@ public abstract class AbsListFragment<T> extends Fragment implements
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-
+		
 		viewLayout = inflater.inflate(R.layout.listview_layout, container,false);
 		initView(viewLayout);
 		return viewLayout;
@@ -75,6 +74,21 @@ public abstract class AbsListFragment<T> extends Fragment implements
 		
 	}
 	
+	@Override  
+    public void setUserVisibleHint(boolean isVisibleToUser) {  
+       
+       if (isVisibleToUser &&this.isResumed()){
+           //相当于Fragment的onResume  
+    	   onlazyLoad();
+       } else {  
+           //相当于Fragment的onPause  
+       } 
+       super.setUserVisibleHint(isVisibleToUser);
+    } 
+	
+	public void onlazyLoad() {
+		
+	}
 	public UpFreshListView getFreshListView(){
 		
 		return mlistview;
