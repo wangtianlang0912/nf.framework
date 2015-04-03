@@ -17,6 +17,7 @@ package nf.framework.app;
 
 import nf.framework.core.AbsApplication;
 import nf.framework.core.exception.LogUtil;
+import nf.framework.core.exception.CrashHandler.CrashMessageCallBack;
 import android.content.Context;
 
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -31,11 +32,11 @@ public abstract class UILApplication extends AbsApplication {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-
 		initImageLoader(getApplicationContext());
+		LogUtil.OpenBug=isOpenBug();
 	}
 
-	public static void initImageLoader(Context context) {
+	public  void initImageLoader(Context context) {
 		// This configuration tuning is custom. You can tune every option, you may tune some of them,
 		// or you can create default configuration by
 		//  ImageLoaderConfiguration.createDefault(this);
@@ -45,9 +46,14 @@ public abstract class UILApplication extends AbsApplication {
 				.denyCacheImageMultipleSizesInMemory()
 				.diskCacheFileNameGenerator(new Md5FileNameGenerator())
 				.tasksProcessingOrder(QueueProcessingType.LIFO)
-				.writeDebugLogs(LogUtil.OpenBug)
+				.writeDebugLogs(isOpenBug())
 				.build();
 		// Initialize ImageLoader with configuration.
 		ImageLoader.getInstance().init(config);
+	}
+	@Override
+	public CrashMessageCallBack getCrashMessageCallBack() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
