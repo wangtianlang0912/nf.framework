@@ -77,8 +77,6 @@ public class UpFreshListView extends ListView implements OnScrollListener {
 	private OnScrollStopedListener onScrollStopedListener;
 	private OnScrollLoadMoreListener onScrollLoadMoreListener;
 	
-	private GestureDetector mGestureDetector;
-	
 	public UpFreshListView(Context context) {
 		this(context,null);
 		init(context);
@@ -88,7 +86,6 @@ public class UpFreshListView extends ListView implements OnScrollListener {
 	public UpFreshListView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		
-		mGestureDetector = new GestureDetector(new YScrollDetector());
 		init(context);
 	}
 
@@ -319,23 +316,6 @@ public class UpFreshListView extends ListView implements OnScrollListener {
 	public int getTopArrowImage() {
 		return topArrowImage;
 	}
-	@Override
-	public boolean onInterceptTouchEvent(MotionEvent ev) {
-	  return super.onInterceptTouchEvent(ev) && mGestureDetector.onTouchEvent(ev);
-	}
-	class YScrollDetector extends SimpleOnGestureListener {
-	        @Override
-	        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-			   if(distanceY!=0&&distanceX!=0){
-			           
-			   }
-	            if(Math.abs(distanceY) >= Math.abs(distanceX)) {
-	                return true;
-	            }
-	            return false;
-	        }
-	}
-	
 	// 当状态改变时候，调用该方法，以更新界面
 	private void changeHeaderViewByState(int state) {
 		switch (state) {
@@ -394,6 +374,14 @@ public class UpFreshListView extends ListView implements OnScrollListener {
 			Log.v(TAG, "当前状态，done");
 			break;
 		}
+	}
+
+	/***
+	 * 设置是否可下拉刷新
+	 * @param isRefreshable
+	 */
+	public void setRefreshable(boolean isRefreshable) {
+		this.isRefreshable = isRefreshable;
 	}
 
 	public void setOnHeaderRefreshListener(OnHeaderRefreshListener refreshListener) {
