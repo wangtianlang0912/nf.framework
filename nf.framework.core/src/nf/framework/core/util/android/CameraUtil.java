@@ -2,6 +2,7 @@ package nf.framework.core.util.android;
 
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -47,7 +48,6 @@ public class CameraUtil {
 	public static final int PIC_REQUEST_CODE_SELECT_CAMERA = 10001; // 标识请求照相功能的activity 再次调用图片剪辑程序去修剪图片
 	public static final int PIC_Select_CODE_ImageFromLoacal = 10002;// 标识请求相册取图功能的activity
 	public static final int PIC_REQUEST_CODE_SELECT_CAMERA2 = 10003; // 标识请求照相功能的activity 直接返回图片bitmap
-	private Context mContext;
 	private Activity mActivity;
 	private int maxPicWidth=300;
 	private int maxPicHeight=300;
@@ -61,8 +61,7 @@ public class CameraUtil {
 	private float pic_size = 240;
 	
 	public CameraUtil(Context context){
-		this.mContext = context;
-		this.mActivity = (Activity)mContext;
+		this.mActivity = (Activity)context;
 		actionReceiver = new MediaActionReceiver();
 	}
 	
@@ -76,9 +75,9 @@ public class CameraUtil {
 			PHOTO_DIR.mkdirs();// 创建照片的存储目录
 			fileName = getPhotoFileName();
 			mCurrentPhotoFile = new File(PHOTO_DIR, fileName);// 给新照的照片文件命名
-			takePhoto(true, mCurrentPhotoFile.getPath());
+			takePhoto(isScan, mCurrentPhotoFile.getPath());
 		} else {
-			Toast.makeText(mContext, "抱歉，没有检测到SD卡",	Toast.LENGTH_LONG).show();
+			Toast.makeText(mActivity, "抱歉，没有检测到SD卡",	Toast.LENGTH_LONG).show();
 		}
 		
 	}
@@ -107,7 +106,7 @@ public class CameraUtil {
 			mActivity.startActivityForResult(intent,
 					PIC_Select_CODE_ImageFromLoacal);
 		} else {
-			Toast.makeText(mContext, "没有SD卡",
+			Toast.makeText(mActivity, "没有SD卡",
 					Toast.LENGTH_LONG).show();
 		}
 	}
@@ -123,7 +122,7 @@ public class CameraUtil {
 			case SCAN_MEDIA_FILE:
 				Log.i(TAG, "sccan file");
 				ScanMediaThread sthread = new ScanMediaThread(
-						mContext, 40, 300);
+						mActivity, 40, 300);
 				sthread.run();
 				break;
 
@@ -140,7 +139,7 @@ public class CameraUtil {
 					Log.e(TAG, "actionReceiver not registed");
 				}
 
-				Toast.makeText(mContext, "no take photo",
+				Toast.makeText(mActivity, "no take photo",
 						Toast.LENGTH_LONG).show();
 				break;
 			}
@@ -174,7 +173,7 @@ public class CameraUtil {
 		try {
 			long id = 0;
 			Uri imgUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-			ContentResolver cr = mContext.getContentResolver();
+			ContentResolver cr = mActivity.getContentResolver();
 
 			Cursor cursor = cr.query(imgUri, null,
 					MediaStore.Images.Media.DISPLAY_NAME + "='"
@@ -210,20 +209,29 @@ public class CameraUtil {
 
 		}
 	}
-	
-	public Bitmap onActivityResult(int requestCode, int resultCode, Intent data) {
-		Bitmap photo = null;
+	/**
+	 * 经过阅读android源代码发现，此方法返回的data 必须小于100k
+	 * @param requestCode
+	 * @param resultCode
+	 * @param data
+	 * @return
+	 */
+	public CameraResponse onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		CameraResponse cameraResponse=new CameraResponse();
 //		if (resultCode == Activity.RESULT_OK) {
+			cameraResponse.setPicPath(mCurrentPhotoFile.getPath());
 			switch (requestCode) {
-			case PIC_REQUEST_CODE_WITH_DATA: {// 调用Gallery返回的
-				System.out.println("CameraUtil.onActivityResult()+111111");
-				if(data!=null){
-					photo = data.getParcelableExtra("data");
-				}else{
-					photo = ImageUtil.decodeBitmapFromFile(mCurrentPhotoFile.getPath(),maxPicWidth,maxPicHeight);
-				}
-				break;
-			}
+				case PIC_REQUEST_CODE_WITH_DATA:// 调用Gallery返回的
+					System.out.println("CameraUtil.onActivityResult()-----------PIC_REQUEST_CODE_WITH_DATA");
+					if(data!=null){
+						cameraResponse.setBitmap((Bitmap)data.getParcelableExtra("data"));
+						cameraResponse.setThumpBit(getThumpPic(mActivity, data));
+					}else{
+						Bitmap	photo = ImageUtil.decodeBitmapFromFile(mCurrentPhotoFile.getPath(),maxPicWidth,maxPicHeight);
+						cameraResponse.setBitmap(photo);
+					}
+					break;
 			case PIC_REQUEST_CODE_SELECT_CAMERA: {// 照相机程序返回的,再次调用图片剪辑程序去修剪图片
 				try {
 					System.out.println("CameraUtil.onActivityResult()+222222");
@@ -238,9 +246,8 @@ public class CameraUtil {
 					mActivity.registerReceiver(actionReceiver, intentFilter);
 					mActivity.sendBroadcast(new Intent(
 							Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, fileUri));
-
 				} catch (Exception e) {
-					Toast.makeText(mContext, "获取图片异常，请重新尝试。", Toast.LENGTH_LONG).show();
+					Toast.makeText(mActivity, "获取图片异常，请重新尝试。", Toast.LENGTH_LONG).show();
 					Log.e(TAG, "Cannot crop image:", e);
 				}
 				break;
@@ -279,45 +286,61 @@ public class CameraUtil {
 					mActivity.sendBroadcast(new Intent(
 							Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, fileUri));
 				} else {
-					Toast.makeText(mContext, "该文件不存在!",
+					Toast.makeText(mActivity, "该文件不存在!",
 							Toast.LENGTH_LONG).show();
 				}
-				photo = null;
 				break;
 				case	PIC_REQUEST_CODE_SELECT_CAMERA2:// 照相机程序返回的 直接返回bitmap
 					if(data!=null){
-						photo = data.getParcelableExtra("data");
+						cameraResponse.setBitmap((Bitmap)data.getParcelableExtra("data"));
+						cameraResponse.setThumpBit(getThumpPic(mActivity, data));
 					}else{
-						photo = ImageUtil.decodeBitmapFromFile(mCurrentPhotoFile.getPath(),maxPicWidth,maxPicHeight);
+						Bitmap	photo = ImageUtil.decodeBitmapFromFile(mCurrentPhotoFile.getPath(),maxPicWidth,maxPicHeight);
+						cameraResponse.setBitmap(photo);
 					}
 				break;
 			}
 //		}
-		return photo;
+		return cameraResponse;
 	}
-
+	/***
+	 * 获取缩略图
+	 * @param context
+	 * @param data
+	 * @return
+	 */
+	public Bitmap   getThumpPic(Context context,Intent data){
+		
+		 ContentResolver resolver =context.getContentResolver();
+         try {  
+	         Uri originalUri = data.getData();
+	         if(originalUri!=null){
+		         Uri thumb = Uri.withAppendedPath(MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI,originalUri.getLastPathSegment());
+		         return MediaStore.Images.Media.getBitmap(resolver, thumb);
+	         }
+	     } catch (IOException e) {
+	    	 Log.v(TAG, "getThumpPic error");
+	     }
+         return null;
+	}
+	
 	/**
 	 * 调用图片剪辑程序
 	 */
 	private Intent getCropImageIntent(Uri photoUri) {
-		//将图片大小定为pic_size（dip）
-		DisplayMetrics dm = new DisplayMetrics();
-        mActivity.getWindowManager().getDefaultDisplay().getMetrics(dm);
-        Float density = dm.density * pic_size;
-		int size = density.intValue();
 		
 		Intent intent = new Intent("com.android.camera.action.CROP");
-		intent.setData(photoUri);
+		intent.setDataAndType(photoUri, "image/*");
 		intent.putExtra("crop", "true");
-		intent.putExtra("aspectX", 1);
-		intent.putExtra("aspectY", 1);
-		intent.putExtra("outputX", size);//裁剪区的宽
-		intent.putExtra("outputY", size);//裁剪区的高
+		intent.putExtra("aspectX", 2);
+		intent.putExtra("aspectY", 3);
+		intent.putExtra("outputX", pic_size);//裁剪区的宽
+		intent.putExtra("outputY", pic_size);//裁剪区的高
 		intent.putExtra("noFaceDetection", true);  //关闭人脸识别
 		intent.putExtra("return-data", true);// //需要返回数据</p>
+		intent.putExtra("outputFormat", "JPEG");
 		return intent;
 	}
-
 	/**
 	 *  用当前时间给取得的图片命名
 	 * @return
@@ -349,7 +372,7 @@ public class CameraUtil {
 			try {
 				int j = 0;
 				Uri imgUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-				ContentResolver cr = mContext.getContentResolver();
+				ContentResolver cr = mActivity.getContentResolver();
 
 				Cursor cursor;
 				for (j = 0; j < this.scanCount; j++) {
@@ -376,18 +399,6 @@ public class CameraUtil {
 		}
 
 	}
-	/**
-	 * 获取当前图片的保存路径mCurrentPhotoFile
-	 * @return
-	 */
-	public String getCurrentPicPath(){
-		
-		if(mCurrentPhotoFile!=null){
-			return mCurrentPhotoFile.getPath();
-		}
-		return null;
-		
-	}
 	public void onDestroy() {
 		try {
 			mActivity.unregisterReceiver(actionReceiver);
@@ -402,6 +413,33 @@ public class CameraUtil {
 
 	public void setMaxPicHeight(int maxPicHeight) {
 		this.maxPicHeight = maxPicHeight;
+	}
+	
+	public static class CameraResponse{
+		
+		String picPath;
+		Bitmap bitmap;
+		Bitmap thumpBit;
+		public String getPicPath() {
+			return picPath;
+		}
+		public void setPicPath(String picPath) {
+			this.picPath = picPath;
+		}
+		public Bitmap getBitmap() {
+			return bitmap;
+		}
+		public void setBitmap(Bitmap bitmap) {
+			this.bitmap = bitmap;
+		}
+		public Bitmap getThumpBit() {
+			return thumpBit;
+		}
+		public void setThumpBit(Bitmap thumpBit) {
+			this.thumpBit = thumpBit;
+		}
+	
+	
 	}
 	
 }
