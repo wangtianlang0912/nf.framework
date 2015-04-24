@@ -4,13 +4,6 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="10dp" >
-
-    <nf.framework.TelAddressView
-        android:id="@+id/teladdressview"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
-    </nf.framework.TelAddressView>
-
     
     <ListView 
         android:id="@+id/activity_main_listview"
