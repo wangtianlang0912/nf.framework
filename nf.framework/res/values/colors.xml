@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+	<color name="_666666">#666666</color> 
+    <color name="_999999">#999999</color> 
+    <!--00999999  -->
+	<color name="_333333">#333333</color>
+	<color name="_EEEEEE">#EEEEEE</color>
     <color name="menu_item_selector_pressed">#E7EFE2</color>
     <color name="menu_item_selector_normal">#ffffff</color>
     <!-- layout 背景 -->
