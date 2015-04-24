@@ -48,7 +48,7 @@ public abstract class AbsBaseActivity extends FragmentActivity{
 	protected ImageButton leftButton;
 	protected ImageButton rightButton;
 	protected LinearLayout mainlayout;
-	protected FrameLayout framelayout;
+	protected ViewGroup framelayout;
 	protected ViewGroup navigationBarLayout;
 	private boolean isLeftRightGesture = false;
 	private GestureDetector leftRightDetector = null;
@@ -86,7 +86,7 @@ public abstract class AbsBaseActivity extends FragmentActivity{
 	private void setBaseContentView() {
 
 		setContentView(R.layout.common_basemain);
-		framelayout = (FrameLayout) this.findViewById(R.id.common_base_main_fragmentlayout);
+		framelayout = (ViewGroup) this.findViewById(R.id.common_base_main_fragmentlayout);
 		top_textview = (TextView) this.findViewById(R.id.common_base_top_title_textview);
 		leftButton = (ImageButton) findViewById(R.id.common_base_toptitle_left_img);
 		rightButton = (ImageButton) findViewById(R.id.common_base_toptitle_right_img);
@@ -333,6 +333,6 @@ public abstract class AbsBaseActivity extends FragmentActivity{
 		if(TextUtils.isEmpty(msg)){
 			return;
 		}
-		Toast.makeText(this,msg, 0).show();
+		Toast.makeText(this,msg, Toast.LENGTH_SHORT).show();
 	}
 }
