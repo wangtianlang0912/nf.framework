@@ -1,5 +1,6 @@
 package nf.framework.act.browser;
 
+import android.annotation.SuppressLint;
 import android.text.TextUtils;
 import android.webkit.WebView;
 import android.util.Log;
@@ -167,7 +168,8 @@ public class JsCallJava {
         }
     }
 
-    private String getReturn (String reqJson, int stateCode, Object result) {
+    @SuppressLint("DefaultLocale")
+	private String getReturn (String reqJson, int stateCode, Object result) {
         String insertRes;
         if (result == null) {
             insertRes = "null";

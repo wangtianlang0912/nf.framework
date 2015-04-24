@@ -4,6 +4,7 @@ import nf.framework.R;
 import nf.framework.act.AbsBaseActivity;
 import nf.framework.core.util.android.CloseActivityClass;
 import nf.framework.expand.widgets.ProgressWebView;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,7 +39,7 @@ public class InnerBrowserByTitleActivity extends AbsBaseActivity {
 		super.top_textview.setText(titleName);
 		detailwebview.loadUrl(urlAddress);
 	}
-
+	@SuppressLint("SetJavaScriptEnabled")
 	private void initView() {
 		super.leftButton.setVisibility(View.VISIBLE);
 		super.leftButton.setImageResource(R.drawable.common_navigate_back_btn);

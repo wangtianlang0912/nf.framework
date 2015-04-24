@@ -6,6 +6,7 @@ import nf.framework.core.LoadSysSoft;
 import nf.framework.core.util.android.AndroidVersionCheckUtils;
 import nf.framework.core.util.android.CloseActivityClass;
 import nf.framework.expand.widgets.ProgressWebView;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,6 +41,7 @@ public class InnerBrowserActivity extends AbsBaseActivity {
 		initView();
 	}
 
+	@SuppressLint("SetJavaScriptEnabled")
 	private void initView() {
 		View view = LayoutInflater.from(mcontext).inflate(R.layout.common_web_browser_main, super.mainlayout,false);
 		super.mainlayout.addView(view);
