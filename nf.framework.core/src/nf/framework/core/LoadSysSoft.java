@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import nf.framework.core.exception.NFRuntimeException;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -152,7 +153,7 @@ public class LoadSysSoft {
 				it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				context.startActivity(it);
 			} catch (Exception e) {
-				Toast.makeText(context, "您未安装任何浏览器", 0).show();
+				Toast.makeText(context, "您未安装任何浏览器", Toast.LENGTH_SHORT).show();
 			}
 		}
 	}
@@ -175,7 +176,7 @@ public class LoadSysSoft {
 	    mIntent.putExtra("sms_body",sendContent);  
 	    ((Activity)context).startActivityForResult(mIntent,requestCode);
 		}catch(Exception e){
-			Toast.makeText(context,"短信功能调用失败",0).show();
+			Toast.makeText(context,"短信功能调用失败",Toast.LENGTH_SHORT).show();
 		}
 	}
 	/**
@@ -200,7 +201,7 @@ public class LoadSysSoft {
 			in.setData(Uri.parse("market://details?id="+appPackage));
 			context.startActivity(in);
 			}catch(Exception e){
-				Toast.makeText(context, "您未安装任何应用市场", 0).show();
+				Toast.makeText(context, "您未安装任何应用市场", Toast.LENGTH_SHORT).show();
 		}
 	}
 	
@@ -320,6 +321,7 @@ public class LoadSysSoft {
 		 *  用当前时间给取得的图片命名
 		 * @return
 		 */
+		@SuppressLint("SimpleDateFormat")
 		private String getPhotoFileName() {
 			Date date = new Date(System.currentTimeMillis());
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");

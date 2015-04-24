@@ -9,6 +9,7 @@ import java.util.Date;
 import nf.framework.core.exception.LogUtil;
 import nf.framework.core.exception.NFRuntimeException;
 import nf.framework.core.util.io.ImageUtil;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -345,6 +346,7 @@ public class CameraUtil {
 	 *  用当前时间给取得的图片命名
 	 * @return
 	 */
+	@SuppressLint("SimpleDateFormat")
 	private String getPhotoFileName() {
 		Date date = new Date(System.currentTimeMillis());
 		SimpleDateFormat dateFormat = new SimpleDateFormat(

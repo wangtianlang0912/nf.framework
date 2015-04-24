@@ -1,5 +1,6 @@
 package nf.framework.core.util;
 
+import android.annotation.SuppressLint;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -29,7 +30,8 @@ public class DateUtils {
      * @param pattern 日期格式
      * @return
      */
-    public static Date parse(String strDate, String pattern) {
+    @SuppressLint("SimpleDateFormat")
+	public static Date parse(String strDate, String pattern) {
         SimpleDateFormat df = new SimpleDateFormat(pattern);
         try {
             return df.parse(strDate);
@@ -71,7 +73,8 @@ public class DateUtils {
      * 获取系统当前时间
      * @return
      */
-    public static String getNowTime() {
+    @SuppressLint("SimpleDateFormat")
+	public static String getNowTime() {
         SimpleDateFormat df = new SimpleDateFormat(DATE_FULL_STR);
         return df.format(new Date());
     }
@@ -80,7 +83,8 @@ public class DateUtils {
      * 获取系统当前时间
      * @return
      */
-    public static String getNowTime(String type) {
+    @SuppressLint("SimpleDateFormat")
+	public static String getNowTime(String type) {
         SimpleDateFormat df = new SimpleDateFormat(type);
         return df.format(new Date());
     }
@@ -89,7 +93,8 @@ public class DateUtils {
      * 获取系统当前计费期
      * @return
      */
-    public static String getJFPTime() {
+    @SuppressLint("SimpleDateFormat")
+	public static String getJFPTime() {
         SimpleDateFormat df = new SimpleDateFormat(DATE_JFP_STR);
         return df.format(new Date());
     }
@@ -99,7 +104,8 @@ public class DateUtils {
      * @param String date 需要转换的日期 yyyy-MM-dd HH:mm:ss
      * @return long 时间戳
      */
-    public static long dateToUnixTimestamp(String date) {
+    @SuppressLint("SimpleDateFormat")
+	public static long dateToUnixTimestamp(String date) {
         long timestamp = 0;
         try {
             timestamp = new SimpleDateFormat(DATE_FULL_STR).parse(date).getTime();
@@ -114,7 +120,8 @@ public class DateUtils {
      * @param String date 需要转换的日期 yyyy-MM-dd
      * @return long 时间戳
      */
-    public static long dateToUnixTimestamp(String date, String dateFormat) {
+    @SuppressLint("SimpleDateFormat")
+	public static long dateToUnixTimestamp(String date, String dateFormat) {
         long timestamp = 0;
         try {
             timestamp = new SimpleDateFormat(dateFormat).parse(date).getTime();
@@ -143,6 +150,7 @@ public class DateUtils {
     	return unixTimestampToDate(timestamp,DATE_FULL_STR);
     }
     
+	@SuppressLint("SimpleDateFormat")
 	public static String unixTimestampToDate(long timestamp,String format) {
         SimpleDateFormat sd = new SimpleDateFormat(format);
         sd.setTimeZone(TimeZone.getTimeZone("GMT+8"));
@@ -151,6 +159,7 @@ public class DateUtils {
 	
 	private final static ThreadLocal<SimpleDateFormat> dateFormater = new ThreadLocal<SimpleDateFormat>()
 	{
+		@SuppressLint("SimpleDateFormat")
 		@Override
 		protected SimpleDateFormat initialValue()
 		{
@@ -182,6 +191,7 @@ public class DateUtils {
 	
 	private final static ThreadLocal<SimpleDateFormat> dateFormater2 = new ThreadLocal<SimpleDateFormat>()
 	{
+		@SuppressLint("SimpleDateFormat")
 		@Override
 		protected SimpleDateFormat initialValue()
 		{
