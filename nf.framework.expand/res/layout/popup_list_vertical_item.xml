@@ -11,9 +11,7 @@
     <ImageView
         android:id="@+id/menu_action_bar_item_image"
         android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true" />
+        android:layout_height="25dp" />
 
     <TextView
         android:id="@+id/menu_action_bar_item_text"

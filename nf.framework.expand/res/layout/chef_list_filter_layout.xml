@@ -3,7 +3,8 @@
     android:layout_height="wrap_content"
     android:background="#aa333333"
     android:orientation="horizontal"
-    android:weightSum="2" >
+    android:weightSum="2" 
+    android:baselineAligned="true">
 
     <!-- 列表展示数据 -->
 
