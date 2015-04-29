@@ -82,4 +82,11 @@ public class EditTextDialog extends AbsBaseDialog {
 		contentEditTxt.findFocus();
 		contentEditTxt.setFocusable(true);
 	}
+	
+	public void setTitleViewVisiblity(int visible){
+	
+		if(titleLayout!=null){
+			titleLayout.setVisibility(visible);
+		}
+	}
 }
