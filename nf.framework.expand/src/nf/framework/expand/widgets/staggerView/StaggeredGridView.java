@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import nf.framework.expand.R;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.database.DataSetObserver;
@@ -104,7 +103,6 @@ public class StaggeredGridView extends ViewGroup {
     private int mActivePointerId;
     private int mMotionPosition;
     private int mColWidth;
-    private int mNumCols;
     private long mFirstAdapterId;
     private boolean mBeginClick;
     
@@ -119,7 +117,7 @@ public class StaggeredGridView extends ViewGroup {
 	private static final int INVALID_POSITION = -1;
 	
     private int mTouchMode;
-    private final VelocityTracker mVelocityTracker = VelocityTracker.obtain();
+    private VelocityTracker mVelocityTracker = null;
     private final ScrollerCompat mScroller;
 
     private final EdgeEffectCompat mTopEdge;
@@ -281,6 +279,7 @@ public class StaggeredGridView extends ViewGroup {
             TypedArray a=getContext().obtainStyledAttributes( attrs, R.styleable.StaggeredGridView);
             mColCount = a.getInteger(R.styleable.StaggeredGridView_numColumns, 2);
             mDrawSelectorOnTop = a.getBoolean(R.styleable.StaggeredGridView_drawSelectorOnTop, false);
+            a.recycle();
         }else{
         	mColCount = 2;
         	mDrawSelectorOnTop = false;
@@ -363,11 +362,10 @@ public class StaggeredGridView extends ViewGroup {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        mVelocityTracker.addMovement(ev);
+    	acquireVelocityTracker(ev);  
         final int action = ev.getAction() & MotionEventCompat.ACTION_MASK;
         switch (action) {
             case MotionEvent.ACTION_DOWN:
-                mVelocityTracker.clear();
                 mScroller.abortAnimation();
                 mLastTouchY = ev.getY();
                 mActivePointerId = MotionEventCompat.getPointerId(ev, 0);
@@ -379,6 +377,13 @@ public class StaggeredGridView extends ViewGroup {
                 }
                 break;
 
+            case MotionEvent.ACTION_CANCEL:
+            	
+            	releaseVelocityTracker();  
+            	break;
+            case MotionEvent.ACTION_UP:
+            	releaseVelocityTracker();  
+            	break;
             case MotionEvent.ACTION_MOVE: {
                 final int index = MotionEventCompat.findPointerIndex(ev, mActivePointerId);
                 if (index < 0) {
@@ -410,15 +415,13 @@ public class StaggeredGridView extends ViewGroup {
     
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        mVelocityTracker.addMovement(ev);
+    	acquireVelocityTracker(ev);  
         final int action = ev.getAction() & MotionEventCompat.ACTION_MASK;
         
         int motionPosition = pointToPosition((int) ev.getX(), (int) ev.getY());
         
         switch (action) {
             case MotionEvent.ACTION_DOWN:
-            	
-                mVelocityTracker.clear();
                 mScroller.abortAnimation();
                 mLastTouchY = ev.getY();
                 mLastTouchX = ev.getX();
@@ -466,7 +469,7 @@ public class StaggeredGridView extends ViewGroup {
 
                     if (!trackMotionScroll(deltaY, true)) {
                         // Break fling velocity if we impacted an edge.
-                        mVelocityTracker.clear();
+                    	releaseVelocityTracker();  
                     }
                 }
                 
@@ -492,6 +495,7 @@ public class StaggeredGridView extends ViewGroup {
                 }
                 
                 mTouchMode = TOUCH_MODE_IDLE;
+                releaseVelocityTracker();  
                 break;
 
             case MotionEvent.ACTION_UP: {
@@ -589,11 +593,37 @@ public class StaggeredGridView extends ViewGroup {
                 mBeginClick = false;
                 
                 updateSelectorState();
+                releaseVelocityTracker();  
             } break;
         }
         return true;
     }
-
+    
+    /**  
+     * @param event 向VelocityTracker添加MotionEvent  
+     *  
+     * @see android.view.VelocityTracker#obtain()  
+     * @see android.view.VelocityTracker#addMovement(MotionEvent)  
+     */  
+    private void acquireVelocityTracker(final MotionEvent event) {  
+        if(null == mVelocityTracker) {  
+        	mVelocityTracker = VelocityTracker.obtain();  
+        }  
+        mVelocityTracker.addMovement(event);  
+    }  
+    /**  
+     * 释放VelocityTracker  
+     *  
+     * @see android.view.VelocityTracker#clear()  
+     * @see android.view.VelocityTracker#recycle()  
+     */  
+    private void releaseVelocityTracker() {  
+        if(null != mVelocityTracker) {  
+        	mVelocityTracker.clear();  
+        	mVelocityTracker.recycle();  
+        	mVelocityTracker = null;  
+        }  
+    }  
     /**
      *
      * @param deltaY Pixels that content should move by
