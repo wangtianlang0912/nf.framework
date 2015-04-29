@@ -33,7 +33,8 @@ public class SlipButton extends View implements OnTouchListener
     private OnChangedListener ChgLsn;
 
     private Bitmap bg_on, bg_off, slip_btn;
-
+    private Matrix matrix;
+    private Paint paint;
     public SlipButton(Context context)
     {
         this(context, null);
@@ -47,11 +48,15 @@ public class SlipButton extends View implements OnTouchListener
     public SlipButton(Context context, AttributeSet attrs, int defStyle)
     {
         super(context, attrs, defStyle);
-      
+        
+        matrix = new Matrix();
+        paint = new Paint(); 
+        
         TypedArray typeArr = context.obtainStyledAttributes(attrs, R.styleable.SlipButton);
         int slipOnBackgroundId=typeArr.getResourceId(R.styleable.SlipButton_slipOnBackground,0);
         int slipOffBackgroundId=typeArr.getResourceId(R.styleable.SlipButton_slipOffBackground,0);
         int slipCursorId=typeArr.getResourceId(R.styleable.SlipButton_slipCursorDrawable,0);
+        typeArr.recycle();
         
         if(slipOnBackgroundId==0||slipOffBackgroundId==0||slipCursorId==0){
         	
@@ -63,6 +68,8 @@ public class SlipButton extends View implements OnTouchListener
         Btn_On = new Rect(0, 0, slip_btn.getWidth(), slip_btn.getHeight());
         Btn_Off = new Rect(bg_off.getWidth() - slip_btn.getWidth(), 0, bg_off.getWidth(),
                 slip_btn.getHeight());
+        
+        
         setOnTouchListener(this);// 设置监听器,也可以直接复写OnTouchEvent  
     }
 
@@ -72,8 +79,7 @@ public class SlipButton extends View implements OnTouchListener
 
         super.onDraw(canvas);
 
-        Matrix matrix = new Matrix();
-        Paint paint = new Paint();
+       
         float x;
 
         if (NowX < (bg_on.getWidth() / 2))// 滑动到前半段与后半段的背景不同,在此做判断

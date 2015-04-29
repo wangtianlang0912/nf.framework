@@ -14,6 +14,7 @@ import java.util.Date;
 
 import nf.framework.expand.R;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -52,7 +53,7 @@ public class UpFreshGridView extends RelativeLayout implements OnScrollListener 
 	private ProgressBar bottomProgressBar;
 	private RotateAnimation animation = null;
 	private RotateAnimation reverseAnimation = null;
-	private LinearLayout head_layout = null;
+	private ViewGroup head_layout = null;
 	private final static int RELEASE_To_REFRESH = 0;
 	private final static int PULL_To_REFRESH = 1;
 	private final static int REFRESHING = 2;
@@ -185,10 +186,10 @@ public class UpFreshGridView extends RelativeLayout implements OnScrollListener 
 	 * 
 	 * @return
 	 */
-	private LinearLayout HeadUpdateView(Context mcontext) {
+	private ViewGroup HeadUpdateView(Context mcontext) {
 		// 头部刷新
 
-		head_layout = (LinearLayout) LayoutInflater.from(mcontext).inflate(
+		head_layout = (ViewGroup) LayoutInflater.from(mcontext).inflate(
 				R.layout.expand_header_refresh_layout, null);
 		arrowImageView = (ImageView) head_layout
 				.findViewById(R.id.expand_header_refresh_layout_arrowImageView);
@@ -553,6 +554,7 @@ public class UpFreshGridView extends RelativeLayout implements OnScrollListener 
 		isRefreshable = true;
 	}
 
+	@SuppressLint("SimpleDateFormat")
 	public void onRefreshComplete() {
 		state = DONE;
 		SimpleDateFormat time=new SimpleDateFormat("HH:mm:ss"); 

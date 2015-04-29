@@ -18,6 +18,7 @@ public class TextProgressBar extends ProgressBar {
 	private Object buttonStateTag;
 	private static int TEXT_SIZE=16;
 	private static int TEXT_COLOR=Color.BLACK;
+	private	Rect rect = new Rect();
 	public TextProgressBar(Context context) {
 		super(context);
 		initText();
@@ -48,7 +49,8 @@ public class TextProgressBar extends ProgressBar {
 			if(this.text.contains("-")){
 				this.text="读取中";
 			}
-			Rect rect = new Rect();
+			
+			rect.setEmpty();
 			this.mPaint.getTextBounds(this.text, 0, this.text.length(), rect);
 			setPaintTextStyle();
 			int x = (getWidth() / 2) - rect.centerX();

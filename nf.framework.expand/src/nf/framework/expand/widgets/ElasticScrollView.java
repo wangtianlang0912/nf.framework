@@ -5,6 +5,7 @@ import java.util.Date;
 
 import nf.framework.expand.R;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -337,6 +338,7 @@ public class ElasticScrollView extends ScrollView {
 		invalidate();
 		scrollTo(0, 0);
 	}
+	@SuppressLint("SimpleDateFormat")
 	private SimpleDateFormat getDateFarmat(){
 		 
 		return new SimpleDateFormat("HH:mm:ss"); 

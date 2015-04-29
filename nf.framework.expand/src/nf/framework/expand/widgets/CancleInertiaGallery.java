@@ -21,24 +21,24 @@ import android.widget.Gallery;
 
 public class CancleInertiaGallery extends Gallery {
 	private static int TICK_WHAT = 5;
-	private static boolean waitHander = false;
+	private boolean waitHander = false;
 	private long millionseconds = 5000;// 自动滚屏间隔时间
 	private int contentItemCount = 0;
 
+	@SuppressWarnings("deprecation")
 	public CancleInertiaGallery(Context context, AttributeSet attrSet) {
 		super(context, attrSet);
-		// TODO Auto-generated constructor stub
 	}
 
 	public CancleInertiaGallery(Context context) {
-		super(context, null);
-		// TODO Auto-generated constructor stub
+		this(context, null);
 	}
 
 	private boolean isScrollingLeft(MotionEvent e1, MotionEvent e2) {
 		return e2.getX() > e1.getX();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 			float velocityY) {

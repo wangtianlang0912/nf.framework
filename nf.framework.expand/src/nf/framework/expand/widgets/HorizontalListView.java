@@ -264,18 +264,20 @@ public class HorizontalListView extends AdapterView<ListAdapter>
 
 		if (!mScroller.isFinished())
 		{
-			post(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					requestLayout();
-				}
-			});
+			post(runnable);
 
 		}
 	}
 
+	Runnable runnable =new Runnable()
+	{
+		@Override
+		public void run()
+		{
+			requestLayout();
+		}
+	};
+	
 	private void fillList(final int dx)
 	{
 		int edge = 0;

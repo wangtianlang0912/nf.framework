@@ -4,11 +4,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import nf.framework.expand.R;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -46,7 +45,7 @@ public class UpFreshListView extends ListView implements OnScrollListener {
 
 	private LayoutInflater inflater;
 
-	private LinearLayout headView;
+	private ViewGroup headView;
 	private View footView;
 	private View autoFootView;
 	private boolean isLoadingMore;
@@ -93,7 +92,7 @@ public class UpFreshListView extends ListView implements OnScrollListener {
 		setCacheColorHint(context.getResources().getColor(R.color.transparent));
 		inflater = LayoutInflater.from(context);
 
-		headView = (LinearLayout) inflater.inflate(R.layout.expand_header_refresh_layout, null);
+		headView = (ViewGroup) inflater.inflate(R.layout.expand_header_refresh_layout, null);
 		arrowImageView = (ImageView) headView.findViewById(R.id.expand_header_refresh_layout_arrowImageView);
 		arrowImageView.setMinimumWidth(70);
 		arrowImageView.setMinimumHeight(50);
@@ -400,6 +399,7 @@ public class UpFreshListView extends ListView implements OnScrollListener {
 		isLoadingMore=false;
 	}
 	
+	@SuppressLint("SimpleDateFormat")
 	private SimpleDateFormat getDateFarmat(){
 	 
 		return new SimpleDateFormat("HH:mm:ss"); 

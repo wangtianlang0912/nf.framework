@@ -49,7 +49,7 @@ public class PorterDuffView extends ImageView {
         private boolean porterduffMode=true;
         /** 标识是否正在下载图片。 */
         private boolean loading;
-
+        private PorterDuffXfermode porterDuffXfermode=   new PorterDuffXfermode(PorterDuff.Mode.DARKEN);
         public PorterDuffView(Context context, AttributeSet attrs) {
                 super(context, attrs);
                 init(context, attrs);
@@ -127,14 +127,14 @@ public class PorterDuffView extends ImageView {
 
                 decFormat = new DecimalFormat("0.0%");
         }
-        
+       
         public void onDraw(Canvas canvas) {
                 if (porterduffMode) {
                         int tmpW = (getWidth() - width)/2, tmpH = (getHeight() - height)/2;
                         // 画出背景图
                         canvas.drawBitmap(bitmapBg, tmpW, tmpH, paint);
                         // 设置PorterDuff模式
-                        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DARKEN));
+                        paint.setXfermode(porterDuffXfermode);
 //                      canvas.drawBitmap(bitmapFg, tmpW, tmpH - progress * height, paint);
                         int tH = height - (int) (progress * height);
                         for (int i = 0; i < tH; i++) {
