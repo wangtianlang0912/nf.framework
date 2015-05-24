@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -142,7 +143,7 @@ public class AlphabetListView extends FrameLayout {
             TextView textView = new TextView(context);
             textView.setTextColor(Color.argb(255, 150, 150, 150));
             textView.setBackgroundColor(Color.argb(0, 255, 255, 0));
-            textView.setTextSize(15);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP,11);
             textView.setText(alphabet[i]);
             textView.setGravity(Gravity.CENTER);
             textView.setLayoutParams(params);
