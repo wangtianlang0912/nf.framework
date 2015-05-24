@@ -107,13 +107,13 @@ public abstract class AbsBaseRequestData<T> {
 		if(mHttpRequestInterface instanceof HttpPostFilesRequestInterface){
 			Map<String, String> mPostParams=((HttpPostFilesRequestInterface)mHttpRequestInterface).getPostParamMap();
 			Map<String, File> mPostFiles=((HttpPostFilesRequestInterface)mHttpRequestInterface).getPostFilesMap();
-			if((mPostParams==null||mPostParams.isEmpty())&&(mPostFiles==null||mPostFiles.isEmpty())){
+			if((mPostParams==null)&&(mPostFiles==null||mPostFiles.isEmpty())){
 				throw new NFRuntimeException("HTTP post file request must contain a param map or a file map !");
 			}
 			responseData = mNetworkRequest.postParamAndFile(url, mPostParams, mPostFiles);
 		}else {
 			Map<String, String> mPostParams=((HttpPostRequestInterface)mHttpRequestInterface).getPostParamMap();
-			if(mPostParams==null||mPostParams.isEmpty()){
+			if(mPostParams==null){
 				throw new NFRuntimeException("HTTP post request must contain a param map !");
 			}
 			responseData = mNetworkRequest.postRequest(url, mPostParams);
