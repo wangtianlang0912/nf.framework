@@ -9,7 +9,7 @@
     	android:orientation="vertical"
     	android:gravity="center"
         />
-	<!-- 列表展示数据 -->
+	<!-- 列表展示数据 android:overScrollMode="never"  解决魅族列表悬停问题-->
 	<nf.framework.expand.widgets.UpFreshListView 
 	    android:id="@+id/common_listview"
 	    android:layout_width="fill_parent"
@@ -18,6 +18,7 @@
 	    android:divider="@color/_EEEEEE"
 	    android:dividerHeight="0dp"
 	    android:fadeScrollbars="true"
+	    android:overScrollMode="never" 
 	    android:fadingEdge="none"
 	    android:headerDividersEnabled="false"
 	    android:scrollingCache="false" />
