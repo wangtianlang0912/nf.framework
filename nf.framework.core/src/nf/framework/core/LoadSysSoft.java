@@ -189,6 +189,7 @@ public class LoadSysSoft {
 		//系统默认的action，用来打开默认的电话界面
 		intent.setAction(Intent.ACTION_CALL);
 		//需要拨打的号码
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS); 
 		intent.setData(Uri.parse("tel:"+telphone));
 		context.startActivity(intent);
 	}
