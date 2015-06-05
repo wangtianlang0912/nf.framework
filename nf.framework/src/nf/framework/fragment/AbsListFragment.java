@@ -9,9 +9,13 @@ import nf.framework.expand.widgets.UpFreshListView;
 import nf.framework.statistic.MobStatisticUtils;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public abstract class AbsListFragment<T> extends Fragment implements
@@ -20,6 +24,10 @@ public abstract class AbsListFragment<T> extends Fragment implements
 	private AbsListAdapter<?, ?> listItemAdapter;
 	private View viewLayout = null;
 	private MobStatisticUtils mobStatisticUtils;
+	protected LinearLayout  emptyLayout;
+	private ImageView emptyImgView;
+	private TextView referView1;
+	private TextView referView2;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -64,8 +72,30 @@ public abstract class AbsListFragment<T> extends Fragment implements
 		mlistview.setOnHeaderRefreshListener(this);
 		mlistview.setOnScrollLoadMoreListener(this);
 		mlistview.setOnItemClickListener(this);
+		emptyLayout =(LinearLayout)v.findViewById(R.id.common_listview_empty_layout);
+		View emptyView=LayoutInflater.from(getActivity()).inflate(R.layout.list_empty_view,emptyLayout, false);
+		emptyImgView=(ImageView)emptyView.findViewById(R.id.list_empty_view_iv);
+		referView1=(TextView)emptyView.findViewById(R.id.list_empty_view_tv_refer);
+		referView2 =(TextView)emptyView.findViewById(R.id.list_empty_view_tv_refer2);
+		emptyLayout.addView(emptyView);
+		emptyView.setVisibility(View.GONE);
 	}
 	
+	public void setEmptyViewShow(boolean isShow){
+		
+		if(emptyLayout!=null){
+			emptyLayout.setVisibility(isShow?View.VISIBLE:View.GONE);
+		}
+	}
+	
+	public void seteEmptyViewText(int resId,String refer1,String refer2){
+		emptyImgView.setVisibility(resId==0?View.GONE:View.VISIBLE);
+		emptyImgView.setImageResource(resId);
+		referView1.setVisibility(TextUtils.isEmpty(refer1)?View.GONE:View.VISIBLE);
+		referView1.setText(refer1);
+		referView2.setVisibility(TextUtils.isEmpty(refer2)?View.GONE:View.VISIBLE);
+		referView2.setText(refer2);
+	}
 	protected abstract AbsListAdapter<?, ?> createAbsListAdapter();
 	
 	
