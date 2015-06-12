@@ -47,6 +47,7 @@ public abstract class AbsBaseActivity extends FragmentActivity{
 	protected TextView right_textview;
 	protected ImageButton leftButton;
 	protected ImageButton rightButton;
+	protected TextView rightTxtBtn;
 	protected LinearLayout mainlayout;
 	protected ViewGroup framelayout;
 	protected ViewGroup navigationBarLayout;
@@ -90,6 +91,7 @@ public abstract class AbsBaseActivity extends FragmentActivity{
 		top_textview = (TextView) this.findViewById(R.id.common_base_top_title_textview);
 		leftButton = (ImageButton) findViewById(R.id.common_base_toptitle_left_img);
 		rightButton = (ImageButton) findViewById(R.id.common_base_toptitle_right_img);
+		rightTxtBtn = (TextView) findViewById(R.id.common_base_toptitle_right_txt);
 		right_textview = (TextView) findViewById(R.id.common_base_toptitle_right_textview);
 		navigationBarLayout = (ViewGroup) findViewById(R.id.common_basemain_navigationbar_layout);
 		mainlayout = (LinearLayout) findViewById(R.id.common_basemain_main_layout);

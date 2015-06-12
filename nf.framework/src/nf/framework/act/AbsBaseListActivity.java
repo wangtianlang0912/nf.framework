@@ -40,7 +40,7 @@ public abstract class AbsBaseListActivity extends AbsBaseActivity implements OnI
 		referView1=(TextView)emptyView.findViewById(R.id.list_empty_view_tv_refer);
 		referView2 =(TextView)emptyView.findViewById(R.id.list_empty_view_tv_refer2);
 		emptyLayout.addView(emptyView);
-		emptyView.setVisibility(View.GONE);
+		emptyLayout.setVisibility(View.GONE);
 	}
 	
 	public void setEmptyViewShow(boolean isShow){
@@ -50,7 +50,7 @@ public abstract class AbsBaseListActivity extends AbsBaseActivity implements OnI
 		}
 	}
 	
-	public void seteEmptyViewText(int resId,String refer1,String refer2){
+	public void setEmptyViewText(int resId,String refer1,String refer2){
 		emptyImgView.setVisibility(resId==0?View.GONE:View.VISIBLE);
 		emptyImgView.setImageResource(resId);
 		referView1.setVisibility(TextUtils.isEmpty(refer1)?View.GONE:View.VISIBLE);
