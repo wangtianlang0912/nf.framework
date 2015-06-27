@@ -21,7 +21,9 @@
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="10dp"
             android:gravity="center_horizontal"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp" >
 
             <!-- 提示 -->
 
@@ -39,6 +41,7 @@
                 android:id="@+id/expand_header_refresh_layout_lastUpdatedTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="上次更新"
                 android:textColor="#666666"
                 android:textSize="10sp" />
