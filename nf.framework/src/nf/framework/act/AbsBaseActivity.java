@@ -203,7 +203,7 @@ public abstract class AbsBaseActivity extends FragmentActivity{
 			progressDialog	=new ProgressDialog(this);
 		}
 		if(!progressDialog.isShowing()&&!isFinishing())
-			progressDialog.show();
+			progressDialog.show(false);
 	}
 	
 	protected void dismissProgressBar(){

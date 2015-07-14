@@ -6,7 +6,6 @@ import nf.framework.statistic.MobStatisticUtils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -16,8 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
+import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
-import android.widget.Toast;
 
 import com.slidingmenu.lib.SlidingMenu;
 import com.slidingmenu.lib.app.SlidingTabActivity;
@@ -26,6 +25,7 @@ public abstract class AbsSlidingTabActivity extends SlidingTabActivity{
 
     protected SlidingMenu slidingMenu;
     private MobStatisticUtils mobStatisticUtils;
+    private TabHost  tabHost;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -33,7 +33,7 @@ public abstract class AbsSlidingTabActivity extends SlidingTabActivity{
         
         mobStatisticUtils=new MobStatisticUtils(this);
         
-        TabHost  tabHost = getTabHostView();
+        tabHost  = getTabHostView();
         setContentView(tabHost);
         setBehindContentView(getBehindContentView());
         slidingMenu = getSlidingMenu();
@@ -54,9 +54,10 @@ public abstract class AbsSlidingTabActivity extends SlidingTabActivity{
         }
         for(TabItemActVO tabItemAct: tabItemList){
         
-        	tabHost.addTab(tabHost.newTabSpec(tabItemAct.getTitle())
-    				.setIndicator(buildItemTabView(tabItemAct))
-    				.setContent(new Intent(this,tabItemAct.getActivity())));	
+        	TabSpec tabSpec=tabHost.newTabSpec(tabItemAct.getTitle());
+        	tabSpec.setIndicator(buildItemTabView(tabItemAct));
+    		tabSpec.setContent(new Intent(this,tabItemAct.getActivity()));	
+        	tabHost.addTab(tabSpec);
         }
         
         int leng = tabHost.getTabWidget().getChildCount();
@@ -66,7 +67,7 @@ public abstract class AbsSlidingTabActivity extends SlidingTabActivity{
 			} else {
 				tabHost.setPadding(tabHost.getPaddingLeft(),
 						tabHost.getPaddingTop(), tabHost.getPaddingRight(),
-						tabHost.getPaddingBottom() - 1);
+						tabHost.getPaddingBottom());
 			}
 		}
 		tabHost.setOnTabChangedListener(new OnTabChangeListener() {
@@ -79,7 +80,11 @@ public abstract class AbsSlidingTabActivity extends SlidingTabActivity{
 		
     }
     
-    @Override
+    public TabHost getTabHost() {
+		return tabHost;
+	}
+
+	@Override
     protected void onResume() {
     	// TODO Auto-generated method stub
     	super.onResume();
@@ -116,7 +121,7 @@ public abstract class AbsSlidingTabActivity extends SlidingTabActivity{
 		frameLayout.setLayoutParams(new ViewGroup.LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));
 		linearLayout.addView(frameLayout,new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,0, 1));
 		TabWidget tabWidget=new TabWidget(this);
-		tabWidget.setLayoutParams(new ViewGroup.LayoutParams(LayoutParams.FILL_PARENT,dip2px(this,50)));
+		tabWidget.setLayoutParams(new ViewGroup.LayoutParams(LayoutParams.FILL_PARENT,dip2px(this,56)));
 		tabWidget.setClickable(false);
 		tabWidget.setId(android.R.id.tabs);
 		linearLayout.addView(tabWidget);

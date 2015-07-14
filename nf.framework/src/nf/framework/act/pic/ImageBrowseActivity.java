@@ -13,10 +13,10 @@ import nf.framework.expand.widgets.zoomPhotoView.ImageTagVO;
 import nf.framework.expand.widgets.zoomPhotoView.PhotoView;
 import nf.framework.expand.widgets.zoomPhotoView.PhotoView.OnImageTagItemClickListener;
 import nf.framework.expand.widgets.zoomPhotoView.PhotoViewAttacher.OnViewTapListener;
-import nf.framework.http.imageload.ImageLoader;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -30,10 +30,18 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.webkit.URLUtil;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import com.nostra13.universalimageloader.core.download.ImageDownloader.Scheme;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 
 public class ImageBrowseActivity extends AbsBaseActivity {
@@ -51,8 +59,7 @@ public class ImageBrowseActivity extends AbsBaseActivity {
 	private View bottomLayout;
 	private TextView desView;
 	private boolean isHidden;
-//	private DisplayImageOptions options;
-//	protected  ImageLoader imageLoader = ImageLoader.getInstance();
+	private DisplayImageOptions options;
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -73,15 +80,16 @@ public class ImageBrowseActivity extends AbsBaseActivity {
 		mViewPager.setCurrentItem(currentPosition, true);
 		top_textview.setText((currentPosition+1) + "/" + list.size());
 		setBottomViewShow(list.get(currentPosition).getDescription());
-//		options = new DisplayImageOptions.Builder()
-//		.showImageForEmptyUri(R.drawable.icon_empty)
-//		.showImageOnFail(R.drawable.ic_error)
-//		.resetViewBeforeLoading(true)
-//		.cacheOnDisc(true)
-//		.imageScaleType(ImageScaleType.EXACTLY)
-//		.bitmapConfig(Bitmap.Config.RGB_565)
-//		.displayer(new FadeInBitmapDisplayer(300))
-//		.build();
+		options = new DisplayImageOptions.Builder()
+		.showImageForEmptyUri(R.drawable.empty_photo)
+		.showImageOnFail(R.drawable.empty_photo)
+		.resetViewBeforeLoading(true)
+		.cacheOnDisk(true)
+		.cacheInMemory(true)
+		.imageScaleType(ImageScaleType.EXACTLY)
+		.bitmapConfig(Bitmap.Config.RGB_565)
+		.displayer(new FadeInBitmapDisplayer(300))
+		.build();
 	}
 
 	/***
@@ -225,13 +233,9 @@ public class ImageBrowseActivity extends AbsBaseActivity {
 		List<ImageBrowserVO> mlist = new ArrayList<ImageBrowserVO>();
 		private ViewGroup mcontainer;
 		private LayoutInflater inflater;
-		private ImageLoader loadImage;
 		public WallPaperBrowseAdapter(Context context, List<ImageBrowserVO> list) {
 			this.mlist = list;
 			inflater =((Activity) context).getLayoutInflater();
-			if(loadImage==null){
-				loadImage=ImageLoader.getInstance(ImageBrowseActivity.this);
-			}
 		}
 
 		@Override
@@ -245,7 +249,35 @@ public class ImageBrowseActivity extends AbsBaseActivity {
 			PhotoView imageView = (PhotoView) imageLayout.findViewById(R.id.wallpaper_image_layout_image);
 			final ProgressBar progressBar = (ProgressBar) imageLayout.findViewById(R.id.wallpaper_image_layout_loading);
 			ImageBrowserVO wallPaper = mlist.get(position);
-			new DownloadImgTask(mcontext,loadImage,imageView, progressBar,R.drawable.package_loading,wallPaper).execute();
+			String picUrl=null;
+			if(!TextUtils.isEmpty(wallPaper.getPicUrl())){
+				if(URLUtil.isFileUrl(wallPaper.getPicUrl())||wallPaper.getPicUrl().startsWith(File.separator)){
+					picUrl=Scheme.FILE.wrap(wallPaper.getPicUrl());
+				}else{
+					picUrl =wallPaper.getPicUrl();
+				}
+			}
+			ImageLoader.getInstance().displayImage(picUrl, imageView, options,new SimpleImageLoadingListener(){
+				@Override
+				public void onLoadingStarted(String imageUri, View view) {
+					progressBar.setVisibility(View.VISIBLE);
+				}
+				@Override
+				public void onLoadingComplete(String imageUri, View view,
+						Bitmap loadedImage) {
+					progressBar.setVisibility(View.GONE);
+				}
+				@Override
+				public void onLoadingCancelled(String imageUri, View view) {
+					progressBar.setVisibility(View.GONE);
+				}
+				@Override
+				public void onLoadingFailed(String imageUri, View view,
+						FailReason failReason) {
+					progressBar.setVisibility(View.GONE);
+				}
+			});
+//			new DownloadImgTask(mcontext,loadImage,imageView, progressBar,R.drawable.package_loading,wallPaper).execute();
 			container.addView(imageLayout, LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
 			mcontainer = container;
 			imageView.setOnViewTapListener(onImageViewTapListener());

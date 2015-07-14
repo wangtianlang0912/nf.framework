@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,9 +18,10 @@ public abstract class AbsBaseListActivity extends AbsBaseActivity implements OnI
 
 	protected UpFreshListView mListView;
 	protected LinearLayout  emptyLayout;
-	private ImageView emptyImgView;
-	private TextView referView1;
-	private TextView referView2;
+	protected ImageView emptyImgView;
+	protected TextView referView1;
+	protected TextView referView2;
+	protected Button emptyBtn;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -39,6 +41,7 @@ public abstract class AbsBaseListActivity extends AbsBaseActivity implements OnI
 		emptyImgView=(ImageView)emptyView.findViewById(R.id.list_empty_view_iv);
 		referView1=(TextView)emptyView.findViewById(R.id.list_empty_view_tv_refer);
 		referView2 =(TextView)emptyView.findViewById(R.id.list_empty_view_tv_refer2);
+		emptyBtn=(Button)emptyView.findViewById(R.id.list_empty_view_btn);
 		emptyLayout.addView(emptyView);
 		emptyLayout.setVisibility(View.GONE);
 	}

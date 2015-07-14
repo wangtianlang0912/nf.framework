@@ -49,7 +49,7 @@ public abstract class AbsTabActivity extends TabActivity{
 			} else {
 				tabHost.setPadding(tabHost.getPaddingLeft(),
 						tabHost.getPaddingTop(), tabHost.getPaddingRight(),
-						tabHost.getPaddingBottom() - 1);
+						tabHost.getPaddingBottom());
 			}
 		}
 		tabHost.setOnTabChangedListener(new OnTabChangeListener() {
@@ -91,7 +91,7 @@ public abstract class AbsTabActivity extends TabActivity{
 		frameLayout.setLayoutParams(new ViewGroup.LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));
 		linearLayout.addView(frameLayout,new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,0, 1));
 		TabWidget tabWidget=new TabWidget(this);
-		tabWidget.setLayoutParams(new ViewGroup.LayoutParams(LayoutParams.FILL_PARENT,dip2px(this,50)));
+		tabWidget.setLayoutParams(new ViewGroup.LayoutParams(LayoutParams.FILL_PARENT,dip2px(this,56)));
 		tabWidget.setClickable(false);
 		tabWidget.setId(android.R.id.tabs);
 		linearLayout.addView(tabWidget);
