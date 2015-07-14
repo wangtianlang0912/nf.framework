@@ -14,8 +14,14 @@ package nf.framework.core.util;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import android.text.TextUtils;
+
 public class PatternUtil {
 	public static PatternUtil pu=null;
+	
+    private static String ChineseMobilePattern = "^(0|86|17951)?(13[0-9]|15[012356789]|17[0678]|18[0-9]|14[57])[0-9]{8}$";
+		
+	
 	public static PatternUtil getInstance(){
 		
 		if(pu==null){
@@ -61,15 +67,36 @@ public class PatternUtil {
 	 */
 	 public   boolean checkTelPhone(String mobile) {
 		 boolean flag=false;
-		 String regex =null;
 		 if(mobile!=null&&!"".equals(mobile)){
-			 regex = "^(1(([358][0-9])|(47)))\\d{8}$";//判定电话号码
-			  flag= checkStr(regex,mobile);
+			  flag= checkStr(ChineseMobilePattern,mobile);//判定电话号码
 		 }else{
 			 flag=true;
 		 }
 		 return flag;
 	}
+    /** 
+     * 电话号码验证 
+     *  
+     * @param  str 
+     * @return 验证通过返回true 
+     */  
+    public static boolean isPhone(String str) {   
+    	boolean b = false;
+		if(!TextUtils.isEmpty(str)) {
+	        Pattern p1 = null,p2 = null;  
+	        Matcher m = null;     
+	        p1 = Pattern.compile("^[0][1-9]{2,3}-[0-9]{5,10}$");  // 验证带区号的  
+	        p2 = Pattern.compile("^[1-9]{1}[0-9]{5,8}$");         // 验证没有区号的  
+	        if(str.length() >9)  
+	        {   m = p1.matcher(str);  
+	            b = m.matches();    
+	        }else{  
+	            m = p2.matcher(str);  
+	            b = m.matches();   
+	        }	
+		}
+        return b;  
+    }  
 	 /**
 	 *判断手机号码非空并且限制为11位
 	 * @param str
@@ -77,10 +104,8 @@ public class PatternUtil {
 	 */
 	 public   boolean checkTelPhone2(String mobile) {
 		 boolean flag=false;
-		 String regex =null;
 		 if(mobile!=null&&!"".equals(mobile)){
-			 regex = "^\\d{11}$";
-			 flag= checkStr(regex,mobile);
+			 flag= checkStr(ChineseMobilePattern,mobile);//判定电话号码
 		 }
 		 return flag;
 	}
