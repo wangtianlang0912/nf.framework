@@ -60,7 +60,17 @@ public class ProgressDialog extends Dialog{
 	 * 设定正在加载的状态
 	 */
 	public  void show(){
+		// 点击对话框外部取消对话框显示
+		setCanceledOnTouchOutside(true);
 		super.show();  
+	}
+	/**
+	 * 设定正在加载的状态
+	 */
+	public void show(boolean cancelTouchOutside) {
+		// 点击对话框外部取消对话框显示
+		setCanceledOnTouchOutside(cancelTouchOutside);
+		super.show();
 	}
 	/**
 	 * 设定未加载状态

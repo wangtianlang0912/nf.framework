@@ -48,4 +48,8 @@ public class BaseDialog extends AbsBaseDialog {
 		txtContentView.setText(content);
 	}
 	
+	public TextView getContentView() {
+		return txtContentView;
+	}
+	
 }

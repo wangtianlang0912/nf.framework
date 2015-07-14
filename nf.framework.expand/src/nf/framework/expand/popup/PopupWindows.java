@@ -149,13 +149,21 @@ public abstract class PopupWindows {
 //	}
 
 
-
+	public void show(View anchor) {
+		
+		show(anchor,null);
+	}
+	public enum DirectionEnum{
+		
+		Up,Down;
+	}
+	
 	/**
 	 * Show quickaction popup. Popup is automatically positioned, on top or
 	 * bottom of anchor view.
 	 * 
 	 */
-	public void show(View anchor) {
+	public void show(View anchor,DirectionEnum direction) {
 		preShow();
 
 		int xPos, yPos, arrowPos;
@@ -202,7 +210,16 @@ public abstract class PopupWindows {
 		int dyTop = anchorRect.top;
 		int dyBottom = screenHeight - anchorRect.bottom;
 
-		boolean onTop = (dyTop > dyBottom) ? true : false;
+		boolean onTop = false;
+		if(direction==null){
+			onTop = (dyTop > dyBottom) ? true : false;
+		}else{
+			if(direction==DirectionEnum.Up){
+				onTop= true;
+			}else if(direction==DirectionEnum.Down){
+				onTop=false;
+			}
+		}
 		// onTop true the anchor view of position is on the area of the screen
 		// bottom
 		// .....false

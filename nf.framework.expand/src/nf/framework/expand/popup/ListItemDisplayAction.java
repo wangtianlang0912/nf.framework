@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -139,41 +140,27 @@ public class ListItemDisplayAction extends PopupWindows implements
 		String title = action.getTitle();
 		Drawable icon = action.getIcon();
 
-		View container;
-		LayoutInflater mInflater = (LayoutInflater) mContext
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		if (mRootViewLayout.getOrientation() != LinearLayout.HORIZONTAL) {
-			container = mInflater.inflate(
-					R.layout.popup_list_horizonal_item, null);
-		} else {
-			container = mInflater.inflate(
-					R.layout.popup_list_vertical_item, null);
-		}
+		ViewHolder viewHolder=buildRootView();
 		if(position==-1){
-			mRootViewLayout.addView(container);
+			mRootViewLayout.addView(viewHolder.container);
 		}else{
-			mRootViewLayout.addView(container, position);
+			mRootViewLayout.addView(viewHolder.container, position);
 		}
-		ImageView img = (ImageView) container
-				.findViewById(R.id.menu_action_bar_item_image);
-		TextView text = (TextView) container
-				.findViewById(R.id.menu_action_bar_item_text);
-
 		if (icon != null) {
-			img.setImageDrawable(icon);
+			viewHolder.imageView.setImageDrawable(icon);
 		} else {
-			img.setVisibility(View.GONE);
+			viewHolder.imageView.setVisibility(View.GONE);
 		}
 
 		if (title != null) {
-			text.setText(title);
+			viewHolder.txtView.setText(title);
 		} else {
-			text.setVisibility(View.GONE);
+			viewHolder.txtView.setVisibility(View.GONE);
 		}
 
 		final int actionId = action.getActionId();
 
-		container.setOnClickListener(new OnClickListener() {
+		viewHolder.container.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				if (mItemClickListener != null) {
@@ -189,11 +176,38 @@ public class ListItemDisplayAction extends PopupWindows implements
 			}
 		});
 
-		container.setFocusable(true);
-		container.setClickable(true);
+		viewHolder.container.setFocusable(true);
+		viewHolder.container.setClickable(true);
 
 	}
 
+	protected ViewHolder buildRootView(){
+		
+		ViewHolder viewholder=new ViewHolder();
+		LayoutInflater mInflater = (LayoutInflater) mContext
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		if (mRootViewLayout.getOrientation() != LinearLayout.HORIZONTAL) {
+			viewholder.container = (ViewGroup) mInflater.inflate(
+					R.layout.popup_list_horizonal_item, null);
+		} else {
+			viewholder.container = (ViewGroup) mInflater.inflate(
+					R.layout.popup_list_vertical_item, null);
+		}
+		viewholder.imageView= (ImageView) viewholder.container
+				.findViewById(R.id.menu_action_bar_item_image);
+		viewholder.txtView= (TextView) viewholder.container
+				.findViewById(R.id.menu_action_bar_item_text);
+		
+		return viewholder;
+	}
+	
+	public static class ViewHolder{
+		
+		public	ImageView imageView;
+		public	TextView txtView;
+		public	ViewGroup container;
+	}
+	
 	/**
 	 * Set listener for window dismissed. This listener will only be fired if
 	 * the quicakction dialog is dismissed by clicking outside the dialog or

@@ -1,6 +1,8 @@
 package nf.framework.expand.widgets;
 
 
+import nf.framework.core.util.android.DensityUtil;
+import nf.framework.expand.R;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
@@ -36,6 +38,8 @@ public class AlphabetListView extends FrameLayout {
     private HideIndicator mHideIndicator = new HideIndicator();
     
     private int indicatorDuration = 1000;
+    
+    private int alphabetBg;
     
     public void setIndicatorDuration(int duration) {
         this.indicatorDuration = duration;
@@ -73,11 +77,9 @@ public class AlphabetListView extends FrameLayout {
         initAlphabetLayout(mContext);
 
         mTextView = new TextView(mContext);
-        mTextView.setTextSize(convertDIP2PX(30));
-        mTextView.setTextColor(Color.argb(150, 255, 255, 255));
-        mTextView.setBackgroundColor(Color.argb(100, 0, 0, 0));
-        mTextView.setMinWidth(convertDIP2PX(40));
-        mTextView.setMinHeight(convertDIP2PX(40));
+        mTextView.setTextSize(convertDIP2PX(25));
+        mTextView.setTextColor(Color.WHITE);
+        mTextView.setBackgroundResource(R.drawable.alphabet_pop_bg);
         int pixels = convertDIP2PX(5);
         mTextView.setPadding(pixels, pixels, pixels, pixels);
         mTextView.setGravity(Gravity.CENTER);
@@ -132,9 +134,12 @@ public class AlphabetListView extends FrameLayout {
     private void initAlphabetLayout(Context context) {
         alphabetLayout = new LinearLayout(context);
         alphabetLayout.setOrientation(LinearLayout.VERTICAL);
-        FrameLayout.LayoutParams alphabetLayoutParams = new FrameLayout.LayoutParams(40,FrameLayout.LayoutParams.FILL_PARENT);
+        FrameLayout.LayoutParams alphabetLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,FrameLayout.LayoutParams.FILL_PARENT);
         alphabetLayoutParams.gravity = Gravity.RIGHT;
+        alphabetLayoutParams.setMargins(0,DensityUtil.dip2px(getContext(), 20), 0, DensityUtil.dip2px(getContext(), 20));
+        alphabetLayout.setPadding(DensityUtil.dip2px(getContext(),5), DensityUtil.dip2px(getContext(),10), DensityUtil.dip2px(getContext(),5), DensityUtil.dip2px(getContext(),10));
         alphabetLayout.setLayoutParams(alphabetLayoutParams);
+        alphabetLayout.setBackgroundResource(alphabetBg);
         final String[] alphabet = new String[]{"#","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
         params.weight = 1;
@@ -158,7 +163,9 @@ public class AlphabetListView extends FrameLayout {
                     case MotionEvent.ACTION_DOWN:
                     	TextView tv=(TextView)alphabetLayout.findViewWithTag(0);
                     	unit=tv.getHeight();
-                    	alphabetLayout.setBackgroundColor(Color.argb(32, 0, 153, 204));
+                    	if(alphabetBg==0){
+                    		alphabetLayout.setBackgroundColor(Color.argb(32, 0, 153, 204));
+                    	}
                         int l = (int)(event.getY()/unit);
                         if(l>=alphabet.length){
                         		l=alphabet.length-1;
@@ -187,7 +194,7 @@ public class AlphabetListView extends FrameLayout {
                         }
                         break;
                     case MotionEvent.ACTION_UP:
-                        alphabetLayout.setBackgroundResource(0);
+                        alphabetLayout.setBackgroundResource(alphabetBg);
                         break;
                 }
                 return true;
@@ -195,7 +202,28 @@ public class AlphabetListView extends FrameLayout {
         });
     }
 
-    public int convertDIP2PX(float dip) {
+    public LinearLayout getAlphabetLayout() {
+		return alphabetLayout;
+	}
+
+    public void setAlphabetLayoutBackground(int resId){
+    	this.alphabetBg=resId;
+    	 alphabetLayout.setBackgroundResource(alphabetBg);
+    }
+    
+    public void setAlphabetTextView(int resColor, int textSize){
+    	int count =alphabetLayout.getChildCount();
+    	for(int i=0;i<count;i++){
+    		View view =alphabetLayout.getChildAt(i);
+    		if(view instanceof TextView){
+    			((TextView) view).setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
+    			((TextView) view).setTextColor(resColor);
+    		}
+    	}
+    	
+    }
+    
+	public int convertDIP2PX(float dip) {
         return (int)(dip*screenDensity + 0.5f*(dip>=0?1:-1));
     }
 }
