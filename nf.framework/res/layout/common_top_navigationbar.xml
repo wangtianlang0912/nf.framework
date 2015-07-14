@@ -28,6 +28,21 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true" >
 
+         <!-- 右侧文字按钮 -->
+         <TextView
+            android:id="@+id/common_base_toptitle_right_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:background="@drawable/common_navigate_btn_selector"
+            android:visibility="gone" 
+            />
         <!-- 右侧图片按钮 -->
 
         <ImageButton
@@ -40,7 +55,6 @@
             android:background="@drawable/common_navigate_btn_selector"
             android:scaleType="centerInside"
             android:visibility="gone" />
-
         <!-- 右侧图片上方文字 -->
 
          <TextView
@@ -55,6 +69,9 @@
             android:textStyle="bold"
             android:background="@drawable/common_navigate_txt_update_bg"
             android:visibility="gone" />
+         
+         
+         
     </RelativeLayout>
 
     <TextView
