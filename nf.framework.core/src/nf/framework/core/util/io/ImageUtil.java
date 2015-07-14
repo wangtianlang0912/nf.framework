@@ -256,7 +256,7 @@ public class ImageUtil {
 	 * @return
 	 */
 	public static Bitmap byteToBitmap(byte[] byteArray) {
-		if (byteArray.length != 0) {
+		if (byteArray!=null&&byteArray.length != 0) {
 			return BitmapFactory
 					.decodeByteArray(byteArray, 0, byteArray.length);
 		} else {
