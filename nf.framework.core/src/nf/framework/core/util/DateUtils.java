@@ -1,6 +1,8 @@
 package nf.framework.core.util;
 
 import android.annotation.SuppressLint;
+import android.text.TextUtils;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -67,8 +69,48 @@ public class DateUtils {
             return 0;
         }
     }
-     
- 
+    /***
+     * 一分钟之内算作接近
+     * @param timeStr1
+     * @param timeStr2
+     * @return
+     */
+    public static  boolean isCloseEnough(String timeStr1,String timeStr2){
+    	
+    	if(TextUtils.isEmpty(timeStr1)||TextUtils.isEmpty(timeStr2)){
+    		return false;
+    	}
+    	long time1=dateToUnixTimestamp(timeStr1);
+    	long time2=dateToUnixTimestamp(timeStr2);
+    	if(Math.abs(time1-time2)<60*1000){
+    		return true;
+    	}
+    	return false;
+    }
+    /***
+     * 一分钟之内算作接近
+     * @return
+     */
+    public static  boolean isCloseEnough(long time1,long time2){
+
+    	return isCloseEnough(time1, time2, 60*1000);
+    	
+    }
+   /**
+    * 相隔时间内接近
+    * @param time1
+    * @param time2
+    * @param timeStamp   相隔时间差
+    * @return
+    */
+    public static  boolean isCloseEnough(long time1,long time2,long timeStamp){
+
+    	if(Math.abs(time1-time2)<timeStamp){
+    		return true;
+    	}
+    	return false;
+    }
+    
     /**
      * 获取系统当前时间
      * @return
@@ -228,6 +270,9 @@ public class DateUtils {
 	 */
 	public static String friendly_time(String sdate)
 	{
+		if(TextUtils.isEmpty(sdate)){
+			return "";
+		}
 		Date time = toDate(sdate);
 		if (time == null)
 		{
