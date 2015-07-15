@@ -77,15 +77,22 @@ public class DateUtils {
      */
     public static  boolean isCloseEnough(String timeStr1,String timeStr2){
     	
+    	return isCloseEnough(timeStr1, timeStr2, 60*1000);
+    }
+    /**
+     * 
+     * @param timeStr1
+     * @param timeStr2
+     * @param timeStamp
+     * @return
+     */
+    public static  boolean isCloseEnough(String timeStr1,String timeStr2,long timeStamp){
     	if(TextUtils.isEmpty(timeStr1)||TextUtils.isEmpty(timeStr2)){
     		return false;
-    	}
+    	}	
     	long time1=dateToUnixTimestamp(timeStr1);
     	long time2=dateToUnixTimestamp(timeStr2);
-    	if(Math.abs(time1-time2)<60*1000){
-    		return true;
-    	}
-    	return false;
+    	return isCloseEnough(time1, time2,timeStamp);
     }
     /***
      * 一分钟之内算作接近
