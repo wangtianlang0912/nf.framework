@@ -148,6 +148,10 @@ public abstract class PopupWindows {
 //		setContentView(inflator.inflate(layoutResID, null));
 //	}
 
+	public boolean isShowing(){
+		
+		return mWindow.isShowing();
+	}
 
 	public void show(View anchor) {
 		
