@@ -84,9 +84,18 @@ public abstract class AbsListAdapter<T,ViewHolder> extends BaseAdapter {
 		
 	}
 	
-	protected  void setImageLoader(ImageView imageView,String url){
+	protected  void setImageLoader(final ImageView imageView,final String url){
 		
-		setImageLoader(imageView, url,options);
+		setImageLoader(imageView, url,options,new SimpleImageLoadingListener(){
+			@Override
+			public void onLoadingComplete(String imageUri, View view,
+					Bitmap loadedImage) {
+				super.onLoadingComplete(imageUri, view, loadedImage);
+				if(imageUri.equals(url)){
+					imageView.setImageBitmap(loadedImage);
+				} 
+			}
+		});
 	}
 	/**
 	 * 圆形图片
