@@ -198,11 +198,22 @@ public class DateUtils {
     public static String unixTimestampToDate(long timestamp) {
     	return unixTimestampToDate(timestamp,DATE_FULL_STR);
     }
-    
-	@SuppressLint("SimpleDateFormat")
+    /**
+     * //设置时区，慎用
+     * @param timestamp
+     * @param format
+     * @return
+     */
+	@SuppressLint("SimpleDateFormat") 
+	@Deprecated
 	public static String unixTimestampToDate(long timestamp,String format) {
         SimpleDateFormat sd = new SimpleDateFormat(format);
         sd.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+        return sd.format(new Date(timestamp));
+    }
+	
+	public static String unixTimestampFormat(long timestamp,String format) {
+        SimpleDateFormat sd = new SimpleDateFormat(format);
         return sd.format(new Date(timestamp));
     }
 	
@@ -294,10 +305,15 @@ public class DateUtils {
 		if (curDate.equals(paramDate))
 		{
 			int hour = (int) ((cal.getTimeInMillis() - time.getTime()) / 3600000);
-			if (hour == 0)
-				ftime = Math.max(
-						(cal.getTimeInMillis() - time.getTime()) / 60000, 1)
-						+ "分钟前";
+			if (hour == 0){
+				long timeVal  = Math.max(
+						(cal.getTimeInMillis() - time.getTime()) / 60000, 1);
+				if(timeVal==1){
+					ftime ="刚刚";
+				}else if(timeVal>1){
+					ftime = timeVal + "分钟前";
+				}
+			}
 			else
 				ftime = hour + "小时前";
 			return ftime;

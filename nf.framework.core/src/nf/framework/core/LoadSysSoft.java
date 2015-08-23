@@ -12,10 +12,13 @@ package nf.framework.core;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import nf.framework.core.exception.NFRuntimeException;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningTaskInfo;
 import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -276,7 +279,23 @@ public class LoadSysSoft {
 			Toast.makeText(mcontext, "请确定安装了此应用", Toast.LENGTH_SHORT).show();
 		}
 	}
-
+	
+	/**
+	 * 是否应用在前台运行
+	 */
+	public static boolean isRunningApp(Context context, String packageName) {
+		boolean isAppRunning = false;
+		ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+		List<RunningTaskInfo> list = am.getRunningTasks(100);
+		for (RunningTaskInfo info : list) {
+			if (info.topActivity.getPackageName().equals(packageName) && info.baseActivity.getPackageName().equals(packageName)) {
+				isAppRunning = true;
+				// find it, break
+				break;
+			}
+		}
+		return isAppRunning;
+	}
 	/**
 	 * 调用相册获取照片
 	 * 

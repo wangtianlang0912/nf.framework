@@ -127,7 +127,7 @@ public static final String CHARSET = "UTF-8";
 	        conn.setUseCaches(false);
 	        conn.setRequestProperty("Connection", "Keep-Alive");
 	        conn.setRequestProperty("Charset", CHARSET);
-	        conn.setRequestProperty("Content-Type", MULTIPART_FORM_DATA + "; boundary=" + BOUNDARY);
+//	        conn.setRequestProperty("Content-Type", MULTIPART_FORM_DATA + "; boundary=" + BOUNDARY);
 
 	        try {
 				conn.connect();
@@ -474,13 +474,14 @@ public static final String CHARSET = "UTF-8";
 	        conn.setRequestMethod("POST");
 	        conn.setDoInput(true);
 	        conn.setDoOutput(true);
+	        conn.setInstanceFollowRedirects(true);  
 	        conn.setUseCaches(false);
 	        conn.setConnectTimeout(getConnectTimeOut());
 			conn.setReadTimeout(getConnectTimeOut());
 	        conn.setRequestProperty("Connection", "Keep-Alive");
 	        conn.setRequestProperty("Charset", CHARSET);
 	        conn.setRequestProperty("Content-Type", MULTIPART_FORM_DATA + "; boundary=" + BOUNDARY);  
-			conn.setRequestProperty("Content-Length",""+contentLength);
+//			conn.setRequestProperty("Content-Length",""+contentLength);
 
 			try {
 				conn.connect();

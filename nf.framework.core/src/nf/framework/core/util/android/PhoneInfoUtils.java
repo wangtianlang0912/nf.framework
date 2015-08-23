@@ -10,9 +10,14 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import nf.framework.core.base64.Md5Encrypt;
+import nf.framework.core.exception.LogUtil;
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.ContentResolver;
@@ -31,6 +36,7 @@ import android.os.Parcelable;
 import android.telephony.TelephonyManager;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.WindowManager;
 
 /**
  * 手机信息获取
@@ -590,5 +596,41 @@ public class PhoneInfoUtils {
         } 
         return false; 
     }
-    
+    /**
+     * 程序是否在前台运行
+     * 
+     * @return
+     */
+    public static boolean isAppOnForeground(Context context) {
+        try {
+            ActivityManager activityManager = (ActivityManager) context.getApplicationContext().getSystemService(
+                    Context.ACTIVITY_SERVICE);
+            String packageName = context.getPackageName();
+            List<RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
+            if (appProcesses == null) {
+                return false;
+            }
+            for (RunningAppProcessInfo appProcess : appProcesses) {
+                // The name of the process that this object is associated with.
+                if (appProcess.processName.equals(packageName)
+                        && appProcess.importance == RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LogUtil.e("", "isAppOnForeground exception!"+ e);
+        }
+        return false;
+    }
+
+    /**
+     * 屏幕宽度
+     * @param activity
+     * @return
+     */
+    public static int getScreenWidth(Activity activity){
+    	WindowManager wm = (WindowManager)activity.getSystemService(Context.WINDOW_SERVICE);
+		return wm.getDefaultDisplay().getWidth();//屏幕宽度
+    }
 }

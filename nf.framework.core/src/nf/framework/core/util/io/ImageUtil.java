@@ -586,6 +586,11 @@ public class ImageUtil {
 			while ( baos.toByteArray().length / 1024>100) {	//循环判断如果压缩后图片是否大于100kb,大于继续压缩		
 				baos.reset();//重置baos即清空baos
 				options -= 10;//每次都减少10
+				if(options<0){
+					options=10;
+					image.compress(Bitmap.CompressFormat.JPEG, options, baos);
+					break;
+				}
 				image.compress(Bitmap.CompressFormat.JPEG, options, baos);//这里压缩options%，把压缩后的数据存放到baos中
 			}
 			Log.i("ImageUtil","质量压缩方法比例:::"+options+"%");
