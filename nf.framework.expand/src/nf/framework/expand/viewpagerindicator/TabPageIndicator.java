@@ -18,9 +18,10 @@ package nf.framework.expand.viewpagerindicator;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+import nf.framework.core.util.android.DensityUtil;
 import nf.framework.expand.R;
 import android.content.Context;
-import android.graphics.Color;
+import android.content.res.ColorStateList;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -30,7 +31,10 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /**
@@ -82,8 +86,8 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
     private int mTabViewBackground = R.drawable.expand_tab_indicator_bg;
     
     private int mTabViewPaddingTop =10;
-    private int mTabViewPaddingLeft =10;
-    private int mTabViewPaddingRight =10;
+    private int mTabViewPaddingLeft =0;
+    private int mTabViewPaddingRight =0;
     private int mTabViewPaddingBottom =10;
     
     private int mTabViewTextSize =14;
@@ -176,22 +180,7 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
         tabView.setGravity(mTabViewGravity);
         tabView.setBackgroundResource(mTabViewBackground);
         tabView.setPadding(mTabViewPaddingLeft,mTabViewPaddingTop, mTabViewPaddingRight,mTabViewPaddingBottom);
-        if (iconResId != 0) {
-        	switch (this.mImgPosition) {
-			case Left:
-				tabView.setCompoundDrawablesWithIntrinsicBounds(iconResId, 0, 0, 0);
-				break;
-			case Top:
-				tabView.setCompoundDrawablesWithIntrinsicBounds(0,iconResId, 0, 0);
-				break;
-			case Right:
-				tabView.setCompoundDrawablesWithIntrinsicBounds(0,0,iconResId, 0);
-				break;
-			case Bottom:
-				tabView.setCompoundDrawablesWithIntrinsicBounds(0,0, 0,iconResId);
-				break;
-			}
-        }
+        tabView.setImageResource(iconResId);
 
         mTabLayout.addView(tabView, new LinearLayout.LayoutParams(0, MATCH_PARENT, 1));
     }
@@ -234,7 +223,6 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
     		}
     	}
     }
-    
     public void setTabViewTextSize(int textSize){
     	
     	this.mTabViewTextSize =textSize;
@@ -256,6 +244,7 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
     		}
     	}
     }
+   
     @Override
     public void onPageScrollStateChanged(int arg0) {
         if (mListener != null) {
@@ -351,28 +340,70 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
         mListener = listener;
     }
 
-    private class TabView extends TextView {
+    private class TabView extends RelativeLayout {
         private int mIndex;
-
-        
+        private TextView textView;
+        private ImageView imageView;
         public TabView(Context context) {
-			super(context);
-			// TODO Auto-generated constructor stub
+			this(context,null);
 		}
+	
 		public TabView(Context context,AttributeSet attrs) {
             super(context,attrs);
-        }
+            initView();
+		}
+		public void initView() {
+			LinearLayout linearLayout =new LinearLayout(getContext());
+			RelativeLayout.LayoutParams liParam =new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.WRAP_CONTENT);
+			liParam.addRule(RelativeLayout.CENTER_IN_PARENT);
+			linearLayout.setGravity(Gravity.CENTER);
+			
+			imageView =new ImageView(getContext());
+			imageView.setId(1);
+			imageView.setAdjustViewBounds(true);
+			imageView.setScaleType(ScaleType.CENTER_INSIDE);
+			int size = DensityUtil.dip2px(getContext(),30);
+			LinearLayout.LayoutParams imageParam =new LinearLayout.LayoutParams(size,size);
+			imageView.setLayoutParams(imageParam);
+			linearLayout.addView(imageView);
+			imageView.setVisibility(View.GONE);
+			
+			textView =new TextView(getContext());
+			LinearLayout.LayoutParams textParam =new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+			textView.setLayoutParams(textParam);
+			linearLayout.addView(textView);
+			
+			addView(linearLayout,liParam);
+		}
+		public void setImageResource(int iconResId){
+			if(iconResId==0){
+				imageView.setVisibility(View.GONE);
+				return;
+			}
+			imageView.setVisibility(View.VISIBLE);
+			imageView.setImageResource(iconResId);
+		}
+		public void setTextSize(int complexUnitSp, int mTabViewTextSize) {
+			textView.setTextSize(complexUnitSp, mTabViewTextSize);
+		}
+		public void setTextColor(ColorStateList colorStateList) {
+			textView.setTextColor(colorStateList);
+		}
+		public void setSingleLine(boolean singleLine) {
+			textView.setSingleLine(singleLine);
+		}
+		public void setText(CharSequence text) {
+			textView.setText(text);
+		}
         @Override
         public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
             // Re-measure if we went beyond our maximum size.
             if (mMaxTabWidth > 0 && getMeasuredWidth() > mMaxTabWidth) {
                 super.onMeasure(MeasureSpec.makeMeasureSpec(mMaxTabWidth, MeasureSpec.EXACTLY),
                         heightMeasureSpec);
             }
         }
-
         public int getIndex() {
             return mIndex;
         }
@@ -382,4 +413,6 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
     	
     	Left,Top,Right,Bottom
     }
+
+	
 }
