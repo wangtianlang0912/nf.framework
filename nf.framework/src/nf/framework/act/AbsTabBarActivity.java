@@ -126,7 +126,7 @@ public abstract class AbsTabBarActivity extends AbsBaseActivity{
 	}
 
 	public Fragment getCurrentTabFragment() {
-		
+		if(mSectionsPagerAdapter.getCount()==0){return null;}
 		return mSectionsPagerAdapter.getItem(mPager.getCurrentItem());
 		
 	}
