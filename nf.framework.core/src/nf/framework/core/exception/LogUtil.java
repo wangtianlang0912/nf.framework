@@ -165,19 +165,18 @@ public class LogUtil {
 	 * 
 	 * @param urlStr
 	 */
-	private void SaveExceptionUrlToFile(String urlStr) {
-		FileUtils fileHelper = FileUtils.getInstance();
+	private void saveExceptionUrlToFile(String urlStr) {
 		try {
 			File file = new File(Environment.getExternalStorageDirectory()
 					.getPath() + "/test.txt");
 			if (!file.exists()) {
 				file.createNewFile();
 			}
-			String fileStr = fileHelper.read(file);
+			String fileStr = FileUtils.read(file);
 			StringBuffer sb2 = new StringBuffer(fileStr);
 			sb2.append("\r\n");
 			sb2.append(urlStr);
-			fileHelper.write(file, sb2.toString());
+			FileUtils.write(file, sb2.toString());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

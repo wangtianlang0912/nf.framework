@@ -47,18 +47,6 @@ import android.graphics.BitmapFactory;
 
 public class FileUtils {
 
-
-	public static FileUtils fileHelper = null;
-
-	public static FileUtils getInstance() {
-
-		if (fileHelper == null) {
-
-			fileHelper = new FileUtils();
-		}
-		return fileHelper;
-	}
-
 	/**
 	 * 在SD卡上创建文件
 	 * 
@@ -66,7 +54,7 @@ public class FileUtils {
 	 *            要创建的文件名
 	 * @return 创建得到的文件
 	 */
-	public File createSDFile(String fileName) throws IOException {
+	public static File createSDFile(String fileName) throws IOException {
 		File file = new File(new SdcardUtil().getSDCardPath()+File.separator+ fileName);
 		file.createNewFile();
 		return file;
@@ -79,7 +67,7 @@ public class FileUtils {
 	 *            要创建的文件名
 	 * @return 创建得到的文件
 	 */
-	public File createAbsoluteDir(String dirName) {
+	public static File createAbsoluteDir(String dirName) {
 		File dir = new File(dirName);
 		dir.mkdirs();
 		return dir;
@@ -92,7 +80,7 @@ public class FileUtils {
 	 *            要创建的文件名
 	 * @return 创建得到的文件
 	 */
-	public File createFile(String filePath, String fileName) throws IOException {
+	public static File createFile(String filePath, String fileName) throws IOException {
 		String fileStr = null;
 		if (!filePath.endsWith(File.separator)) {
 			fileStr = filePath + File.separator + fileName;
@@ -111,7 +99,7 @@ public class FileUtils {
 	 *            要创建的目录名
 	 * @return 创建得到的目录
 	 */
-	public File createAbsoluteSDDir(String absoluteDirName) {
+	public static File createAbsoluteSDDir(String absoluteDirName) {
 		File dir = new File(absoluteDirName);
 		dir.mkdir();
 		return dir;
@@ -123,7 +111,7 @@ public class FileUtils {
 	 * @param picUrl
 	 * @return
 	 */
-	public String getPicSty(String picUrl) {
+	public static String getPicSty(String picUrl) {
 
 		return picUrl.substring(picUrl.lastIndexOf(".") + 1, picUrl.length());
 
@@ -136,7 +124,7 @@ public class FileUtils {
 	 *            绝对路径
 	 * @return boolean, true表示存在，false表示不存在
 	 */
-	public boolean isAbsolutePackageExist(String absolutePackagePath) {
+	public static boolean isAbsolutePackageExist(String absolutePackagePath) {
 		File file = new File(absolutePackagePath);
 		return file.exists();
 	}
@@ -146,7 +134,7 @@ public class FileUtils {
 	 * @return
 	 * @throws FileNotFoundException
 	 */
-	public Bitmap buildBitmap(String absolutepicPath, float density) {
+	public static Bitmap buildBitmap(String absolutepicPath, float density) {
 		if (absolutepicPath == null) {
 			return null;
 		}
@@ -280,7 +268,7 @@ public class FileUtils {
 	 *            要删除的目录或文件
 	 * @return 删除成功返回 true，否则返回 false。
 	 */
-	public boolean DeleteFolder(String sPath) {
+	public static boolean deleteFolder(String sPath) {
 		boolean flag = false;
 		File file = new File(sPath);
 		// 判断目录或文件是否存在
@@ -303,7 +291,7 @@ public class FileUtils {
 	 *            被删除目录的文件路径
 	 * @return 目录删除成功返回true，否则返回false
 	 */
-	public boolean deleteDirectory(String sPath) {
+	public static boolean deleteDirectory(String sPath) {
 		// 如果sPath不以文件分隔符结尾，自动添加文件分隔符
 		if (!sPath.endsWith(File.separator)) {
 			sPath = sPath + File.separator;
@@ -346,7 +334,7 @@ public class FileUtils {
 	 *            被删除文件的文件名
 	 * @return 单个文件删除成功返回true，否则返回false
 	 */
-	public boolean deleteFile(String sPath) {
+	public static boolean deleteFile(String sPath) {
 		boolean flag = false;
 		File file = new File(sPath);
 		// 路径为文件且不为空则进行删除
@@ -365,13 +353,12 @@ public class FileUtils {
 	 * @param fileName
 	 * @return
 	 */
-	public String getAssetFileContent(Context mcontext, String fileName) {
+	public static String getAssetFileContent(Context mcontext, String fileName) {
 		InputStream inputStream;
 		try {
 			inputStream = mcontext.getResources().getAssets().open(fileName);
-			return InputStream2String(inputStream);
+			return inputStream2String(inputStream);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
@@ -384,7 +371,7 @@ public class FileUtils {
 	 * @param inputStream
 	 * @return
 	 */
-	public String InputStream2String(InputStream inputStream) {
+	public static String inputStream2String(InputStream inputStream) {
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		byte buf[] = new byte[1024];
 		int len;
@@ -401,7 +388,7 @@ public class FileUtils {
 
 	}
 
-	public void XmlByDomj4(Context mcontext, String fileName) {
+	public static void xmlByDomj4(Context mcontext, String fileName) {
 		try {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
@@ -427,7 +414,6 @@ public class FileUtils {
 				}
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -438,14 +424,13 @@ public class FileUtils {
 	 * @param mcontext
 	 * @param file
 	 */
-	public Document XmlByDomj4(File file) {
+	public static Document XmlByDomj4(File file) {
 		org.w3c.dom.Document document = null;
 		try {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			document = db.parse(file);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return document;
@@ -460,7 +445,7 @@ public class FileUtils {
 	 * @throws Exception
 	 */
 
-	public String read(InputStream instr, String encodeStr) throws Exception {
+	public static String read(InputStream instr, String encodeStr) throws Exception {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		byte[] buffer = new byte[1024];
 		int len = -1;
@@ -482,7 +467,7 @@ public class FileUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	public byte[] readTobyte(String filePath) throws Exception {
+	public static byte[] readTobyte(String filePath) throws Exception {
 		File file = new File(filePath);
 		FileInputStream input = new FileInputStream(file);
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -506,7 +491,7 @@ public class FileUtils {
 	 * @throws Exception
 	 */
 
-	public String read(File file) throws Exception {
+	public static String read(File file) throws Exception {
 		FileInputStream input = new FileInputStream(file);
 		return read(input, "utf-8");
 	}
@@ -519,7 +504,7 @@ public class FileUtils {
 	 * @throws Exception
 	 */
 
-	public void write(File file, String writeData) throws Exception {
+	public static void write(File file, String writeData) throws Exception {
 		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 		writer.write(writeData);
 		writer.close();
@@ -533,13 +518,13 @@ public class FileUtils {
 	 * @param fileSavePath
 	 *            转储的文件路径文件名称 final String tempFileName=path+"tempInit.zip";
 	 */
-	public boolean InitFileToSDCard(Context mcontext, int rawId,
+	public static boolean initFileToSDCard(Context mcontext, int rawId,
 			String fileSavePath) {
 
 		InputStream inputStream = null;
 		try {
 			inputStream = mcontext.getResources().openRawResource(rawId); // 这里就是Raw文件引用位置
-			SaveInputStreamToFile(inputStream, fileSavePath);
+			saveInputStreamToFile(inputStream, fileSavePath);
 		} catch (Exception e) {
 			return false;
 		} finally {
@@ -547,7 +532,6 @@ public class FileUtils {
 				inputStream.close();
 				inputStream = null;
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				return false;
 			}
 		}
@@ -562,7 +546,7 @@ public class FileUtils {
 	 * @param fileSavePath
 	 *            转储的文件路径文件名称
 	 */
-	public boolean InitAssetsFileToSDCard(Context mcontext,
+	public static boolean initAssetsFileToSDCard(Context mcontext,
 			String assetsFileName, String fileSavePath) {
 		if (assetsFileName == null) {
 			return false;
@@ -571,7 +555,7 @@ public class FileUtils {
 		try {
 			inputStream = mcontext.getResources().getAssets()
 					.open(assetsFileName);
-			SaveInputStreamToFile(inputStream, fileSavePath);
+			saveInputStreamToFile(inputStream, fileSavePath);
 		} catch (Exception e) {
 			return false;
 		} finally {
@@ -579,7 +563,6 @@ public class FileUtils {
 				inputStream.close();
 				inputStream = null;
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				return false;
 			}
 		}
@@ -593,7 +576,7 @@ public class FileUtils {
 	 * @param fileSavePath
 	 * @throws Exception
 	 */
-	public void SaveInputStreamToFile(InputStream inputStream,
+	public static void saveInputStreamToFile(InputStream inputStream,
 			String fileSavePath) throws Exception {
 
 		int len = 4096;//
@@ -767,7 +750,7 @@ public class FileUtils {
 	 * @param strPath
 	 * @return
 	 */
-	public List<String> refreshFileList(String strPath) {
+	public static List<String> refreshFileList(String strPath) {
 		List<String> filelist = new ArrayList<String>();
 		File dir = new File(strPath);
 		File[] files = dir.listFiles();
@@ -790,7 +773,7 @@ public class FileUtils {
 	 * @param strPath
 	 * @return
 	 */
-	public List<String> queryFileNameList(String strPath) {
+	public static List<String> queryFileNameList(String strPath) {
 		List<String> filelist = new ArrayList<String>();
 		File dir = new File(strPath);
 		File[] files = dir.listFiles();
@@ -819,7 +802,7 @@ public class FileUtils {
 	 *            每次读取的文件单元
 	 * @return
 	 */
-	public List<String> loadSql(String sqlFile, int filePart, int unit) {
+	public static List<String> loadSql(String sqlFile, int filePart, int unit) {
 		List<String> sqlList = new ArrayList<String>();
 		final int BUFFER_SIZE = 0x300000;// 缓冲区大小为3M
 		try {
@@ -858,7 +841,6 @@ public class FileUtils {
 
 			LogUtil.i("FileHelper","读取文件文件一半内容花费：" + (end - start) + "毫秒");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return sqlList;
@@ -1309,7 +1291,7 @@ public class FileUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	public long getFileSize(File f) throws Exception// 取得文件夹大小
+	public static long getFileSize(File f) throws Exception// 取得文件夹大小
 	{
 		long size = 0;
 		File flist[] = f.listFiles();
@@ -1332,7 +1314,7 @@ public class FileUtils {
 	 * @param fileS
 	 * @return
 	 */
-	public String FormetFileSize(long fileS) {// 转换文件大小
+	public static String formatFileSize(long fileS) {// 转换文件大小
 		DecimalFormat df = new DecimalFormat("#.00");
 		String fileSizeString = "";
 		if (fileS < 1024) {
@@ -1353,7 +1335,7 @@ public class FileUtils {
 	 * @param f
 	 * @return
 	 */
-	public long getlist(File f) {// 递归求取目录文件个数
+	public static long getlist(File f) {// 递归求取目录文件个数
 		long size = 0;
 		File flist[] = f.listFiles();
 		size = flist.length;
@@ -1377,13 +1359,13 @@ public class FileUtils {
 	 * @param to
 	 *            改名的后缀，也包括那个(.点)
 	 */
-	public void BatchReNameFileSuffix(String path, String from, String to) {
+	public static void batchReNameFileSuffix(String path, String from, String to) {
 		File f = new File(path);
 		File[] fs = f.listFiles();
 		for (int i = 0; i < fs.length; ++i) {
 			File f2 = fs[i];
 			if (f2.isDirectory()) {
-				BatchReNameFileSuffix(f2.getPath(), from, to);
+				batchReNameFileSuffix(f2.getPath(), from, to);
 			} else {
 				String name = f2.getName();
 				if (name.endsWith(from)) {
@@ -1403,14 +1385,14 @@ public class FileUtils {
 	 * @param appendSuffix
 	 *            追加的后缀，也包括那个(.点)
 	 */
-	public void BatchAppendFileSuffix(String path, String from,
+	public static void batchAppendFileSuffix(String path, String from,
 			String appendSuffix) {
 		File f = new File(path);
 		File[] fs = f.listFiles();
 		for (int i = 0; i < fs.length; ++i) {
 			File f2 = fs[i];
 			if (f2.isDirectory()) {
-				BatchReNameFileSuffix(f2.getPath(), from, appendSuffix);
+				batchReNameFileSuffix(f2.getPath(), from, appendSuffix);
 			} else {
 				String name = f2.getName();
 				if (name.endsWith(from)) {
@@ -1427,13 +1409,13 @@ public class FileUtils {
 	 * @param path
 	 * @param appendSuffix
 	 */
-	public void BatchAppendImageFileSuffix(String path, String appendSuffix) {
+	public static void batchAppendImageFileSuffix(String path, String appendSuffix) {
 		File f = new File(path);
 		File[] fs = f.listFiles();
 		for (int i = 0; i < fs.length; ++i) {
 			File f2 = fs[i];
 			if (f2.isDirectory()) {
-				BatchAppendImageFileSuffix(f2.getPath(), appendSuffix);
+				batchAppendImageFileSuffix(f2.getPath(), appendSuffix);
 			} else {
 				String name = f2.getName();
 				Pattern p = Pattern.compile("[\\s\\S]+.(gif|jpg|png|jpeg)$",

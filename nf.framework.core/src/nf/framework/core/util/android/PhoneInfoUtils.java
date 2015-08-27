@@ -45,24 +45,8 @@ import android.view.WindowManager;
  */
 public class PhoneInfoUtils {
 
-	public static PhoneInfoUtils pdd = null;
-	public Context context;
-
-	public static PhoneInfoUtils getInstance(Context mcontext) {
-		if (pdd == null) {
-
-			pdd = new PhoneInfoUtils(mcontext);
-		}
-		return pdd;
-	}
-
-	public PhoneInfoUtils(Context mcontext) {
-		context = mcontext;
-	}
-
 	/**
 	 * 通过包名获取应用程序的名称。
-	 * 
 	 * @param context
 	 *            Context对象。
 	 * @param packageName
@@ -89,14 +73,13 @@ public class PhoneInfoUtils {
 	 * @param context
 	 * @return
 	 */
-	public String getAppVersionNum() {
+	public static String getAppVersionNum(Context context) {
 
 		String currentversion = null;
 		try {
 			currentversion = context.getPackageManager().getPackageInfo(
 					context.getPackageName(), 0).versionName;
 		} catch (NameNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}// 获取本地版本号
 
@@ -109,14 +92,13 @@ public class PhoneInfoUtils {
 	 * @param context
 	 * @return
 	 */
-	public int getVersionCode() {
+	public static int getVersionCode(Context context) {
 
 		int currentversionCode = 1;
 		try {
 			currentversionCode = context.getPackageManager().getPackageInfo(
 					context.getPackageName(), 0).versionCode;
 		} catch (NameNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}// 获取本地版本号
 
@@ -128,7 +110,7 @@ public class PhoneInfoUtils {
 	 * 
 	 * @return
 	 */
-	public String phoneNum() {
+	public static String phoneNum(Context context) {
 		// 获取手机号、手机串号信息
 		TelephonyManager tm = (TelephonyManager) context
 				.getSystemService(Context.TELEPHONY_SERVICE);
@@ -145,7 +127,7 @@ public class PhoneInfoUtils {
 	 * 
 	 * @return
 	 */
-	public String getImsi() {
+	public static String getImsi(Context context) {
 
 		// 获取手机号、手机串号信息
 		TelephonyManager tm = (TelephonyManager) context
@@ -162,7 +144,7 @@ public class PhoneInfoUtils {
 	 *            ：2.2.2
 	 * @return
 	 */
-	public String getOSVersionNum() {
+	public static  String getOSVersionNum() {
 
 		String currentversion = android.os.Build.VERSION.RELEASE;
 
@@ -174,7 +156,7 @@ public class PhoneInfoUtils {
 	 * 
 	 * @return
 	 */
-	public int getAndroidSDKVersion() {
+	public static int getAndroidSDKVersion() {
 		int version = 1;
 		try {
 			version = android.os.Build.VERSION.SDK_INT;
@@ -187,7 +169,7 @@ public class PhoneInfoUtils {
 	/**
 	 * 手机系统的相关信息
 	 */
-	public void PhoneInfo() {
+	public static void PhoneInfo() {
 
 		String phoneInfo = "Product: " + android.os.Build.PRODUCT;
 		phoneInfo += ", CPU_ABI: " + android.os.Build.CPU_ABI;
@@ -213,9 +195,9 @@ public class PhoneInfoUtils {
 	 //取得用户及设备标识
     //标识设备 android=md5(imei+mac+manufacturer+model)；ios=openUDID（Unique Device IDentifier）】
     /** 由于在2013.12.19日新闻将行为日志的格式升级为3.0.1在2013.12.25日对行为日志设备id进行了调整，如果取md5之后是16位的不变，不低于32位的，则取中间的16位，对于目前的用户量完全满足而且可以节约存储*/
-    public String getDeviceId() {
+    public static String getDeviceId(Context context) {
         String str = String.format("%s_%s_%s_%s", 
-    		getIMEI(), getMacAddress(), android.os.Build.MANUFACTURER, 
+    		getIMEI(context), getMacAddress(context), android.os.Build.MANUFACTURER, 
     		android.os.Build.MODEL);
         
         /**
@@ -238,7 +220,7 @@ public class PhoneInfoUtils {
 	 * 
 	 * @return
 	 */
-	public String getIMEI() {
+	public static String getIMEI(Context context) {
 		String deviceId = null;
 		try {
 			// 获取手机号、手机串号信息 当获取不到设备号时，系统会提供一个自动的deviceId
@@ -252,7 +234,7 @@ public class PhoneInfoUtils {
 		return deviceId;
 	}
 	
-	public String getMacAddress(){
+	public static String getMacAddress(Context context){
         WifiManager wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);       
         WifiInfo info = wifi.getConnectionInfo();
         if(info != null){
@@ -377,7 +359,7 @@ public class PhoneInfoUtils {
 	 * @param context
 	 * @return
 	 */
-	public boolean hasShortCut(String appName) {
+	public static boolean hasShortCut(Context context,String appName) {
 		String url = "";
 		if (getAndroidSDKVersion() < 8) {
 			url = "content://com.android.launcher.settings/favorites?notify=true";
@@ -429,17 +411,16 @@ public class PhoneInfoUtils {
 	}
 
 	/* 提示用户是否创建快捷方式Dialog */
-	public void showDialog(Context mcontext, final int icon,
+	public static void showDialog(final Context context, final int icon,
 			final String appName, final Class<?> cls) {
 		// 定义一个AlertDialog.builder方法,用于退出程序提示
-		AlertDialog.Builder builder = new AlertDialog.Builder(mcontext);
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setMessage("是否创建桌面快捷方式");
 		// 设置标题为提示
 		builder.setTitle("提示");
 		// 设置一个取消按钮，设置监听，监听事件为如果点击了，就将这个Dialog关闭
 		builder.setNegativeButton("取消",
 				new android.content.DialogInterface.OnClickListener() {
-
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
 					}
@@ -473,7 +454,7 @@ public class PhoneInfoUtils {
 	 * @param appName
 	 * @param cls
 	 */
-	public void addShortcut(int icon, String appName, Class<?> cls) {
+	public void addShortcut(Context context,int icon, String appName, Class<?> cls) {
 
 		Intent intent = new Intent();
 		intent.setClass(context, cls);
@@ -518,7 +499,7 @@ public class PhoneInfoUtils {
 	 * @param apkName
 	 * @return
 	 */
-	public boolean isInstall(String apkName) {
+	public static boolean isInstall(Context context,String apkName) {
 
 		PackageInfo packageInfo;
 		boolean isInstall = false;
@@ -584,7 +565,7 @@ public class PhoneInfoUtils {
      * @param context
      * @return true 表示开启
      */ 
-    public boolean isOpenGPS() { 
+    public static boolean isOpenGPS(Context context) { 
         LocationManager locationManager  
                                  = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE); 
         // 通过GPS卫星定位，定位级别可以精确到街（通过24颗卫星定位，在室外和空旷的地方定位准确、速度快） 

@@ -19,7 +19,7 @@ public abstract class AbstractCacheFileMaster {
 	protected abstract List<String> queryAllCacheFileNameList();
 	
 	/**
-	 * ���浽ϵͳ�ļ��� /data/data/...
+	 * /data/data/...
 	 * @param context
 	 * @param jsonData
 	 * @param fileFolderName
@@ -32,9 +32,8 @@ public abstract class AbstractCacheFileMaster {
 			return;
 		}
 		String fileFolderPath=getSysSaveFilePath(context, fileFolderName);
-		FileUtils fileUtils=FileUtils.getInstance();
-		if(!fileUtils.isAbsolutePackageExist(fileFolderPath)){
-			fileUtils.createAbsoluteDir(fileFolderPath);
+		if(!FileUtils.isAbsolutePackageExist(fileFolderPath)){
+			FileUtils.createAbsoluteDir(fileFolderPath);
 		}
 		String CacheFilePath=fileFolderPath+File.separator+fileName;
 		saveDataToFile(CacheFilePath, jsonData);
@@ -53,11 +52,9 @@ public abstract class AbstractCacheFileMaster {
 		if(!CacheFile.exists()){
 			CacheFile.createNewFile();
 		}
-		FileUtils fileUtils=FileUtils.getInstance();
-		fileUtils.write(CacheFile, jsonData);
+		FileUtils.write(CacheFile, jsonData);
 	}
 	/***
-	 * ��ȡ�����ļ�����
 	 * @param context
 	 * @param fileName
 	 * @param fileFolderName
@@ -75,13 +72,12 @@ public abstract class AbstractCacheFileMaster {
 			String CacheFilePath=fileFolderPath+File.separator+fileName;
 			File CacheFile=new File(CacheFilePath);
 			if(CacheFile.exists()){
-				return FileUtils.getInstance().read(CacheFile);
+				return FileUtils.read(CacheFile);
 			}
 		}
 		return null;
 	}
 	/***
-	 * ɾ��ָ���ļ�
 	 * @param context
 	 * @param fileName
 	 * @param fileFolderName
@@ -98,15 +94,14 @@ public abstract class AbstractCacheFileMaster {
 			String CacheFilePath=fileFolderPath+File.separator+fileName;
 			File CacheFile=new File(CacheFilePath);
 			if(CacheFile.exists()){
-				return FileUtils.getInstance().deleteFile(CacheFilePath);
+				return FileUtils.deleteFile(CacheFilePath);
 			}
 		}
 		return false;
 	}
 	/***
-	 * ������еı����ļ�
 	 * @param context
-	 * @param isSdCard  �ж��Ƿ�sd���в���
+	 * @param isSdCard 
 	 * @param fileFolderName
 	 * @return
 	 */
@@ -114,12 +109,11 @@ public abstract class AbstractCacheFileMaster {
 		
 		String	fileFolderPath=getSysSaveFilePath(context, fileFolderName);
 		if(new File(fileFolderPath).exists()){
-			FileUtils.getInstance().deleteDirectory(fileFolderPath);
+			FileUtils.deleteDirectory(fileFolderPath);
 		}
 		return true;
 	}
 	/***
-	 * ����ָ���ļ����е�ȫ���ļ����
 	 * @param context
 	 * @param fileFolderName
 	 * @param isSdCard
@@ -129,7 +123,7 @@ public abstract class AbstractCacheFileMaster {
 		
 		String	fileFolderPath=getSysSaveFilePath(context, fileFolderName);
 		if(new File(fileFolderPath).exists()){
-			return 	FileUtils.getInstance().queryFileNameList(fileFolderPath);
+			return 	FileUtils.queryFileNameList(fileFolderPath);
 		}
 		return null;
 	}

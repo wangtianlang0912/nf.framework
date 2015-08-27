@@ -168,7 +168,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
 		// TODO 使用HTTP Post 发送错误报告到服务器
 		// 这里不再详述,开发者可以根据OPhoneSDN上的其他网络操作
 		// 教程来提交错误报告
-		String message = FileUtils.getInstance().read(file);
+		String message = FileUtils.read(file);
 		if (!TextUtils.isEmpty(message)) {
 			LogUtil.d(mContext, message);
 		

@@ -1,7 +1,5 @@
 /**
  * PatternUtil.java
- * com.Apricotforest
- * 工程：medicalJournals_for_android
  * 功能：正则表达式处理 
  * author      date          time      
  * ─────────────────────────────────────────────
@@ -17,24 +15,15 @@ import java.util.regex.Pattern;
 import android.text.TextUtils;
 
 public class PatternUtil {
-	public static PatternUtil pu=null;
 	
     private static String ChineseMobilePattern = "^(0|86|17951)?(13[0-9]|15[012356789]|17[0678]|18[0-9]|14[57])[0-9]{8}$";
 		
-	
-	public static PatternUtil getInstance(){
-		
-		if(pu==null){
-			pu=new PatternUtil();
-		}
-		return pu;
-	}
 	/**
 	 * 判断邮箱
 	 * @param str
 	 * @return
 	 */
-	 public   boolean checkEmail(String email) {
+	 public  static boolean checkEmail(String email) {
 		 boolean flag=false;
 		 String regex =null;
 		 if(email!=null){
@@ -65,7 +54,7 @@ public class PatternUtil {
 	 * @param str
 	 * @return
 	 */
-	 public   boolean checkTelPhone(String mobile) {
+	 public static  boolean checkTelPhone(String mobile) {
 		 boolean flag=false;
 		 if(mobile!=null&&!"".equals(mobile)){
 			  flag= checkStr(ChineseMobilePattern,mobile);//判定电话号码
@@ -102,7 +91,7 @@ public class PatternUtil {
 	 * @param str
 	 * @return
 	 */
-	 public   boolean checkTelPhone2(String mobile) {
+	 public  static boolean checkTelPhone2(String mobile) {
 		 boolean flag=false;
 		 if(mobile!=null&&!"".equals(mobile)){
 			 flag= checkStr(ChineseMobilePattern,mobile);//判定电话号码
@@ -114,7 +103,7 @@ public class PatternUtil {
 	 * @param str
 	 * @return
 	 */
-	 public  boolean checkPassword(String password) {
+	 public static boolean checkPassword(String password) {
 		 boolean flag=false;
 		 String regex =null;
 		 int len=password.length();
@@ -131,7 +120,7 @@ public class PatternUtil {
 	 * @param str
 	 * @return
 	 */
-	 public   boolean checkDoctorLicenceStr(String doctorLicence) {
+	 public static  boolean checkDoctorLicenceStr(String doctorLicence) {
 		 boolean flag=false;
 		 String regex =null;
 		 if(doctorLicence!=null&&!"".equals(doctorLicence)){
@@ -148,7 +137,7 @@ public class PatternUtil {
 	  * @param input
 	  * @return
 	  */
-	 private boolean checkStr(String regex,String input){
+	 private static boolean checkStr(String regex,String input){
 		 
 		 boolean flag=false;
 			if(regex!=null){
@@ -163,7 +152,7 @@ public class PatternUtil {
 	 * @param str
 	 * @return
 	 */
-	 public   boolean checkAll(String str) {
+	 public static  boolean checkAll(String str) {
 		 boolean flag=false;
 		 String regex =null;
 		  regex = "([a-z]|[A-Z]|[0-9]|[\u4e00-\u9fa5])+";//判定数字或者字母或者中文
@@ -175,7 +164,7 @@ public class PatternUtil {
 	 * @param str
 	 * @return
 	 */
-	 public   boolean checkContainChinese(String str) {
+	 public static  boolean checkContainChinese(String str) {
 		 boolean flag=false;
 		 String regex =null;
 		  regex = "([\u4e00-\u9fa5])+";//判定中文
@@ -187,7 +176,7 @@ public class PatternUtil {
 	 * @param str
 	 * @return
 	 */
-	 public   boolean checkTrueName(String str) {
+	 public static  boolean checkTrueName(String str) {
 		 boolean flag=false;
 		 String regex =null;
 		  regex = "([\u4e00-\u9fa5])+";//判定中文
@@ -198,21 +187,12 @@ public class PatternUtil {
 		  return flag;
 	}
 	 
-	  public String[] getFileByPattern(String content){
-		  
-		  String[] strs=null;
-		  
-		  
-		return strs;
-		  
-		  
-	  }
 	  /**
 	   * 过滤标点符号
 	   * @param str
 	   * @return
 	   */
-	  public String  filterPunctuation(String str,String replaceStr){
+	  public static String  filterPunctuation(String str,String replaceStr){
 		  if(str!=null)
 			  str=str.replaceAll("\\pP|\\pS|\\s",replaceStr);
 		  return str;
@@ -222,7 +202,7 @@ public class PatternUtil {
 	   * @param str
 	   * @return
 	   */
-	  public String filterRepitChar(String str){
+	  public static String filterRepitChar(String str){
 		  if(str!=null){
 			  str=str.replaceAll("(?s)(.)(?=.*\\1)", "");
 			  }

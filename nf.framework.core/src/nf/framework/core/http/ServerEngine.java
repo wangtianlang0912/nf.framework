@@ -15,6 +15,7 @@ public class ServerEngine {
 	
 	private static Queue<AbsBaseRequestData> mRequestQueue = new LinkedList<AbsBaseRequestData>();
 
+	private ServerEngine() { }
 	private static ServerEngine INSTANCE = new ServerEngine();
 	public static ServerEngine getInstance() {
 		return INSTANCE;
