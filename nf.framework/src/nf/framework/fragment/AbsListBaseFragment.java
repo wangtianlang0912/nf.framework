@@ -1,27 +1,24 @@
 package nf.framework.fragment;
 
-import java.util.List;
-
 import nf.framework.R;
-import nf.framework.expand.widgets.OnHeaderRefreshListener;
-import nf.framework.expand.widgets.OnScrollLoadMoreListener;
-import nf.framework.expand.widgets.UpFreshListView;
+import nf.framework.expand.widgets.pulltorefresh.PullToRefreshBase;
+import nf.framework.expand.widgets.pulltorefresh.PullToRefreshListView;
 import nf.framework.statistic.MobStatisticUtils;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
-@Deprecated
-public abstract class AbsListFragment<T> extends AbsBaseFragment implements
-		OnItemClickListener, OnHeaderRefreshListener, OnScrollLoadMoreListener {
-	private UpFreshListView mlistview;
+
+public abstract class AbsListBaseFragment<T> extends AbsBaseFragment implements
+		OnItemClickListener, PullToRefreshBase.OnRefreshListener<ListView>, PullToRefreshBase.OnLastItemVisibleListener {
+	protected PullToRefreshListView mlistview;
 	private AbsListAdapter<?, ?> listItemAdapter;
 	private View viewLayout = null;
 	private MobStatisticUtils mobStatisticUtils;
@@ -32,7 +29,6 @@ public abstract class AbsListFragment<T> extends AbsBaseFragment implements
 	protected Button emptyBtn;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 	
 		mobStatisticUtils=new MobStatisticUtils(getActivity());
@@ -41,7 +37,7 @@ public abstract class AbsListFragment<T> extends AbsBaseFragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		
-		viewLayout = inflater.inflate(R.layout.listview_layout, container,false);
+		viewLayout = inflater.inflate(R.layout.listview_layout2, container,false);
 		initView(viewLayout);
 		return viewLayout;
 	}
@@ -61,7 +57,9 @@ public abstract class AbsListFragment<T> extends AbsBaseFragment implements
 	}
 	protected void initView(View v) {
 
-		mlistview = (UpFreshListView) v.findViewById(R.id.common_listview);
+		mlistview = (PullToRefreshListView) v.findViewById(R.id.common_listview);
+		mlistview.setShowIndicator(false);
+		mlistview.addFooterView();
 		View headerView=getListHeaderView();
 		if(headerView!=null){
 			mlistview.addHeaderView(headerView,null, false);
@@ -71,8 +69,8 @@ public abstract class AbsListFragment<T> extends AbsBaseFragment implements
 			mlistview.setAdapter(listItemAdapter);
 			listItemAdapter.notifyDataSetChanged();
 		}
-		mlistview.setOnHeaderRefreshListener(this);
-		mlistview.setOnScrollLoadMoreListener(this);
+		mlistview.setOnRefreshListener(this);
+		mlistview.setOnLastItemVisibleListener(this);
 		mlistview.setOnItemClickListener(this);
 		emptyLayout =(LinearLayout)v.findViewById(R.id.common_listview_empty_layout);
 		View emptyView=LayoutInflater.from(getActivity()).inflate(R.layout.list_empty_view,emptyLayout, false);
@@ -83,7 +81,6 @@ public abstract class AbsListFragment<T> extends AbsBaseFragment implements
 		emptyLayout.addView(emptyView);
 		emptyLayout.setVisibility(View.GONE);
 	}
-	
 	public void setEmptyViewShow(boolean isShow){
 		
 		if(emptyLayout!=null){
@@ -122,11 +119,6 @@ public abstract class AbsListFragment<T> extends AbsBaseFragment implements
 	public void onlazyLoad() {
 		
 	}
-	public UpFreshListView getFreshListView(){
-		
-		return mlistview;
-	}
-	
 	
 	protected AbsListAdapter<?, ?> getCurrentListAdapter(){
 		
@@ -138,33 +130,10 @@ public abstract class AbsListFragment<T> extends AbsBaseFragment implements
 		return listItemAdapter!=null?listItemAdapter.getCount():0;
 	}
 	
-	/***
-	 * 
-	 * @param absListview
-	 * @param packagelist
-	 * @param numRows
-	 * @param niufei
-	 * @return void
-	 * @throws
-	 */
-	public void setFooterViewVisible(UpFreshListView absListview,List<?> list,int numRows){
-		
-		if(absListview==null){
-			throw new RuntimeException("absListView is empty !!");
-		}
-		if (list.size() < numRows&&list.size()!=0) {
-			absListview.addAutoFooterView();
-		} else {
-			absListview.removeAutoFooterView();
-		}
-		absListview.onRefreshComplete();
-	}
-	
 	protected abstract String getPageName();
 	
 	@Override
 	public void onDestroy() {
-		// TODO Auto-generated method stub
 		super.onDestroy();
 	
 		if(listItemAdapter!=null){
