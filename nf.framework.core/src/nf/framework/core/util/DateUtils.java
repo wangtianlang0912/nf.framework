@@ -16,7 +16,7 @@ public class DateUtils {
     public static final String DATE_FULL_STR = "yyyy-MM-dd HH:mm:ss";
     public static final String DATE_SMALL_STR = "yyyy-MM-dd";
     public static final String DATE_KEY_STR = "yyMMddHHmmss";
-     
+    public static final String DATE_TIME_STR = "HH:mm:ss";
     /**
      * 使用预设格式提取字符串日期
      * @param strDate 日期字符串
