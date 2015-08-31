@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 
+import nf.framework.core.util.DateUtils;
 import nf.framework.core.util.io.FileUtils;
 import android.content.Context;
 import android.os.Environment;
@@ -94,6 +95,7 @@ public class LogUtil {
 			return;
 		}
 		Log.e(""+tag,""+errorMsg);	
+		saveLogToFile("e",tag,errorMsg);
 	}
 	
 	public static void d(Context mcontext,String errorMsg){
@@ -107,6 +109,7 @@ public class LogUtil {
 			return;
 		}
 		Log.d(""+tag,""+errorMsg);	
+		saveLogToFile("d",tag,errorMsg);
 	}
 	
 	public static void w(Context mcontext,String errorMsg){
@@ -120,6 +123,7 @@ public class LogUtil {
 			return;
 		}
 		Log.w(""+tag,""+errorMsg);	
+		saveLogToFile("w",tag,errorMsg);
 	}
 	public static void w(String tag ,String errorMsg,Throwable throwable){
 		
@@ -141,6 +145,7 @@ public class LogUtil {
 			return;
 		}
 		Log.i(""+tag,""+errorMsg);	
+		saveLogToFile("i",tag,errorMsg);
 	}
 	public static void v(Context mcontext,String errorMsg){
 		if(!OpenBug){
@@ -153,33 +158,33 @@ public class LogUtil {
 			return;
 		}
 		Log.v(""+tag,""+errorMsg);	
+		saveLogToFile("v",tag,errorMsg);
 	}
 	private static String getTag(Context mcontext){
 		
 		return mcontext!=null?mcontext.getClass().getSimpleName():LogUtil.class.getSimpleName();
 	}
 	
-	
-	
 	/**
 	 * 
 	 * @param urlStr
 	 */
-	private void saveExceptionUrlToFile(String urlStr) {
+	private static void saveLogToFile(String type,String tag ,String param) {
+		if(mcontext==null){ return; }
 		try {
-			File file = new File(Environment.getExternalStorageDirectory()
-					.getPath() + "/test.txt");
+			String path =mcontext.getExternalCacheDir()
+					.getPath() + "/log_"+DateUtils.getNowTime("yyyy_MM_dd")+".txt";
+			File file = new File(path);
 			if (!file.exists()) {
 				file.createNewFile();
 			}
 			String fileStr = FileUtils.read(file);
 			StringBuffer sb2 = new StringBuffer(fileStr);
 			sb2.append("\r\n");
-			sb2.append(urlStr);
+			sb2.append("time --"+DateUtils.getNowTime(DateUtils.DATE_TIME_STR)+"-----type="+type+":::::tag="+ tag +"====>"+param);
 			FileUtils.write(file, sb2.toString());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
+	
 }
