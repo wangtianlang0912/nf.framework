@@ -1,14 +1,9 @@
 package nf.framework.core.exception;
 import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.Writer;
 
 import nf.framework.core.util.DateUtils;
 import nf.framework.core.util.io.FileUtils;
 import android.content.Context;
-import android.os.Environment;
 import android.util.Log;
 
 /**
@@ -178,11 +173,10 @@ public class LogUtil {
 			if (!file.exists()) {
 				file.createNewFile();
 			}
-			String fileStr = FileUtils.read(file);
-			StringBuffer sb2 = new StringBuffer(fileStr);
+			StringBuffer sb2 = new StringBuffer();
 			sb2.append("\r\n");
 			sb2.append("time --"+DateUtils.getNowTime(DateUtils.DATE_TIME_STR)+"-----type="+type+":::::tag="+ tag +"====>"+param);
-			FileUtils.write(file, sb2.toString());
+			FileUtils.appendFileData(path, sb2.toString());
 		} catch (Exception e) {
 		}
 	}
