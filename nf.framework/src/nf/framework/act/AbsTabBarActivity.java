@@ -36,6 +36,7 @@ public abstract class AbsTabBarActivity extends AbsBaseActivity{
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	private ViewGroup mainLanderView;
 	private boolean isAutoLoadTab =true;
+	private int initPagePos=0;
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		initView();
@@ -122,6 +123,7 @@ public abstract class AbsTabBarActivity extends AbsBaseActivity{
 	 * @param position
 	 */
 	public void setCurrentTabItem(int position) {
+		this.initPagePos=position;
 		mPager.setCurrentItem(position);
 	}
 
@@ -309,7 +311,7 @@ public abstract class AbsTabBarActivity extends AbsBaseActivity{
 				if(!tabBarList.isEmpty()&&!isFinishing()){
 					mSectionsPagerAdapter.setFragments(getFragmentList(tabBarList));
 					mPager.setOffscreenPageLimit(tabBarList.size());// 设置缓存页面，当前页面的相邻N各页面都会被缓存
-					setCurrentTabItem(0);
+					setCurrentTabItem(initPagePos);
 				}
 				indicator.notifyDataSetChanged();
 				afterFragmentFinished();
