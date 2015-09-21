@@ -69,7 +69,7 @@ public class PhoneInfoUtils {
 
 	/**
 	 * 获取当前应用的版本号
-	 * 
+	 * versionName
 	 * @param context
 	 * @return
 	 */
